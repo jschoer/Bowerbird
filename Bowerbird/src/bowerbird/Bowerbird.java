@@ -6,37 +6,102 @@
 package bowerbird;
 
 import javafx.application.Application;
+import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
-/**
- *
- * @author josh5
- */
 public class Bowerbird extends Application {
     
+    private String artist, title, album, year, genre;
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        
+        Media media = new Media("file:///users/josh5/OneDrive/Documents/GitHub/Bowerbird/Bowerbird/resources/test.mp3");
+        media.getMetadata().addListener(new MapChangeListener<String, Object>() {
+            @Override
+            public void onChanged(MapChangeListener.Change<? extends String, ? extends Object> change) {
+                if(change.wasAdded())
+                {
+                    String key = change.getKey();
+                    Object value = change.getValueAdded();
+                    
+                    switch(key)
+                    {
+                        case "title": title = value.toString();
+                        break;
+                        case "artist": artist = value.toString();
+                        break;
+                        case "album": album = value.toString();
+                        break;
+                        case "year": year = value.toString();
+                        break;
+                        case "genre": genre = value.toString();
+                        break;
+                    }
+                }
+            }
+        
+        });
+        MediaPlayer mp = new MediaPlayer(media);
+        
+        Button playBtn = new Button();
+        playBtn.setText("Play");
+        playBtn.setAlignment(Pos.CENTER);
+        playBtn.setOnAction(new EventHandler<ActionEvent>() {
             
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
+                mp.play();
+                System.out.println("Playing\n" + title + "\n" + artist + "\n" + album + "\n" + year + "\n" + genre);
             }
         });
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        Button pauseBtn = new Button();
+        pauseBtn.setText("Pause");
+        pauseBtn.setAlignment(Pos.CENTER);
+        pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
+           @Override
+           public void handle(ActionEvent event)
+           {
+               mp.pause();
+               System.out.println("Paused.");
+           }
+        });
         
-        Scene scene = new Scene(root, 300, 250);
+        Button stopBtn = new Button();
+        stopBtn.setText("Stop");
+        stopBtn.setAlignment(Pos.CENTER);
+        stopBtn.setOnAction(new EventHandler<ActionEvent>() {
+           @Override
+           public void handle(ActionEvent event)
+           {
+               mp.stop();
+               System.out.println("Stopped.");
+           }
+        });
         
-        primaryStage.setTitle("Hello World!");
+        GridPane grid = new GridPane();
+        grid.setMinSize(400, 400);
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setVgap(5);
+        grid.setHgap(5);
+        grid.setAlignment(Pos.CENTER);
+        grid.add(playBtn, 0, 2);
+        grid.add(pauseBtn, 1, 2);
+        grid.add(stopBtn, 3, 2);
+        
+        Scene scene = new Scene(grid, 500, 500);
+        
+        primaryStage.setTitle("Bowerbird");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
