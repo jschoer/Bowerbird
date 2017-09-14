@@ -6,6 +6,8 @@
 package bowerbird;
 
 import javafx.application.Application;
+import javafx.beans.Observable;
+import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +15,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -52,6 +56,20 @@ public class Bowerbird extends Application {
         
         });
         MediaPlayer mp = new MediaPlayer(media);
+
+        Label outputLabel = new Label();
+
+        Slider volumeSlider = new Slider();
+        volumeSlider.setValue(mp.getVolume()*100);
+        volumeSlider.valueProperty().addListener(new InvalidationListener() {
+
+            @Override
+            public void invalidated(Observable observable) {
+                mp.setVolume(volumeSlider.getValue() / 100);
+
+            }
+        });
+
         
         Button playBtn = new Button();
         playBtn.setText("Play");
@@ -61,7 +79,13 @@ public class Bowerbird extends Application {
             @Override
             public void handle(ActionEvent event) {
                 mp.play();
-                System.out.println("Playing\n" + title + "\n" + artist + "\n" + album + "\n" + year + "\n" + genre);
+                System.out.println("Now Playing\n" + "Title: " + title + "\n"
+                        + "Artist: " + artist + "\n" + "Album: " + album + "\n"
+                        + "Year: " + year + "\n" + "Title: " + genre);
+
+                outputLabel.setText("Now Playing\n" + "Title: " + title + "\n"
+                        + "Artist: " + artist + "\n" + "Album: " + album + "\n"
+                        + "Year: " + year + "\n" + "Title: " + genre);
             }
         });
         
@@ -98,7 +122,8 @@ public class Bowerbird extends Application {
         grid.add(playBtn, 0, 2);
         grid.add(pauseBtn, 1, 2);
         grid.add(stopBtn, 3, 2);
-        
+        grid.add(outputLabel,0,0);
+        grid.add(volumeSlider,4,2);
         Scene scene = new Scene(grid, 500, 500);
         
         primaryStage.setTitle("Bowerbird");
