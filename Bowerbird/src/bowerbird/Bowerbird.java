@@ -18,6 +18,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.Menu;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Tab;
@@ -74,8 +76,8 @@ public class Bowerbird extends Application {
         leftSideMenu.setPrefWidth(165);
 
         Tab songTab = new Tab();
-        songTab.setText("Songs");
-        songTab.setContent(new Label("\nList of Songs\n will go here..."));
+        songTab.setText("Song");
+        songTab.setContent(new Label("\nSong info\n will go here..."));
 
         Tab albumTab = new Tab();
         albumTab.setText("Albums");
@@ -96,7 +98,8 @@ public class Bowerbird extends Application {
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #D3D3D3;");
 
-        Media media = new Media("file:///Users/christinaach/Documents/SandBox/Bowerbird/Bowerbird/resources/test.mp3");
+        //file:///Users/christinaach/Documents/SandBox/Bowerbird/Bowerbird/resources/test.mp3
+        Media media = new Media("file:///Users/cryst/Documents/GitHub/Bowerbird/Bowerbird/resources/test.mp3");
         media.getMetadata().addListener(new MapChangeListener<String, Object>() {
             @Override
             public void onChanged(MapChangeListener.Change<? extends String, ? extends Object> change) {
@@ -187,7 +190,8 @@ public class Bowerbird extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         launch(args);
     }
     
