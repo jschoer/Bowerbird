@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /Bowerbird/nbproject/private/
 /Bowerbird/build/
+*.class
