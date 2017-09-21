@@ -4,14 +4,13 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BowerbirdDB
 {
     private static String dbName = "music.db";
-    private static String url = "jdbc:sqlite:F:/sqlite/db";
+    private static String url = "jdbc:sqlite:";
 
     public static void main(String[] args)
     {
@@ -39,7 +38,7 @@ public class BowerbirdDB
 
     public static void newDB(String filename)
     {
-        url = System.getProperty("user.dir").replace("\\", "/") + filename;
+        url += System.getProperty("user.dir").replace("\\", "/") + "/resources/" + filename;
 
         try
         {
@@ -61,10 +60,11 @@ public class BowerbirdDB
     {
         String sql = 	"CREATE TABLE IF NOT EXISTS music (\n" +
                         "ID integer PRIMARY KEY,\n" +
-                        "Title text NOT NULL,\n" +
-                        "Album text,\n" +
-                        "Artist text\n" +
-                        "FilePath text NOT NULL\n" +
+                        "FilePath text NOT NULL,\n" +
+                        "PlayCount integer,\n" +
+                        "\n" +
+                        "\n" +
+                        "Lyrics text,\n" +
                         ");";
 
         try
