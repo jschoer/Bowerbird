@@ -6,11 +6,9 @@
 package bowerbird;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableObjectValue;
-import javafx.scene.layout.VBox;
+import javafx.beans.value.ObservableValue;
 import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
@@ -21,14 +19,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.Menu;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -36,26 +30,17 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 public class Bowerbird extends Application {
+
+    public static final Double MIN_DURATION_CHANGE = 0.5;
     
-    private String artist, title, album, year, genre;
+    private String artist = "unknown", title = "-", album = "-", year = "-", genre = "N/A";
     private Duration duration;
-    private MediaPlayer mp;
+    private MediaPlayer mediaPlayer;
     private Slider timeSlider;
+
     @Override
     public void start(Stage primaryStage) {
 
-        //Slider timeSlider = new Slider();
-        //timeSlider.setValue(mp.getVolume()*100);
-        //timeSlider.valueProperty().addListener(new InvalidationListener() {
-
-        //    @Override
-        //    public void invalidated(Observable observable) {
-                //mp.seek(duration.multiply(timeSlider.getValue() / 100));
-
-        //    }
-        //});
-
-        //GridPane grid = new GridPane();
         BorderPane layout = new BorderPane();
         HBox hbox = topMenu();
         TabPane tabPane = leftSideMenu();
@@ -63,15 +48,6 @@ public class Bowerbird extends Application {
         layout.setLeft(tabPane);
         layout.setMinSize(400, 400);
         layout.setPadding(new Insets(10, 10, 10, 10));
-        //grid.setVgap(10);
-        //grid.setHgap(10);
-        //grid.setAlignment(Pos.CENTER);
-        //grid.add(playBtn, 0, 2);
-        //grid.add(pauseBtn, 1, 2);
-        //grid.add(stopBtn, 3, 2);
-        //grid.add(outputLabel,0,0);
-        //grid.add(timeSlider,3,3);
-        //grid.add(volumeSlider,8,3);
         Scene scene = new Scene(layout, 600, 600);
 
         primaryStage.setTitle("Bowerbird");
@@ -106,12 +82,11 @@ public class Bowerbird extends Application {
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #D3D3D3;");
 
-<<<<<<< HEAD
         //file:///Users/christinaach/Documents/SandBox/Bowerbird/Bowerbird/resources/test.mp3
-        Media media = new Media("file:///Users/cryst/Documents/GitHub/Bowerbird/Bowerbird/resources/test.mp3");
-=======
-        Media media = new Media("file:///Users/Josh5/OneDrive/Documents/GitHub/Bowerbird/Bowerbird/resources/test.mp3");
->>>>>>> c6f4e63b9b9185c83a6090135cafd931bf141e04
+        //Media media = new Media("file:///Users/cryst/Documents/GitHub/Bowerbird/Bowerbird/resources/test.mp3");
+
+        Media media = new Media("file:///Users/Josh5/OneDrive/Documents/GitHub/Bowerbird/Bowerbird/resources/test2.mp3");
+
         media.getMetadata().addListener(new MapChangeListener<String, Object>() {
             @Override
             public void onChanged(MapChangeListener.Change<? extends String, ? extends Object> change) {
@@ -138,20 +113,14 @@ public class Bowerbird extends Application {
 
         });
 
-        mp = new MediaPlayer(media);
+        mediaPlayer = new MediaPlayer(media);
 
-        mp.currentTimeProperty().addListener(new InvalidationListener()
-        {
-            public void invalidated(Observable ov) {
-                update();
-            }
-        });
-
-        mp.setOnReady(new Runnable() {
+        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
-            public void run() {
-                duration = mp.getMedia().getDuration();
-                update();
+            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                if(!timeSlider.isValueChanging()) {
+                    timeSlider.setValue(newValue.toSeconds());
+                }
             }
         });
 
@@ -164,14 +133,12 @@ public class Bowerbird extends Application {
 
             @Override
             public void handle(ActionEvent event) {
-                mp.play();
-                System.out.println("Now Playing\n" + "Title: " + title + "\n"
-                        + "Artist: " + artist + "\n" + "Album: " + album + "\n"
-                        + "Year: " + year + "\n" + "Title: " + genre);
-
+                mediaPlayer.play();
                 outputLabel.setText("Now Playing\n" + "Title: " + title + "\n"
                         + "Artist: " + artist + "\n" + "Album: " + album + "\n"
                         + "Year: " + year + "\n" + "Title: " + genre);
+                timeSlider.setDisable(false);
+                timeSlider.setValue(0);
             }
         });
 
@@ -182,7 +149,7 @@ public class Bowerbird extends Application {
             @Override
             public void handle(ActionEvent event)
             {
-                mp.pause();
+                mediaPlayer.pause();
                 System.out.println("Paused.");
             }
         });
@@ -194,30 +161,48 @@ public class Bowerbird extends Application {
             @Override
             public void handle(ActionEvent event)
             {
-                mp.stop();
+                mediaPlayer.stop();
+                timeSlider.setDisable(true);
                 System.out.println("Stopped.");
             }
         });
 
         Slider volumeSlider = new Slider();
-        volumeSlider.setValue(mp.getVolume()*100);
+        volumeSlider.setValue(mediaPlayer.getVolume()*100);
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
 
             @Override
             public void invalidated(Observable observable) {
-                mp.setVolume(volumeSlider.getValue() / 100);
-
+                mediaPlayer.setVolume(volumeSlider.getValue() / 100);
             }
         });
 
         timeSlider = new Slider();
-        timeSlider.setMinWidth(50);
-        timeSlider.setMaxWidth(Double.MAX_VALUE);
-        timeSlider.valueProperty().addListener(new InvalidationListener() {
-            public void invalidated(Observable ov) {
-                if (timeSlider.isValueChanging()) {
-                    // multiply duration by percentage calculated by slider position
-                    mp.seek(duration.multiply(timeSlider.getValue() / 100.0));
+        timeSlider.setDisable(true);
+
+        mediaPlayer.totalDurationProperty().addListener(new ChangeListener<Duration>() {
+            @Override
+            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                timeSlider.setMax(newValue.toSeconds());
+            }
+        });
+
+        timeSlider.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(!newValue) {
+                    mediaPlayer.seek(Duration.seconds(timeSlider.getValue()));
+                }
+            }
+        });
+
+        timeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                double currentTime = mediaPlayer.getCurrentTime().toSeconds();
+                double sliderTime = newValue.doubleValue();
+                if (Math.abs(currentTime - sliderTime) > MIN_DURATION_CHANGE) {
+                    mediaPlayer.seek(Duration.seconds(sliderTime));
                 }
             }
         });
@@ -225,21 +210,6 @@ public class Bowerbird extends Application {
         hbox.getChildren().addAll(playBtn, pauseBtn, stopBtn, outputLabel, volumeSlider, timeSlider);
 
         return hbox;
-    }
-
-    protected void update()
-    {
-        Platform.runLater(new Runnable() {
-            public void run() {
-                Duration currentTime = mp.getCurrentTime();
-                timeSlider.setDisable(duration.isUnknown());
-                if (!timeSlider.isDisabled()
-                        && duration.greaterThan(Duration.ZERO)
-                        && !timeSlider.isValueChanging()) {
-                    timeSlider.setValue(currentTime.divide(duration).toMillis() * 100.0);
-                }
-            }
-        });
     }
 
     /**
