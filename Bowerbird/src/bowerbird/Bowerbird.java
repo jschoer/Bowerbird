@@ -13,6 +13,7 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -23,26 +24,27 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
 import javafx.util.Duration;
 
 public class Bowerbird extends Application {
 
     public static final Double MIN_DURATION_CHANGE = 0.5;
     
-    private String artist = "unknown", title = "-", album = "-", year = "-", genre = "N/A";
+    private String artist = "unknown", title = "-", album = "-", year = "-", genre = "N/A", filename = "";
     private Duration duration;
     private MediaPlayer mediaPlayer;
     private Slider timeSlider;
+    private Media media = new Media("file:///Users/cryst/Documents/GitHub/Bowerbird/Bowerbird/resources/test3.mp3");
 
     @Override
     public void start(Stage primaryStage) {
 
         BorderPane layout = new BorderPane();
-        HBox hbox = topMenu();
+        HBox hbox = topMenu(primaryStage);
         TabPane tabPane = leftSideMenu();
         layout.setTop(hbox);
         layout.setLeft(tabPane);
@@ -76,16 +78,36 @@ public class Bowerbird extends Application {
         return leftSideMenu;
     }
 
-    public HBox topMenu() {
+    public HBox topMenu(Stage stg) {
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 12, 10, 12));
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #D3D3D3;");
 
-        //file:///Users/christinaach/Documents/SandBox/Bowerbird/Bowerbird/resources/test.mp3
-        //Media media = new Media("file:///Users/cryst/Documents/GitHub/Bowerbird/Bowerbird/resources/test.mp3");
+        final FileChooser fc = new FileChooser();
+        Button addSong = new Button();
+        addSong.setText("Pick song...");
+        addSong.setAlignment(Pos.TOP_RIGHT);
+        addSong.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event)
+            {
+                java.io.File f = fc.showOpenDialog(stg);
 
-        Media media = new Media("file:///Users/Josh5/OneDrive/Documents/GitHub/Bowerbird/Bowerbird/resources/test2.mp3");
+                if(f != null)
+                {
+                    filename = "file://" + f.getAbsolutePath().replace("C:", "").replace("\\", "/");
+                    System.out.println("Filename: " + filename);
+                    media = new Media(filename);
+                }
+                else
+                    System.out.println("Chosen file is null.");
+            }
+        });
+
+        //file:///Users/christinaach/Documents/SandBox/Bowerbird/Bowerbird/resources/test.mp3
+        //file:///Users/Josh5/OneDrive/Documents/GitHub/Bowerbird/Bowerbird/resources/test2.mp3
+        //file:///Users/cryst/Documents/GitHub/Bowerbird/Bowerbird/resources/test3.mp3
 
         media.getMetadata().addListener(new MapChangeListener<String, Object>() {
             @Override
@@ -114,7 +136,6 @@ public class Bowerbird extends Application {
         });
 
         mediaPlayer = new MediaPlayer(media);
-
         mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
             public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
@@ -123,11 +144,10 @@ public class Bowerbird extends Application {
                 }
             }
         });
-
         Label outputLabel = new Label();
 
         Button playBtn = new Button();
-        playBtn.setText("Play");
+        playBtn.setText(">");
         playBtn.setAlignment(Pos.CENTER);
         playBtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -136,14 +156,14 @@ public class Bowerbird extends Application {
                 mediaPlayer.play();
                 outputLabel.setText("Now Playing\n" + "Title: " + title + "\n"
                         + "Artist: " + artist + "\n" + "Album: " + album + "\n"
-                        + "Year: " + year + "\n" + "Title: " + genre);
+                        + "Year: " + year + "\n" + "Genre: " + genre);
                 timeSlider.setDisable(false);
                 timeSlider.setValue(0);
             }
         });
 
         Button pauseBtn = new Button();
-        pauseBtn.setText("Pause");
+        pauseBtn.setText("||");
         pauseBtn.setAlignment(Pos.CENTER);
         pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -155,7 +175,7 @@ public class Bowerbird extends Application {
         });
 
         Button stopBtn = new Button();
-        stopBtn.setText("Stop");
+        stopBtn.setText("S");
         stopBtn.setAlignment(Pos.CENTER);
         stopBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -207,7 +227,7 @@ public class Bowerbird extends Application {
             }
         });
 
-        hbox.getChildren().addAll(playBtn, pauseBtn, stopBtn, outputLabel, volumeSlider, timeSlider);
+        hbox.getChildren().addAll(playBtn, pauseBtn, stopBtn, outputLabel, volumeSlider, timeSlider, addSong);
 
         return hbox;
     }
