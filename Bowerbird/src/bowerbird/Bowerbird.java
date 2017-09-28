@@ -42,6 +42,8 @@ public class Bowerbird extends Application {
     private Slider timeSlider, volumeSlider;
     private Button playBtn, pauseBtn, stopBtn, addSong;
 
+    private BowerbirdDB bowerbirdDB;
+
     @Override
     public void start(Stage primaryStage)
     {
@@ -70,6 +72,8 @@ public class Bowerbird extends Application {
 
         timeSlider = new Slider();
         volumeSlider = new Slider();
+
+        bowerbirdDB = new BowerbirdDB();
     }
 
     public TabPane leftSideMenu()
@@ -119,12 +123,11 @@ public class Bowerbird extends Application {
                         mediaPlayer.stop();
                         mediaPlayer.dispose();
                     }
-                        UpdateMedia(filename);
+                    UpdateMedia(filename);
 
-                        playBtn.setDisable(false);
-                        pauseBtn.setDisable(false);
-                        stopBtn.setDisable(false);
-
+                    playBtn.setDisable(false);
+                    pauseBtn.setDisable(false);
+                    stopBtn.setDisable(false);
                 }
                 else
                     System.out.println("Chosen file is null.");
@@ -145,6 +148,9 @@ public class Bowerbird extends Application {
                         + "Year: " + year + "\n" + "Genre: " + genre);
                 timeSlider.setDisable(false);
                 timeSlider.setValue(0);
+                playBtn.setDisable(true);
+                pauseBtn.setDisable(false);
+                stopBtn.setDisable(false);
             }
         });
 
@@ -156,6 +162,8 @@ public class Bowerbird extends Application {
             public void handle(ActionEvent event)
             {
                 mediaPlayer.pause();
+                playBtn.setDisable(false);
+                pauseBtn.setDisable(true);
                 System.out.println("Paused.");
             }
         });
@@ -168,6 +176,8 @@ public class Bowerbird extends Application {
             public void handle(ActionEvent event)
             {
                 mediaPlayer.stop();
+                pauseBtn.setDisable(true);
+                stopBtn.setDisable(true);
                 timeSlider.setDisable(true);
                 System.out.println("Stopped.");
             }

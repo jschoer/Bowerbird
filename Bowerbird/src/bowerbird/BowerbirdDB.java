@@ -12,12 +12,10 @@ public class BowerbirdDB
     private static String dbName = "music.db";
     private static String url = "jdbc:sqlite:";
 
-    public static void main(String[] args)
+    public BowerbirdDB()
     {
         newDB(dbName);
         newTable();
-
-
     }
 
     private static Connection connect()
