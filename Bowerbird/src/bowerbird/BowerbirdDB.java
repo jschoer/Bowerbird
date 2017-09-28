@@ -83,7 +83,7 @@ public class BowerbirdDB
 
     private static void insert()
     {
-        String sql = "INSERT INTO music () VALUES(?, ?, ?)";
+        String sql = "INSERT INTO music (MAX(ID), ID, FilePath, PlayCount, Lyrics) VALUES(?, ?, ?, ?, ?)";
 
         try(Connection conn = BowerbirdDB.connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {

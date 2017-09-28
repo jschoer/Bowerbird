@@ -115,11 +115,16 @@ public class Bowerbird extends Application {
                 {
                     filename = "file://" + f.getAbsolutePath().replace("C:", "").replace("\\", "/");
                     System.out.println("Filename: " + filename);
-                    UpdateMedia(filename);
+                    if (mediaPlayer != null) {
+                        mediaPlayer.stop();
+                        mediaPlayer.dispose();
+                    }
+                        UpdateMedia(filename);
 
-                    playBtn.setDisable(false);
-                    pauseBtn.setDisable(false);
-                    stopBtn.setDisable(false);
+                        playBtn.setDisable(false);
+                        pauseBtn.setDisable(false);
+                        stopBtn.setDisable(false);
+
                 }
                 else
                     System.out.println("Chosen file is null.");
