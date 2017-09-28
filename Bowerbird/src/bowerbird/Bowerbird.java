@@ -35,13 +35,17 @@ public class Bowerbird extends Application {
     public static final Double MIN_DURATION_CHANGE = 0.5;
     
     private String artist = "unknown", title = "-", album = "-", year = "-", genre = "N/A", filename = "";
-    private Duration duration;
+
+    private Media media;
     private MediaPlayer mediaPlayer;
-    private Slider timeSlider;
-    private Media media = new Media("file:///Users/cryst/Documents/GitHub/Bowerbird/Bowerbird/resources/test3.mp3");
+
+    private Slider timeSlider, volumeSlider;
+    private Button playBtn, pauseBtn, stopBtn, addSong;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage)
+    {
+        init();
 
         BorderPane layout = new BorderPane();
         HBox hbox = topMenu(primaryStage);
@@ -57,7 +61,19 @@ public class Bowerbird extends Application {
         primaryStage.show();
     }
 
-    public TabPane leftSideMenu() {
+    public void init()
+    {
+        playBtn = new Button();
+        pauseBtn = new Button();
+        stopBtn = new Button();
+        addSong = new Button();
+
+        timeSlider = new Slider();
+        volumeSlider = new Slider();
+    }
+
+    public TabPane leftSideMenu()
+    {
         TabPane leftSideMenu = new TabPane();
         leftSideMenu.setPrefWidth(165);
 
@@ -78,15 +94,16 @@ public class Bowerbird extends Application {
         return leftSideMenu;
     }
 
-    public HBox topMenu(Stage stg) {
+    public HBox topMenu(Stage stg)
+    {
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(15, 12, 10, 12));
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #D3D3D3;");
 
         final FileChooser fc = new FileChooser();
-        Button addSong = new Button();
-        addSong.setText("Pick song...");
+
+        addSong.setText("Pick Song");
         addSong.setAlignment(Pos.TOP_RIGHT);
         addSong.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -98,59 +115,23 @@ public class Bowerbird extends Application {
                 {
                     filename = "file://" + f.getAbsolutePath().replace("C:", "").replace("\\", "/");
                     System.out.println("Filename: " + filename);
-                    media = new Media(filename);
+                    UpdateMedia(filename);
+
+                    playBtn.setDisable(false);
+                    pauseBtn.setDisable(false);
+                    stopBtn.setDisable(false);
                 }
                 else
                     System.out.println("Chosen file is null.");
             }
         });
 
-        //file:///Users/christinaach/Documents/SandBox/Bowerbird/Bowerbird/resources/test.mp3
-        //file:///Users/Josh5/OneDrive/Documents/GitHub/Bowerbird/Bowerbird/resources/test2.mp3
-        //file:///Users/cryst/Documents/GitHub/Bowerbird/Bowerbird/resources/test3.mp3
-
-        media.getMetadata().addListener(new MapChangeListener<String, Object>() {
-            @Override
-            public void onChanged(MapChangeListener.Change<? extends String, ? extends Object> change) {
-                if(change.wasAdded())
-                {
-                    String key = change.getKey();
-                    Object value = change.getValueAdded();
-
-                    switch(key)
-                    {
-                        case "title": title = value.toString();
-                            break;
-                        case "artist": artist = value.toString();
-                            break;
-                        case "album": album = value.toString();
-                            break;
-                        case "year": year = value.toString();
-                            break;
-                        case "genre": genre = value.toString();
-                            break;
-                    }
-                }
-            }
-
-        });
-
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
-            @Override
-            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
-                if(!timeSlider.isValueChanging()) {
-                    timeSlider.setValue(newValue.toSeconds());
-                }
-            }
-        });
         Label outputLabel = new Label();
 
-        Button playBtn = new Button();
         playBtn.setText(">");
         playBtn.setAlignment(Pos.CENTER);
+        playBtn.setDisable(true);
         playBtn.setOnAction(new EventHandler<ActionEvent>() {
-
             @Override
             public void handle(ActionEvent event) {
                 mediaPlayer.play();
@@ -162,9 +143,9 @@ public class Bowerbird extends Application {
             }
         });
 
-        Button pauseBtn = new Button();
         pauseBtn.setText("||");
         pauseBtn.setAlignment(Pos.CENTER);
+        pauseBtn.setDisable(true);
         pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event)
@@ -174,9 +155,9 @@ public class Bowerbird extends Application {
             }
         });
 
-        Button stopBtn = new Button();
         stopBtn.setText("S");
         stopBtn.setAlignment(Pos.CENTER);
+        stopBtn.setDisable(true);
         stopBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event)
@@ -187,26 +168,19 @@ public class Bowerbird extends Application {
             }
         });
 
-        Slider volumeSlider = new Slider();
-        volumeSlider.setValue(mediaPlayer.getVolume()*100);
+        volumeSlider.setValue(100);
         volumeSlider.valueProperty().addListener(new InvalidationListener() {
-
             @Override
-            public void invalidated(Observable observable) {
-                mediaPlayer.setVolume(volumeSlider.getValue() / 100);
+            public void invalidated(Observable observable)
+            {
+                if(mediaPlayer != null)
+                {
+                    mediaPlayer.setVolume(volumeSlider.getValue() / 100);
+                }
             }
         });
 
-        timeSlider = new Slider();
         timeSlider.setDisable(true);
-
-        mediaPlayer.totalDurationProperty().addListener(new ChangeListener<Duration>() {
-            @Override
-            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
-                timeSlider.setMax(newValue.toSeconds());
-            }
-        });
-
         timeSlider.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -230,6 +204,52 @@ public class Bowerbird extends Application {
         hbox.getChildren().addAll(playBtn, pauseBtn, stopBtn, outputLabel, volumeSlider, timeSlider, addSong);
 
         return hbox;
+    }
+
+    public void UpdateMedia(String filename)
+    {
+        media = new Media(filename);
+        media.getMetadata().addListener(new MapChangeListener<String, Object>() {
+            @Override
+            public void onChanged(MapChangeListener.Change<? extends String, ? extends Object> change) {
+                if(change.wasAdded())
+                {
+                    String key = change.getKey();
+                    Object value = change.getValueAdded();
+
+                    switch(key)
+                    {
+                        case "title": title = value.toString();
+                            break;
+                        case "artist": artist = value.toString();
+                            break;
+                        case "album": album = value.toString();
+                            break;
+                        case "year": year = value.toString();
+                            break;
+                        case "genre": genre = value.toString();
+                            break;
+                    }
+                }
+            }
+        });
+
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
+            @Override
+            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                if(!timeSlider.isValueChanging()) {
+                    timeSlider.setValue(newValue.toSeconds());
+                }
+            }
+        });
+
+        mediaPlayer.totalDurationProperty().addListener(new ChangeListener<Duration>() {
+            @Override
+            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                timeSlider.setMax(newValue.toSeconds());
+            }
+        });
     }
 
     /**
