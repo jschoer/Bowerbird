@@ -6,6 +6,7 @@
 package bowerbird;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -47,8 +48,6 @@ public class Bowerbird extends Application {
     @Override
     public void start(Stage primaryStage)
     {
-        init();
-
         BorderPane layout = new BorderPane();
         HBox hbox = topMenu(primaryStage);
         TabPane tabPane = leftSideMenu();
@@ -104,6 +103,7 @@ public class Bowerbird extends Application {
         hbox.setPadding(new Insets(15, 12, 10, 12));
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #D3D3D3;");
+        Label outputLabel = new Label();
 
         final FileChooser fc = new FileChooser();
 
@@ -117,7 +117,6 @@ public class Bowerbird extends Application {
 
                 if(f != null)
                 {
-                    //filename = "file://" + f.getAbsolutePath().replace("C:", "").replace("\\", "/");
                     filename = f.toURI().toASCIIString();
                     System.out.println("Filename: " + filename);
                     if (mediaPlayer != null) {
@@ -129,13 +128,12 @@ public class Bowerbird extends Application {
                     playBtn.setDisable(false);
                     pauseBtn.setDisable(false);
                     stopBtn.setDisable(false);
+                    outputLabel.setText("");
                 }
                 else
                     System.out.println("Chosen file is null.");
             }
         });
-
-        Label outputLabel = new Label();
 
         playBtn.setText(">");
         playBtn.setAlignment(Pos.CENTER);
@@ -181,6 +179,7 @@ public class Bowerbird extends Application {
                 stopBtn.setDisable(true);
                 timeSlider.setDisable(true);
                 System.out.println("Stopped.");
+                outputLabel.setText("");
             }
         });
 
@@ -267,7 +266,12 @@ public class Bowerbird extends Application {
             }
         });
 
-        databaseInsert();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                databaseInsert();
+            }
+        });
     }
 
     public void databaseInsert()
@@ -275,6 +279,12 @@ public class Bowerbird extends Application {
         System.out.println("Attempting database insert.");
 
         MusicRecord musicRecord = new MusicRecord();
+        musicRecord.set_album(album);
+        musicRecord.set_artist(artist);
+        musicRecord.set_filePath(filename);
+        musicRecord.set_genre(genre);
+        musicRecord.set_title(title);
+        musicRecord.set_year(year);
 
         bowerbirdDB.insert(musicRecord);
     }

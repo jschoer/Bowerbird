@@ -34,6 +34,7 @@ public class BowerbirdDB
         return conn;
     }
 
+    //only used to see if database is present
     public void newDB(String filename)
     {
         url += System.getProperty("user.dir").replace("\\", "/") + "/resources/" + filename;
@@ -56,12 +57,15 @@ public class BowerbirdDB
 
     public void newTable()
     {
-        String sql = 	"CREATE TABLE IF NOT EXISTS music (" +
-                        "ID integer PRIMARY KEY," +
-                        "FilePath text NOT NULL," +
-                        "PlayCount integer," +
-                        "Lyrics text" +
-                        ");";
+        String sql = "CREATE TABLE IF NOT EXISTS music (" +
+                     "ID integer PRIMARY KEY," +
+                     "FilePath text NOT NULL," +
+                     "Title text," +
+                     "Artist text," +
+                     "Album text," +
+                     "Genre text," +
+                     "Year text" +
+                     ");";
 
         try
         {
@@ -79,13 +83,16 @@ public class BowerbirdDB
 
     public void insert(MusicRecord musicRecord)
     {
-        String sql = "INSERT INTO music (ID, FilePath, PlayCount, Lyrics) VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO music (ID, FilePath, Title, Artist, Album, Genre, Year) VALUES(?, ?, ?, ?, ?, ?, ?)";
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
-            ps.setString(2, "mypath");
-            ps.setInt(3, 1);
-            ps.setString(4, "Lalalala");
+            ps.setString(2, musicRecord.get_filePath());
+            ps.setString(3, musicRecord.get_title());
+            ps.setString(4, musicRecord.get_artist());
+            ps.setString(5, musicRecord.get_album());
+            ps.setString(6, musicRecord.get_genre());
+            ps.setString(7, musicRecord.get_year());
 
             ps.executeUpdate();
 

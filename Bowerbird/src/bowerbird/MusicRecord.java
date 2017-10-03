@@ -1,6 +1,9 @@
 package bowerbird;
 
-import javax.print.attribute.standard.Media;
+
+import javafx.scene.media.Media;
+
+import java.io.InputStream;
 
 //class used for setting all information of media file to insert into database
 public class MusicRecord
@@ -13,7 +16,7 @@ public class MusicRecord
     private String _genre;
     private String _year;
         //songdata
-    private Media _media;
+    private String _filePath;
     //endregion PrivateVariables
 
     public MusicRecord()
@@ -62,12 +65,12 @@ public class MusicRecord
         this._year = _year;
     }
 
-    public Media get_media() {
-        return _media;
+    public String get_filePath() {
+        return _filePath;
     }
 
-    public void set_media(Media _media) {
-        this._media = _media;
+    public void set_filePath(String _filePath) {
+        this._filePath = _filePath;
     }
 
     //endregion GetSet
