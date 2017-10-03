@@ -9,8 +9,8 @@ import java.sql.Statement;
 
 public class BowerbirdDB
 {
-    private static String dbName = "music.db";
-    private static String url = "jdbc:sqlite:";
+    private String dbName = "music.db";
+    private String url = "jdbc:sqlite:";
 
     public BowerbirdDB()
     {
@@ -18,7 +18,7 @@ public class BowerbirdDB
         newTable();
     }
 
-    private static Connection connect()
+    private Connection connect()
     {
         Connection conn = null;
 
@@ -34,7 +34,7 @@ public class BowerbirdDB
         return conn;
     }
 
-    public static void newDB(String filename)
+    public void newDB(String filename)
     {
         url += System.getProperty("user.dir").replace("\\", "/") + "/resources/" + filename;
 
@@ -54,15 +54,13 @@ public class BowerbirdDB
         }
     }
 
-    public static void newTable()
+    public void newTable()
     {
-        String sql = 	"CREATE TABLE IF NOT EXISTS music (\n" +
-                        "ID integer PRIMARY KEY,\n" +
-                        "FilePath text NOT NULL,\n" +
-                        "PlayCount integer,\n" +
-                        "\n" +
-                        "\n" +
-                        "Lyrics text,\n" +
+        String sql = 	"CREATE TABLE IF NOT EXISTS music (" +
+                        "ID integer PRIMARY KEY," +
+                        "FilePath text NOT NULL," +
+                        "PlayCount integer," +
+                        "Lyrics text" +
                         ");";
 
         try
@@ -79,17 +77,19 @@ public class BowerbirdDB
         }
     }
 
-    private static void insert()
+    public void insert(MusicRecord musicRecord)
     {
-        String sql = "INSERT INTO music (MAX(ID), ID, FilePath, PlayCount, Lyrics) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO music (ID, FilePath, PlayCount, Lyrics) VALUES(?, ?, ?, ?)";
 
-        try(Connection conn = BowerbirdDB.connect(); PreparedStatement ps = conn.prepareStatement(sql))
+        try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
-            //ps.setString(1);
-            //ps.setInt(2);
-            //ps.setString(3);
+            ps.setString(2, "mypath");
+            ps.setInt(3, 1);
+            ps.setString(4, "Lalalala");
 
             ps.executeUpdate();
+
+            System.out.println("Successful insert!");
         }
         catch(SQLException e)
         {

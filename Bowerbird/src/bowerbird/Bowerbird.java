@@ -117,7 +117,8 @@ public class Bowerbird extends Application {
 
                 if(f != null)
                 {
-                    filename = "file://" + f.getAbsolutePath().replace("C:", "").replace("\\", "/");
+                    //filename = "file://" + f.getAbsolutePath().replace("C:", "").replace("\\", "/");
+                    filename = f.toURI().toASCIIString();
                     System.out.println("Filename: " + filename);
                     if (mediaPlayer != null) {
                         mediaPlayer.stop();
@@ -265,6 +266,17 @@ public class Bowerbird extends Application {
                 timeSlider.setMax(newValue.toSeconds());
             }
         });
+
+        databaseInsert();
+    }
+
+    public void databaseInsert()
+    {
+        System.out.println("Attempting database insert.");
+
+        MusicRecord musicRecord = new MusicRecord();
+
+        bowerbirdDB.insert(musicRecord);
     }
 
     /**
