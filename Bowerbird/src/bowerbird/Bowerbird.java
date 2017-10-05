@@ -30,7 +30,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Bowerbird extends Application {
@@ -49,6 +48,7 @@ public class Bowerbird extends Application {
 
     private List<MusicRecord> musicRecordList;
     private List<AlbumRecord> albumRecordList;
+    Label outputLabel = new Label();
 
     @Override
     public void start(Stage primaryStage)
@@ -93,17 +93,17 @@ public class Bowerbird extends Application {
 
         Tab songTab = new Tab();
         songTab.setText("Song");
-        songTab.setContent(new Label("\nSong info\n will go here..."));
+        songTab.setContent(outputLabel);
 
-        Tab albumTab = new Tab();
-        albumTab.setText("Albums");
-        albumTab.setContent(new Label("\nList of Album\n will go here..."));
+        Tab playlistTab = new Tab();
+        playlistTab.setText("Albums");
+        playlistTab.setContent(new Label("\nList of playlists\n will go here..."));
 
         Tab sortTab = new Tab();
         sortTab.setText("Sort");
         sortTab.setContent(new Label("\nSorting options\n  will go here..."));
 
-        leftSideMenu.getTabs().addAll(songTab, albumTab, sortTab);
+        leftSideMenu.getTabs().addAll(songTab, playlistTab, sortTab);
 
         return leftSideMenu;
     }
@@ -114,7 +114,7 @@ public class Bowerbird extends Application {
         hbox.setPadding(new Insets(15, 12, 10, 12));
         hbox.setSpacing(10);
         hbox.setStyle("-fx-background-color: #D3D3D3;");
-        Label outputLabel = new Label();
+        //Label outputLabel = new Label();
 
         final FileChooser fc = new FileChooser();
 
