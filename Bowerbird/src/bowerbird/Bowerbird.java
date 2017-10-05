@@ -93,6 +93,7 @@ public class Bowerbird extends Application {
 
         Tab songTab = new Tab();
         songTab.setText("Song");
+        outputLabel.setWrapText(true);
         songTab.setContent(outputLabel);
 
         Tab playlistTab = new Tab();
