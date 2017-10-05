@@ -19,11 +19,6 @@ public class MusicRecord
     private String _filePath;
     //endregion PrivateVariables
 
-    public MusicRecord()
-    {
-
-    }
-
     //region GetSet
     public String get_title() {
         return _title;

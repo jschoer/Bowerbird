@@ -14,7 +14,6 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -31,6 +30,9 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Bowerbird extends Application {
 
     public static final Double MIN_DURATION_CHANGE = 0.5;
@@ -44,6 +46,9 @@ public class Bowerbird extends Application {
     private Button playBtn, pauseBtn, stopBtn, addSong;
 
     private BowerbirdDB bowerbirdDB;
+
+    private List<MusicRecord> musicRecordList;
+    private List<AlbumRecord> albumRecordList;
 
     @Override
     public void start(Stage primaryStage)
@@ -73,6 +78,12 @@ public class Bowerbird extends Application {
         volumeSlider = new Slider();
 
         bowerbirdDB = new BowerbirdDB();
+
+        musicRecordList = bowerbirdDB.getAllMusicRecords();
+        for(int i = 0; i < musicRecordList.size(); i++)
+        {
+            System.out.println(musicRecordList.get(i).get_title());
+        }
     }
 
     public TabPane leftSideMenu()
@@ -129,6 +140,7 @@ public class Bowerbird extends Application {
                     pauseBtn.setDisable(false);
                     stopBtn.setDisable(false);
                     outputLabel.setText("");
+
                 }
                 else
                     System.out.println("Chosen file is null.");
@@ -223,6 +235,8 @@ public class Bowerbird extends Application {
 
     public void UpdateMedia(String filename)
     {
+        artist = "unknown"; title = "-"; album = "-"; year = "-"; genre = "N/A";
+
         media = new Media(filename);
         media.getMetadata().addListener(new MapChangeListener<String, Object>() {
             @Override

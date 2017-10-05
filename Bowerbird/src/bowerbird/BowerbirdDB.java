@@ -1,11 +1,8 @@
 package bowerbird;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BowerbirdDB
 {
@@ -34,7 +31,6 @@ public class BowerbirdDB
         return conn;
     }
 
-    //only used to see if database is present
     public void newDB(String filename)
     {
         url += System.getProperty("user.dir").replace("\\", "/") + "/resources/" + filename;
@@ -83,16 +79,25 @@ public class BowerbirdDB
 
     public void insert(MusicRecord musicRecord)
     {
-        String sql = "INSERT INTO music (ID, FilePath, Title, Artist, Album, Genre, Year) VALUES(?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO music (FilePath, Title, Artist, Album, Genre, Year) " +
+                     "SELECT ?, ?, ?, ?, ?, ? " +
+                     "WHERE NOT EXISTS" +
+                     "(SELECT 1 FROM music WHERE Title = ? AND Artist = ? AND Album = ?)";  //unique to a song so no dupes
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
-            ps.setString(2, musicRecord.get_filePath());
-            ps.setString(3, musicRecord.get_title());
-            ps.setString(4, musicRecord.get_artist());
-            ps.setString(5, musicRecord.get_album());
-            ps.setString(6, musicRecord.get_genre());
-            ps.setString(7, musicRecord.get_year());
+            //Setting the values
+            ps.setString(1, musicRecord.get_filePath());
+            ps.setString(2, musicRecord.get_title());
+            ps.setString(3, musicRecord.get_artist());
+            ps.setString(4, musicRecord.get_album());
+            ps.setString(5, musicRecord.get_genre());
+            ps.setString(6, musicRecord.get_year());
+
+            //Setting the duplicate values
+            ps.setString(7, musicRecord.get_title());
+            ps.setString(8, musicRecord.get_artist());
+            ps.setString(9, musicRecord.get_album());
 
             ps.executeUpdate();
 
@@ -102,5 +107,38 @@ public class BowerbirdDB
         {
             System.out.println("insert error: " + e.getMessage());
         }
+    }
+
+    public List<MusicRecord> getAllMusicRecords()
+    {
+        String sql = "SELECT * FROM music";
+        List<MusicRecord> musicRecords = new ArrayList<>();
+
+        try(Connection conn = connect(); Statement st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY))
+        {
+            ResultSet rs = st.executeQuery(sql);
+
+            while(rs.next())
+            {
+                MusicRecord musicRecord = new MusicRecord();
+                musicRecord.set_filePath(rs.getString("FilePath"));
+                musicRecord.set_title(rs.getString("Title"));
+                musicRecord.set_artist(rs.getString("Artist"));
+                musicRecord.set_album(rs.getString("Album"));
+                musicRecord.set_genre(rs.getString("Genre"));
+                musicRecord.set_year(rs.getString("Year"));
+
+                if(musicRecord != null)
+                {
+                    musicRecords.add(musicRecord);
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.print(e.getMessage());
+        }
+
+        return musicRecords;
     }
 }
