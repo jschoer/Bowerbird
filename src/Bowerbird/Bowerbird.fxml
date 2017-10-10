@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
+
+<fx:root type="javafx.scene.layout.BorderPane"
+         xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         prefHeight="600">
+    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+
+    <left>
+        <TabPane tabClosingPolicy="UNAVAILABLE" fx:id="tabPane" >
+            <Tab text="Songs">
+                <Text text="All songs appear here"/>
+            </Tab>
+            <Tab text="Play Lists">
+                <Text text="A list of play lists go here"/>
+            </Tab>
+            <Tab text="Sort By">
+                <Text text="A list of sorting options go here"/>
+            </Tab>
+        </TabPane>
+    </left>
+
+    <bottom>
+        <VBox>
+            <VBox>
+                <Slider fx:id="timeSlider" onScroll="#handleTimeScrollEvent"/>
+                <HBox>
+                    <Label fx:id="currentTime" text="00.00.00"/>
+                    <Text text=" / "/>
+                    <Label fx:id="totalTime" text="00.00.00"/>
+                </HBox>
+            </VBox>
+            <HBox spacing="10" alignment="CENTER">
+                <padding><Insets top="15" right="12" bottom="10" left="12"/></padding>
+                <Button text="Play" onAction="#handlePlayButtonAction" fx:id="playButton" disable="true"/>
+                <Button text="Pause" onAction="#handlePauseButtonAction" fx:id="pauseButton" disable="true"/>
+                <Button text="Stop" onAction="#handleStopButtonAction" fx:id="stopButton" disable="true"/>
+                <Button text="Add Song" onAction="#handleAddSongButtonAction" fx:id="addButton"/>
+                <VBox alignment="CENTER">
+                    <Text text="Volume"/>
+                    <Slider fx:id="volumeSlider" onScroll="#handleVolumeScrollEvent"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </bottom>
+
+    <right>
+        <Label fx:id="songInfo" text="Song Information" wrapText="true" minWidth="300" prefWidth="320" maxWidth="500"/>
+    </right>
+
+    <center>
+        <Label text="Image will go here" minWidth="300"/>
+    </center>
+
+    <stylesheets>
+        <URL value="@Bowerbird.css"/>
+    </stylesheets>
+</fx:root>

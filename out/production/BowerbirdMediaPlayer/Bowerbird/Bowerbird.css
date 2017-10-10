@@ -1,0 +1,38 @@
+.root {
+    -fx-font-size: 16pt;
+    -fx-font-family: "Courier New";
+    -fx-base: rgb(47, 145, 132);
+    -fx-background: royalblue;
+    -fx-background-color: lightsteelblue;
+}
+
+.label {
+    -fx-text-fill: black;
+}
+
+#songInfo {
+    -fx-padding: 0 10 0 10;
+    -fx-border-width: 4;
+    -fx-border-color: blue;
+    -fx-background-color: #f0f0f0;
+}
+
+.tab-pane{
+    -fx-open-tab-animation: grow;
+    -fx-close-tab-animation: grow;
+}
+
+.tab-content-area {
+    -fx-background-color: #f0f0f0;
+    -fx-border-width: 5;
+    -fx-border-color: blue;
+    -fx-padding: 20 10 10 20;
+}
+
+.tab:selected {
+    -fx-background-color: blue;
+}
+
+.button {
+    -fx-background-radius: 50%;
+}
