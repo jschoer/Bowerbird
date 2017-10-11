@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="" />
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BowerbirdMediaPlayer/Bowerbird/Bowerbird.css" afterPath="$PROJECT_DIR$/out/production/BowerbirdMediaPlayer/Bowerbird/Bowerbird.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/BowerbirdMediaPlayer/Bowerbird/Bowerbird.fxml" afterPath="$PROJECT_DIR$/out/production/BowerbirdMediaPlayer/Bowerbird/Bowerbird.fxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Bowerbird/Bowerbird.css" afterPath="$PROJECT_DIR$/src/Bowerbird/Bowerbird.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml" afterPath="$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml" />
+    </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -58,54 +65,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="Bowerbird.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MediaManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#databaseInsert#0;class#MediaManager#0" expanded="false" />
-                <element signature="n#!!doc;n#Play#0;n#MediaManager#0" expanded="false" />
-                <element signature="n#!!doc;n#getMedia#0;n#MediaManager#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="BowerbirdDB.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Bowerbird/BowerbirdDB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
-              <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MusicRecord.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Bowerbird/MusicRecord.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="18" lean-forward="false" selection-start-line="0" selection-start-column="18" selection-end-line="0" selection-end-column="18" />
-              <folding>
-                <element signature="n#!!doc;n#_title#0;n#MusicRecord#0" expanded="false" />
-                <element signature="n#!!doc;n#get_title#0;n#MusicRecord#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="-577">
+              <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -113,14 +78,39 @@
       <file leaf-file-name="Controller.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="945">
-              <caret line="87" column="0" lean-forward="true" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#handleAddSongButtonAction#0;class#Controller#0" expanded="false" />
-                <element signature="method#handleVolumeScrollEvent#0;class#Controller#0" expanded="false" />
-                <element signature="method#handleTimeScrollEvent#0;class#Controller#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="15">
+              <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Bowerbird.css" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="424">
+              <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Bowerbird.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MusicRecord.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Bowerbird/MusicRecord.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -128,33 +118,13 @@
       <file leaf-file-name="Bowerbird.fxml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="15" column="65" lean-forward="false" selection-start-line="15" selection-start-column="65" selection-end-line="15" selection-end-column="65" />
+            <state relative-caret-position="163">
+              <caret line="90" column="29" lean-forward="false" selection-start-line="90" selection-start-column="22" selection-end-line="90" selection-end-column="29" />
               <folding />
             </state>
           </provider>
           <provider editor-type-id="JavaFX-Scene-Builder">
             <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Bowerbird.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="5" column="41" lean-forward="true" selection-start-line="5" selection-start-column="41" selection-end-line="5" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package-info.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Bowerbird/package-info.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="1" lean-forward="false" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
-              <folding />
-            </state>
           </provider>
         </entry>
       </file>
@@ -180,6 +150,9 @@
       <setting name="OPEN_NEW_TAB" value="false" />
     </FindUsagesManager>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
       <projects_view />
@@ -198,18 +171,20 @@
         <option value="$PROJECT_DIR$/src/Bowerbird/package-info.java" />
         <option value="$PROJECT_DIR$/src/Bowerbird/MediaManager.java" />
         <option value="$PROJECT_DIR$/src/Bowerbird/Bowerbird.java" />
-        <option value="$PROJECT_DIR$/src/Bowerbird/Bowerbird.css" />
-        <option value="$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml" />
         <option value="$PROJECT_DIR$/src/Bowerbird/Controller.java" />
+        <option value="$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml" />
+        <option value="$PROJECT_DIR$/src/Bowerbird/Bowerbird.css" />
       </list>
     </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="-8" />
-    <option name="width" value="976" />
-    <option name="height" value="1038" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="113" />
+    <option name="y" value="23" />
+    <option name="width" value="1215" />
+    <option name="height" value="807" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectReloadState">
     <option name="STATE" value="0" />
   </component>
@@ -228,25 +203,21 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="BowerbirdMediaPlayer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="BowerbirdMediaPlayer" type="462c0819:PsiDirectoryNode" />
+              <item name="Bowerbird" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bowerbird" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="BowerbirdMediaPlayer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="BowerbirdMediaPlayer" type="462c0819:PsiDirectoryNode" />
+              <item name="Bowerbird" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bowerbird" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="BowerbirdMediaPlayer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="BowerbirdMediaPlayer" type="462c0819:PsiDirectoryNode" />
+              <item name="Bowerbird" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Bowerbird" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="Bowerbird" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -254,6 +225,10 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -267,7 +242,7 @@
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="dynamic.classpath" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Bowerbird/Bowerbird" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -425,7 +400,7 @@
     <option name="totallyTimeSpent" value="1302000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1048" extended-state="7" />
+    <frame x="113" y="23" width="1215" height="807" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -436,12 +411,12 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3289183" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32789117" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13072917" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20576131" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -490,347 +465,38 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="22" column="1" lean-forward="true" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="5" column="26" lean-forward="false" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1092">
-          <caret line="52" column="0" lean-forward="true" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#databaseInsert#0;class#MediaManager#0" expanded="false" />
-            <element signature="n#!!doc;n#Play#0;n#MediaManager#0" expanded="false" />
-            <element signature="n#!!doc;n#getMedia#0;n#MediaManager#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/BowerbirdDB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="27" column="67" lean-forward="true" selection-start-line="27" selection-start-column="67" selection-end-line="27" selection-end-column="67" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MusicRecord.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
-          <folding>
-            <element signature="n#!!doc;n#_title#0;n#MusicRecord#0" expanded="false" />
-            <element signature="n#!!doc;n#get_title#0;n#MusicRecord#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="651">
-          <caret line="31" column="62" lean-forward="false" selection-start-line="31" selection-start-column="62" selection-end-line="31" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="16" column="33" lean-forward="false" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/package-info.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="18" lean-forward="true" selection-start-line="0" selection-start-column="18" selection-end-line="0" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1785">
-          <caret line="85" column="4" lean-forward="false" selection-start-line="85" selection-start-column="4" selection-end-line="85" selection-end-column="4" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#handleAddSongButtonAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleVolumeScrollEvent#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleTimeScrollEvent#0;class#Controller#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="41" column="148" lean-forward="true" selection-start-line="41" selection-start-column="148" selection-end-line="41" selection-end-column="148" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#handleAddSongButtonAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleVolumeScrollEvent#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleTimeScrollEvent#0;class#Controller#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#databaseInsert#0;class#MediaManager#0" expanded="false" />
-            <element signature="n#!!doc;n#Play#0;n#MediaManager#0" expanded="false" />
-            <element signature="n#!!doc;n#getMedia#0;n#MediaManager#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/BowerbirdDB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="35" column="103" lean-forward="false" selection-start-line="35" selection-start-column="15" selection-end-line="35" selection-end-column="103" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MusicRecord.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
-          <folding>
-            <element signature="n#!!doc;n#_title#0;n#MusicRecord#0" expanded="false" />
-            <element signature="n#!!doc;n#get_title#0;n#MusicRecord#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="3" column="32" lean-forward="false" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="3" column="23" lean-forward="false" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/package-info.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="18" lean-forward="true" selection-start-line="0" selection-start-column="18" selection-end-line="0" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#handleAddSongButtonAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleVolumeScrollEvent#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleTimeScrollEvent#0;class#Controller#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="41" lean-forward="true" selection-start-line="5" selection-start-column="41" selection-end-line="5" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#databaseInsert#0;class#MediaManager#0" expanded="false" />
-            <element signature="n#!!doc;n#Play#0;n#MediaManager#0" expanded="false" />
-            <element signature="n#!!doc;n#getMedia#0;n#MediaManager#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1113">
-          <caret line="53" column="32" lean-forward="false" selection-start-line="53" selection-start-column="32" selection-end-line="53" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="882">
-          <caret line="42" column="1" lean-forward="false" selection-start-line="42" selection-start-column="1" selection-end-line="42" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/package-info.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="10" column="56" lean-forward="false" selection-start-line="10" selection-start-column="56" selection-end-line="10" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="29" column="35" lean-forward="true" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#handleAddSongButtonAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleVolumeScrollEvent#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleTimeScrollEvent#0;class#Controller#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1827">
-          <caret line="87" column="65" lean-forward="false" selection-start-line="87" selection-start-column="65" selection-end-line="87" selection-end-column="65" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#databaseInsert#0;class#MediaManager#0" expanded="false" />
-            <element signature="n#!!doc;n#Play#0;n#MediaManager#0" expanded="false" />
-            <element signature="n#!!doc;n#getMedia#0;n#MediaManager#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/BowerbirdDB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="27" column="67" lean-forward="true" selection-start-line="27" selection-start-column="67" selection-end-line="27" selection-end-column="67" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MusicRecord.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="4" lean-forward="false" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
-          <folding>
-            <element signature="n#!!doc;n#_title#0;n#MusicRecord#0" expanded="false" />
-            <element signature="n#!!doc;n#get_title#0;n#MusicRecord#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="924">
-          <caret line="44" column="103" lean-forward="false" selection-start-line="44" selection-start-column="103" selection-end-line="44" selection-end-column="103" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#handleAddSongButtonAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleVolumeScrollEvent#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleTimeScrollEvent#0;class#Controller#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/BowerbirdDB.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MusicRecord.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/package-info.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/BowerbirdDB.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MusicRecord.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/package-info.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/package-info.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/BowerbirdDB.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MusicRecord.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java" />
     <entry file="file://$PROJECT_DIR$/src/sample/Main.java" />
     <entry file="file://$PROJECT_DIR$/src/sample/sample.fxml" />
     <entry file="file://$PROJECT_DIR$/src/sample/Controller.java" />
@@ -838,17 +504,7 @@
     <entry file="file://$PROJECT_DIR$/src/sample/Main.java" />
     <entry file="file://$PROJECT_DIR$/src/Bowerbird/FXMLBowerbird.fxml" />
     <entry file="file://$PROJECT_DIR$/src/sample/sample.fxml" />
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="10" column="47" lean-forward="true" selection-start-line="10" selection-start-column="47" selection-end-line="10" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml" />
     <entry file="file://$PROJECT_DIR$/BowerbirdMediaPlayer.iml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
@@ -864,39 +520,36 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Bowerbird/resources/layout.xsl" />
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css">
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/package-info.java" />
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MusicRecord.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="41" lean-forward="true" selection-start-line="5" selection-start-column="41" selection-end-line="5" selection-end-column="41" />
+        <state relative-caret-position="45">
+          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Bowerbird/BowerbirdDB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MusicRecord.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="18" lean-forward="false" selection-start-line="0" selection-start-column="18" selection-end-line="0" selection-end-column="18" />
-          <folding>
-            <element signature="n#!!doc;n#_title#0;n#MusicRecord#0" expanded="false" />
-            <element signature="n#!!doc;n#get_title#0;n#MusicRecord#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="-577">
+          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.fxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="15" column="65" lean-forward="false" selection-start-line="15" selection-start-column="65" selection-end-line="15" selection-end-column="65" />
+        <state relative-caret-position="163">
+          <caret line="90" column="29" lean-forward="false" selection-start-line="90" selection-start-column="22" selection-end-line="90" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -906,45 +559,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Bowerbird/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="945">
-          <caret line="87" column="0" lean-forward="true" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#handleAddSongButtonAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleVolumeScrollEvent#0;class#Controller#0" expanded="false" />
-            <element signature="method#handleTimeScrollEvent#0;class#Controller#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/MediaManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#databaseInsert#0;class#MediaManager#0" expanded="false" />
-            <element signature="n#!!doc;n#Play#0;n#MediaManager#0" expanded="false" />
-            <element signature="n#!!doc;n#getMedia#0;n#MediaManager#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/package-info.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="1" lean-forward="false" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
+        <state relative-caret-position="15">
+          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.java">
+    <entry file="file://$PROJECT_DIR$/src/Bowerbird/Bowerbird.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="424">
+          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
