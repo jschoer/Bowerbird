@@ -134,7 +134,7 @@ public class MediaManager {
             }
         });
 
-        Platform.runLater(new Runnable() {
+        mediaPlayer.setOnReady(new Runnable() {
             @Override
             public void run() {
                 if(!fromList)
@@ -169,9 +169,30 @@ public class MediaManager {
     public void SetTimeStamps()
     {
         Duration totalDuration = mediaPlayer.getTotalDuration();
-        Double totalTimeInSeconds = totalDuration.toSeconds();
+        double totalTimeInSeconds = totalDuration.toSeconds();
 
-        totalTime.setText(totalTimeInSeconds / 60 + "s");
+        int[] songTime = splitTime(totalTimeInSeconds);
+
+        totalTime.setText(String.format("%02d.%02d.%02d", songTime[0], songTime[1], songTime[2]));
+
+        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
+            @Override
+            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                int[] time = splitTime(newValue.toSeconds());
+                currentTime.setText(String.format("%02d.%02d.%02d", time[0], time[1], time[2]));
+            }
+        });
+    }
+
+    public int[] splitTime(double totalTimeInSeconds)
+    {
+        int hour = (int)totalTimeInSeconds / 3600;
+        int remainder = (int)totalTimeInSeconds - hour * 3600;
+        int min = remainder / 60;
+        remainder = remainder - min * 60;
+        int sec = remainder;
+
+        return new int[] {hour, min, sec};
     }
 
     //region MediaPlayer
