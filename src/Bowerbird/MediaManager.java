@@ -140,6 +140,7 @@ public class MediaManager {
                 if(!fromList)
                     databaseInsert(path);
                 UpdateLabel();
+                SetTimeStamps();
             }
         });
     }
@@ -163,6 +164,14 @@ public class MediaManager {
     {
         songInfo.setText("Title: " + title + "\nArtist: " + artist + "\n" + "Album: " + album + "\n"
                         + "Year: " + year + "\n" + "Genre: " + genre);
+    }
+
+    public void SetTimeStamps()
+    {
+        Duration totalDuration = mediaPlayer.getTotalDuration();
+        Double totalTimeInSeconds = totalDuration.toSeconds();
+
+        totalTime.setText(totalTimeInSeconds / 60 + "s");
     }
 
     //region MediaPlayer

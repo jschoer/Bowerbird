@@ -22,6 +22,43 @@
             </Tab>
             <Tab text="Sort By">
                 <Text text="A list of sorting options go here"/>
+                <Accordion fx:id="sortOptions">
+                    <panes>
+                        <TitledPane text="Title">
+                            <content>
+                                <Text text="123"/>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="Artist">
+                            <content>
+                                <Text text="123"/>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="Song">
+                            <content>
+                                <Text text="123"/>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="Album">
+                            <content>
+                                <Text text="123"/>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="Genre">
+                            <content>
+                                <Text text="123"/>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="Year">
+                            <content>
+                                <Text text="123"/>
+                            </content>
+                        </TitledPane>
+                    </panes>
+                </Accordion>
+            </Tab>
+            <Tab text="Search">
+                <TextField fx:id="fieldSearch"/>
             </Tab>
         </TabPane>
     </left>
