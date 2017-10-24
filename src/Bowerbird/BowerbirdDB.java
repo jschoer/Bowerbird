@@ -53,14 +53,22 @@ public class BowerbirdDB
 
     public void newTable()
     {
-        String sql = "CREATE TABLE IF NOT EXISTS music (" +
+        String music = "CREATE TABLE IF NOT EXISTS music (" +
                 "ID integer PRIMARY KEY," +
                 "FilePath text NOT NULL," +
                 "Title text," +
                 "Artist text," +
                 "Album text," +
+                "Track# integer," +
                 "Genre text," +
                 "Year text" +
+                ");";
+
+        String playlists = "CREATE TABLE IF NOT EXISTS playlists (" +
+                "ID integer PRIMARY KEY," +
+                "Name text NOT NULL," +
+                "SongID integer," +
+                "Position integer" +
                 ");";
 
         try
@@ -68,12 +76,39 @@ public class BowerbirdDB
             Connection conn = connect();
             Statement stmt = conn.createStatement();
 
-            stmt.execute(sql);
+            stmt.execute(music);
             System.out.println("Table 'music' created.");
+
+            stmt.execute(playlists);
+            System.out.println("Table 'playlists' created.");
         }
         catch(SQLException e)
         {
             System.out.println("newTable error: " + e.getMessage());
+        }
+    }
+
+    public void newPlaylist(String playlistName)
+    {
+        String sql = "INSERT INTO playlists (Name, Song, Position)" +
+                "SELECT ?, ?, ?" +
+                "WHERE NOT EXISTS" +
+                "(SELECT 1 from playlists where Name = ?)";
+
+        try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setString(1, playlistName);
+            ps.setString(2, null);
+            ps.setInt(3, 0);
+            ps.setString(4, playlistName);
+
+            ps.executeUpdate();
+
+            System.out.println("Playlist " + playlistName + " created.");
+        }
+        catch(SQLException e)
+        {
+            System.out.println("new playlist error: " + e.getMessage());
         }
     }
 
