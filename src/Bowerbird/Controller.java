@@ -3,10 +3,7 @@ package Bowerbird;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
@@ -24,6 +21,7 @@ public class Controller extends BorderPane{
     private Button playButton, pauseButton, stopButton, addButton;
 
     @FXML private TabPane tabPane;
+    @FXML private Tab songTab;
 
     private MediaManager mediaManager;
 
@@ -43,7 +41,7 @@ public class Controller extends BorderPane{
 
     @FXML public void initialize()
     {
-        mediaManager = new MediaManager(volumeSlider, timeSlider, songInfo, currentTime, totalTime, playButton, pauseButton, stopButton, addButton);
+        mediaManager = new MediaManager(volumeSlider, timeSlider, songInfo, currentTime, totalTime, playButton, pauseButton, stopButton, addButton, songTab);
 
     }
 
@@ -92,9 +90,5 @@ public class Controller extends BorderPane{
         timeSlider.setValue(timeSlider.getValue() + scrollSpeed / 10);
     }
 
-    @FXML protected void toggleTabVisibility(ActionEvent event)
-    {
-        tabPane.visibleProperty().setValue(!tabPane.isVisible());
-    }
     //endregion Handlers
 }

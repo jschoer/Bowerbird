@@ -39,3 +39,16 @@
 .button {
     -fx-background-radius: 50%;
 }
+
+.tab-button {
+    -fx-width: 100%;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: black;
+    -fx-background-radius: 0;
+}
+.tab-button:hover {
+    -fx-background-color: lightgray;
+}
+.tab-button:click {
+    -fx-background-color: gray;
+}

@@ -14,7 +14,7 @@
 
     <left>
         <TabPane tabClosingPolicy="UNAVAILABLE" fx:id="tabPane" >
-            <Tab text="Songs">
+            <Tab text="Songs" fx:id="songTab">
                 <Text text="All songs appear here"/>
             </Tab>
             <Tab text="Play Lists">
