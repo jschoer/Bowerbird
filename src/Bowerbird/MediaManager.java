@@ -169,7 +169,7 @@ public class MediaManager {
         musicRecord.set_title(title);
         musicRecord.set_year(year);
 
-        bowerbirdDB.insert(musicRecord);
+        bowerbirdDB.importSong(musicRecord);
     }
 
     public void UpdateLabel()

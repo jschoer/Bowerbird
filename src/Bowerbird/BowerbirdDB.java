@@ -53,14 +53,23 @@ public class BowerbirdDB
 
     public void newTable()
     {
-        String sql = "CREATE TABLE IF NOT EXISTS music (" +
+        String music = "CREATE TABLE IF NOT EXISTS music (" +
                 "ID integer PRIMARY KEY," +
                 "FilePath text NOT NULL," +
                 "Title text," +
                 "Artist text," +
                 "Album text," +
+                "Track# integer," +
                 "Genre text," +
                 "Year text" +
+                ");";
+
+        String playlists = "CREATE TABLE IF NOT EXISTS playlists (" +
+                "PlaylistID integer," +
+                "Name text NOT NULL," +
+                "SongID integer," +
+                "Position integer," +
+                "UNIQUE(Name)" +
                 ");";
 
         try
@@ -68,8 +77,11 @@ public class BowerbirdDB
             Connection conn = connect();
             Statement stmt = conn.createStatement();
 
-            stmt.execute(sql);
+            stmt.execute(music);
             System.out.println("Table 'music' created.");
+
+            stmt.execute(playlists);
+            System.out.println("Table 'playlists' created.");
         }
         catch(SQLException e)
         {
@@ -77,7 +89,74 @@ public class BowerbirdDB
         }
     }
 
-    public void insert(MusicRecord musicRecord)
+    public void newPlaylist(String playlistName)
+    {
+        String sql = "INSERT INTO playlists (PlaylistID, Name, Song, Position)" +
+                "VALUES (?, ?, ?, ?)";
+
+        try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setString(1, playlistName);
+            ps.setString(2, null);
+            ps.setInt(3, 0);
+            ps.setString(4, playlistName);
+
+            ps.executeUpdate();
+
+            System.out.println("Playlist " + playlistName + " created.");
+        }
+        catch(SQLException e)
+        {
+            System.out.println("new playlist error: " + e.getMessage());
+        }
+    }
+
+    public void addToPlaylist(int playlistID, int song, int position)
+    {
+        String insert = "INSERT INTO playlists (PlaylistID, Name, Song, Position)" +
+                "VALUES (?, ?, ?, ?)" ;
+
+        String getName = "SELECT TOP 1 Name FROM playlists " +
+                "WHERE ID = ? AND Song = null";
+
+        try(Connection conn = connect())
+        {
+            PreparedStatement gn = conn.prepareStatement(getName);
+            gn.setInt(1, playlistID);
+            ResultSet rs = gn.executeQuery(getName);
+
+            PreparedStatement in = conn.prepareStatement(insert);
+            in.setInt(1, playlistID);
+            in.setString(2, rs.getString("Name"));
+            in.setInt(3, song);
+            in.setInt(4, position);
+        }
+        catch(SQLException e)
+        {
+            System.out.println("add to playlist error: " + e.getMessage());
+        }
+    }
+
+    public void renamePlaylist(int playlistID, String newName)
+    {
+        String sql = "UPDATE playlists " +
+                "SET Name = ?" +
+                "WHERE PlaylistID = ?";
+
+        try(Connection conn = connect())
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, newName);
+            ps.setInt(2, playlistID);
+            ps.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("rename playlist error: " + e.getMessage());
+        }
+    }
+
+    public void importSong(MusicRecord musicRecord)
     {
         String sql = "INSERT INTO music (FilePath, Title, Artist, Album, Genre, Year) " +
                 "SELECT ?, ?, ?, ?, ?, ? " +
