@@ -1,18 +1,23 @@
 package Bowerbird;
 
-import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.MapChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MediaManager {
 
@@ -22,6 +27,7 @@ public class MediaManager {
     @FXML private Slider volumeSlider;
     @FXML private Label songInfo, currentTime, totalTime;
     @FXML private Button playButton, pauseButton, stopButton, addButton;
+    @FXML private Tab songTab;
 
     private BowerbirdDB bowerbirdDB;
 
@@ -30,9 +36,11 @@ public class MediaManager {
 
     private String artist, title, album, year, genre;
 
+    public List<MusicRecord> musicRecordList;
+
     public MediaManager(Slider volumeSlider, Slider timeSlider,
                         Label songInfo, Label currentTime, Label totalTime,
-                        Button playButton, Button pauseButton, Button stopButton, Button addButton)
+                        Button playButton, Button pauseButton, Button stopButton, Button addButton, Tab songTab)
     {
         this.volumeSlider = volumeSlider;
         this.timeSlider = timeSlider;
@@ -43,10 +51,14 @@ public class MediaManager {
         this.pauseButton = pauseButton;
         this.stopButton = stopButton;
         this.addButton = addButton;
+        this.songTab = songTab;
 
         bowerbirdDB = new BowerbirdDB();
 
         SetSliders();
+
+        musicRecordList = bowerbirdDB.getAllMusicRecords();
+        AddSongsToTab();
     }
 
     public void SetSliders()
@@ -157,7 +169,7 @@ public class MediaManager {
         musicRecord.set_title(title);
         musicRecord.set_year(year);
 
-        bowerbirdDB.insert(musicRecord);
+        bowerbirdDB.importSong(musicRecord);
     }
 
     public void UpdateLabel()
@@ -195,6 +207,40 @@ public class MediaManager {
         return new int[] {hour, min, sec};
     }
 
+    public void AddSongsToTab()
+    {
+        VBox songTabVBox = new VBox();
+        for (int i = 1; i < musicRecordList.size() + 1; i++)
+        {
+            Button newButton = songButton(i, musicRecordList.get(i - 1));
+            newButton.getStyleClass().add("tab-button");
+
+            songTabVBox.getChildren().add(newButton);
+        }
+        songTab.setContent(songTabVBox);
+    }
+
+    public Button songButton(int index, MusicRecord musicRecord)
+    {
+        Button newButton = new Button(index + ". " + musicRecord.get_title());
+        newButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(mediaPlayer != null)
+                {
+                    mediaPlayer.stop();
+                    mediaPlayer.dispose();
+
+                    newButton.setStyle("-fx-background-color: yellow");
+                }
+                UpdateMedia(musicRecord.get_filePath(), true);
+                mediaPlayer.play();
+            }
+        });
+
+        return newButton;
+    }
+
     //region MediaPlayer
     public void Play()
     {
@@ -217,6 +263,16 @@ public class MediaManager {
         playButton.setDisable(false);
         pauseButton.setDisable(true);
         timeSlider.setDisable(true);
+
+        currentTime.setText("00.00.00");
+        totalTime.setText("00.00.00");
+        songInfo.setText("Song Information");
+
+        VBox vbox = (VBox)songTab.getContent();
+        for(Node node : vbox.getChildren())
+        {
+            node.setStyle("-fx-background-color: white");
+        }
     }
     //endregion MediaPlayer
 
