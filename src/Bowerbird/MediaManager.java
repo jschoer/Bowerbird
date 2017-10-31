@@ -170,6 +170,8 @@ public class MediaManager {
         musicRecord.set_year(year);
 
         bowerbirdDB.importSong(musicRecord);
+        musicRecordList = bowerbirdDB.getAllMusicRecords();
+        AddSongsToTab();
     }
 
     public void UpdateLabel()

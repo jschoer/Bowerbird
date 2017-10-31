@@ -59,7 +59,7 @@ public class BowerbirdDB
                 "Title text," +
                 "Artist text," +
                 "Album text," +
-                "Track# integer," +
+                "TrackNum integer," +
                 "Genre text," +
                 "Year text" +
                 ");";

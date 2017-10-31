@@ -21,11 +21,39 @@
     <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
 
     <left>
+        <Label fx:id="songInfo" maxWidth="500" minWidth="300" prefWidth="320" text="Song Information" wrapText="true" />
+    </left>
+
+    <bottom>
+        <VBox>
+            <VBox>
+                <Slider fx:id="timeSlider" onScroll="#handleTimeScrollEvent" />
+                <HBox>
+                    <Label fx:id="currentTime" text="00.00.00" />
+                    <Text text=" / " />
+                    <Label fx:id="totalTime" text="00.00.00" />
+                </HBox>
+            </VBox>
+            <HBox alignment="CENTER" spacing="10">
+                <padding><Insets bottom="10" left="12" right="12" top="15" /></padding>
+                <Button fx:id="playButton" disable="true" onAction="#handlePlayButtonAction" text="Play" />
+                <Button fx:id="pauseButton" disable="true" onAction="#handlePauseButtonAction" text="Pause" />
+                <Button fx:id="stopButton" disable="true" onAction="#handleStopButtonAction" text="Stop" />
+                <Button fx:id="addButton" onAction="#handleAddSongButtonAction" text="Add Song" />
+                <VBox alignment="CENTER">
+                    <Text text="Volume" />
+                    <Slider fx:id="volumeSlider" onScroll="#handleVolumeScrollEvent" />
+                </VBox>
+            </HBox>
+        </VBox>
+    </bottom>
+
+    <right>
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
-            <Tab text="Songs">
+            <Tab text="Songs" fx:id="songTab">
                 <Text text="All songs appear here" />
             </Tab>
-            <Tab text="Play Lists">
+            <Tab text="Playlists">
                 <Text text="A list of play lists go here" />
             </Tab>
             <Tab text="Sort By">
@@ -69,34 +97,6 @@
                 <TextField fx:id="fieldSearch" />
             </Tab>
         </TabPane>
-    </left>
-
-    <bottom>
-        <VBox>
-            <VBox>
-                <Slider fx:id="timeSlider" onScroll="#handleTimeScrollEvent" />
-                <HBox>
-                    <Label fx:id="currentTime" text="00.00.00" />
-                    <Text text=" / " />
-                    <Label fx:id="totalTime" text="00.00.00" />
-                </HBox>
-            </VBox>
-            <HBox alignment="CENTER" spacing="10">
-                <padding><Insets bottom="10" left="12" right="12" top="15" /></padding>
-                <Button fx:id="playButton" disable="true" onAction="#handlePlayButtonAction" text="Play" />
-                <Button fx:id="pauseButton" disable="true" onAction="#handlePauseButtonAction" text="Pause" />
-                <Button fx:id="stopButton" disable="true" onAction="#handleStopButtonAction" text="Stop" />
-                <Button fx:id="addButton" onAction="#handleAddSongButtonAction" text="Add Song" />
-                <VBox alignment="CENTER">
-                    <Text text="Volume" />
-                    <Slider fx:id="volumeSlider" onScroll="#handleVolumeScrollEvent" />
-                </VBox>
-            </HBox>
-        </VBox>
-    </bottom>
-
-    <right>
-        <Label fx:id="songInfo" maxWidth="500" minWidth="300" prefWidth="320" text="Song Information" wrapText="true" />
     </right>
 
     <center>
