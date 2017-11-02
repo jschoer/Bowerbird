@@ -211,7 +211,8 @@ public class MediaManager {
 
     public void AddSongsToTab()
     {
-        //VBox songTabVBox = new VBox();
+        songTab.getChildren().clear();
+
         for (int i = 1; i < musicRecordList.size() + 1; i++)
         {
             Button newButton = songButton(i, musicRecordList.get(i - 1));
@@ -219,7 +220,6 @@ public class MediaManager {
 
             songTab.getChildren().add(newButton);
         }
-        //songTab = songTabVBox;
     }
 
     public Button songButton(int index, MusicRecord musicRecord)

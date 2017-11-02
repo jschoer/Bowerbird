@@ -16,8 +16,7 @@
     -fx-border-width: 2;
     -fx-border-color: gray;
     -fx-background-color: #f0f0f0;
-}
-*/
+}*/
 
 .tab-pane{
     -fx-open-tab-animation: grow;
