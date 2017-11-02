@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class Controller extends BorderPane{
     private Button playButton, pauseButton, stopButton, addButton;
 
     @FXML private TabPane tabPane;
-    @FXML private Tab songTab;
+    @FXML private VBox songTab;
 
     private MediaManager mediaManager;
 

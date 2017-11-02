@@ -27,7 +27,7 @@ public class MediaManager {
     @FXML private Slider volumeSlider;
     @FXML private Label songInfo, currentTime, totalTime;
     @FXML private Button playButton, pauseButton, stopButton, addButton;
-    @FXML private Tab songTab;
+    @FXML private VBox songTab;
 
     private BowerbirdDB bowerbirdDB;
 
@@ -40,7 +40,7 @@ public class MediaManager {
 
     public MediaManager(Slider volumeSlider, Slider timeSlider,
                         Label songInfo, Label currentTime, Label totalTime,
-                        Button playButton, Button pauseButton, Button stopButton, Button addButton, Tab songTab)
+                        Button playButton, Button pauseButton, Button stopButton, Button addButton, VBox songTab)
     {
         this.volumeSlider = volumeSlider;
         this.timeSlider = timeSlider;
@@ -211,15 +211,15 @@ public class MediaManager {
 
     public void AddSongsToTab()
     {
-        VBox songTabVBox = new VBox();
+        //VBox songTabVBox = new VBox();
         for (int i = 1; i < musicRecordList.size() + 1; i++)
         {
             Button newButton = songButton(i, musicRecordList.get(i - 1));
             newButton.getStyleClass().add("tab-button");
 
-            songTabVBox.getChildren().add(newButton);
+            songTab.getChildren().add(newButton);
         }
-        songTab.setContent(songTabVBox);
+        //songTab = songTabVBox;
     }
 
     public Button songButton(int index, MusicRecord musicRecord)
@@ -270,7 +270,7 @@ public class MediaManager {
         totalTime.setText("00.00.00");
         songInfo.setText("Song Information");
 
-        VBox vbox = (VBox)songTab.getContent();
+        VBox vbox = songTab;
         for(Node node : vbox.getChildren())
         {
             node.setStyle("-fx-background-color: white");

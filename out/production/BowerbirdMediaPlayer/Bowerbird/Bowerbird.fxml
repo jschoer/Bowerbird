@@ -21,7 +21,6 @@
     <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
 
     <left>
-        <Label fx:id="songInfo" maxWidth="500" minWidth="300" prefWidth="320" text="Song Information" wrapText="true" />
     </left>
 
     <bottom>
@@ -48,10 +47,16 @@
         </VBox>
     </bottom>
 
+    <top>
+        <HBox>
+
+        </HBox>
+    </top>
+
     <right>
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
-            <Tab text="Songs" fx:id="songTab">
-                <Text text="All songs appear here" />
+            <Tab text="Songs">
+                <Label fx:id="songInfo" text="Song Information" />
             </Tab>
             <Tab text="Playlists">
                 <Text text="A list of play lists go here" />
@@ -100,14 +105,7 @@
     </right>
 
     <center>
-        <Label minWidth="300" text="Image will go here">
-         <contextMenu>
-            <ContextMenu>
-              <items>
-                <MenuItem mnemonicParsing="false" text="Unspecified Action" />
-              </items>
-            </ContextMenu>
-         </contextMenu></Label>
+        <VBox fx:id="songTab" maxWidth="600" minWidth="300" prefWidth="500" />
     </center>
 
     <stylesheets>

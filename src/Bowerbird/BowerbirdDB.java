@@ -62,6 +62,7 @@ public class BowerbirdDB
                 "TrackNum integer," +
                 "Genre text," +
                 "Year text" +
+                "Lyrics" +
                 ");";
 
         String playlists = "CREATE TABLE IF NOT EXISTS playlists (" +

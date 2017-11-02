@@ -1,5 +1,5 @@
 .root {
-    -fx-font-size: 14pt;
+    -fx-font-size: 12pt;
     -fx-font-family: "Consolas";
     -fx-base: rgb(47, 145, 132);
     -fx-background: gray;
@@ -10,12 +10,14 @@
     -fx-text-fill: black;
 }
 
+/*
 #songInfo {
     -fx-padding: 0 10 0 10;
     -fx-border-width: 2;
     -fx-border-color: gray;
     -fx-background-color: #f0f0f0;
 }
+*/
 
 .tab-pane{
     -fx-open-tab-animation: grow;
