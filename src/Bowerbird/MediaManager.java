@@ -35,6 +35,7 @@ public class MediaManager {
     private MediaPlayer mediaPlayer;
 
     private String artist, title, album, year, genre;
+    private int trackNumber;
 
     public List<MusicRecord> musicRecordList;
 
@@ -123,6 +124,8 @@ public class MediaManager {
                         case "year": year = value.toString();
                             break;
                         case "genre": genre = value.toString();
+                            break;
+                        case "trackNumber": trackNumber = Integer.parseInt(value.toString());
                             break;
                     }
                 }

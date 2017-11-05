@@ -15,6 +15,8 @@ public class BowerbirdDB
         newTable();
     }
 
+    // region Standard functions
+
     private Connection connect()
     {
         Connection conn = null;
@@ -90,6 +92,10 @@ public class BowerbirdDB
         }
     }
 
+    // endregion
+
+    // region Playlist functions
+
     public void newPlaylist(String playlistName)
     {
         String sql = "INSERT INTO playlists (PlaylistID, Name, Song, Position)" +
@@ -112,7 +118,7 @@ public class BowerbirdDB
         }
     }
 
-    public void addToPlaylist(int playlistID, int song, int position)
+    public void addToPlaylist(int playlistID, int song)
     {
         String insert = "INSERT INTO playlists (PlaylistID, Name, Song, Position)" +
                 "VALUES (?, ?, ?, ?)" ;
@@ -120,21 +126,65 @@ public class BowerbirdDB
         String getName = "SELECT TOP 1 Name FROM playlists " +
                 "WHERE ID = ? AND Song = null";
 
+        String getLastInPlaylist = "SELECT MAX(Position) FROM playlists " +
+                "WHERE PlaylistID = ?";
+
         try(Connection conn = connect())
         {
             PreparedStatement gn = conn.prepareStatement(getName);
             gn.setInt(1, playlistID);
             ResultSet rs = gn.executeQuery(getName);
 
+            PreparedStatement gl = conn.prepareStatement(getLastInPlaylist);
+            gl.setInt(1, playlistID);
+            ResultSet rs1 = gl.executeQuery(getLastInPlaylist);
+
             PreparedStatement in = conn.prepareStatement(insert);
             in.setInt(1, playlistID);
             in.setString(2, rs.getString("Name"));
             in.setInt(3, song);
-            in.setInt(4, position);
+            in.setInt(4, rs1.getInt("Position") + 1);
         }
         catch(SQLException e)
         {
             System.out.println("add to playlist error: " + e.getMessage());
+        }
+    }
+
+    public void removeFromPlaylist(int playlistID, int song, int songPos)
+    {
+        String delFromPlaylist = "DELETE FROM playlists " +
+                "WHERE PlaylistID = ? AND Song = ?";
+
+        String getLastInPlaylist = "SELECT MAX(Position) FROM playlists " +
+                "WHERE PlaylistID = ?";
+
+        String updateSuccessors = "UPDATE playlists SET Position = ? " +
+                "WHERE Position = ? AND PlaylistID = ?";
+
+        try(Connection conn = connect())
+        {
+            PreparedStatement dp = conn.prepareStatement(delFromPlaylist);
+            dp.setInt(1, playlistID);
+            dp.setInt(2, song);
+            dp.executeUpdate();
+
+            PreparedStatement gl = conn.prepareStatement(getLastInPlaylist);
+            gl.setInt(1, playlistID);
+            ResultSet rs = gl.executeQuery(getLastInPlaylist);
+
+            for(int i = songPos; i < rs.getInt("Position"); i++)
+            {
+                PreparedStatement us = conn.prepareStatement(updateSuccessors);
+                us.setInt(1, i);
+                us.setInt(2, i+1);
+                us.setInt(3, playlistID);
+                us.executeUpdate();
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("remove from playlist error: " + e.getMessage());
         }
     }
 
@@ -156,6 +206,26 @@ public class BowerbirdDB
             System.out.println("rename playlist error: " + e.getMessage());
         }
     }
+
+    public void deletePlaylist(int playlistID)
+    {
+        String sql = "DELETE FROM playlists WHERE PlaylistID = ?";
+
+        try(Connection conn = connect())
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, playlistID);
+            ps.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("delete playlist error: " + e.getMessage());
+        }
+    }
+
+    // endregion
+
+    // region Library management functions
 
     public void importSong(MusicRecord musicRecord)
     {
@@ -181,11 +251,28 @@ public class BowerbirdDB
 
             ps.executeUpdate();
 
-            System.out.println("Successful insert!");
+            System.out.println("Successful song insert!");
         }
         catch(SQLException e)
         {
-            System.out.println("insert error: " + e.getMessage());
+            System.out.println("insert song error: " + e.getMessage());
+        }
+    }
+
+    public void removeSong(int deletedID)
+    {
+        String sql = "DELETE FROM music WHERE ID = ?";
+
+        try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setInt(1, deletedID);
+            ps.executeUpdate();
+
+            System.out.println("Successful song delete!");
+        }
+        catch(SQLException e)
+        {
+            System.out.println("delete song error: " + e.getMessage());
         }
     }
 
@@ -207,6 +294,7 @@ public class BowerbirdDB
                 musicRecord.set_album(rs.getString("Album"));
                 musicRecord.set_genre(rs.getString("Genre"));
                 musicRecord.set_year(rs.getString("Year"));
+                musicRecord.set_songID(rs.getInt("ID"));
 
                 if(musicRecord != null)
                 {
@@ -221,4 +309,6 @@ public class BowerbirdDB
 
         return musicRecords;
     }
+
+    // endregion
 }

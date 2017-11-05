@@ -12,6 +12,7 @@ public class MusicRecord
     private String _year;
     //songdata
     private String _filePath;
+    private int _songID;
     //endregion PrivateVariables
 
     //region GetSet
@@ -62,6 +63,10 @@ public class MusicRecord
     public void set_filePath(String _filePath) {
         this._filePath = _filePath;
     }
+
+    public int get_songID() { return _songID; }
+
+    public void set_songID(int _songID) { this._songID = _songID; }
 
     //endregion GetSet
 }
