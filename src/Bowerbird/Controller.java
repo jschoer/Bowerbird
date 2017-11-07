@@ -98,25 +98,22 @@ public class Controller extends BorderPane{
 
     @FXML private void handleViewSwitchAction(ActionEvent event) throws IOException
     {
-        Stage stage;
-        Parent root;
+        FXMLLoader loader;
 
         if(event.getSource() == toVisuals)
         {
-            //load up OTHER FXML document
-            root = FXMLLoader.load(getClass().getResource("VisualizationsView.fxml"));
-            //get reference to the button's stage
-            stage = (Stage)toVisuals.getScene().getWindow();
+            loader = new FXMLLoader(getClass().getResource("VisualizationsView.fxml"));
+            loader.setRoot(this);
+            loader.setController(this);
+            loader.load();
         }
         else
         {
-            root = FXMLLoader.load(getClass().getResource("Bowerbird.fxml"));
-            stage = (Stage)toLibrary.getScene().getWindow();
+            loader = new FXMLLoader(getClass().getResource("Bowerbird.fxml"));
+            loader.setRoot(this);
+            loader.setController(this);
+            loader.load();
         }
-        //create a new scene with root and set the stage
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
     }
 
     //endregion Handlers

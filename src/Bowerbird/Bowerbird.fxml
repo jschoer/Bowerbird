@@ -57,7 +57,7 @@
 
     <right>
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
-            <Tab text="Songs">
+            <Tab text="Song">
                 <VBox>
                     <Label fx:id="songInfo" text="Song Information" />
                 </VBox>

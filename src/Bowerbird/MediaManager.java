@@ -9,14 +9,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MediaManager {
@@ -35,7 +33,7 @@ public class MediaManager {
     private MediaPlayer mediaPlayer;
 
     private String artist, title, album, year, genre, lyrics;
-    private int trackNumber;
+    private int track;
 
     public List<MusicRecord> musicRecordList;
 
@@ -102,7 +100,7 @@ public class MediaManager {
 
     public void UpdateMedia(String path, boolean fromList)
     {
-        artist = "unknown"; title = "-"; album = "-"; year = "-"; genre = "N/A"; trackNumber = 0; lyrics = "none";
+        artist = "unknown"; title = "-"; album = "-"; year = "-"; genre = "N/A"; track = 0; lyrics = "none";
 
         playButton.setDisable(false); pauseButton.setDisable(true); stopButton.setDisable(false);
 
@@ -127,7 +125,7 @@ public class MediaManager {
                             break;
                         case "genre": genre = value.toString();
                             break;
-                        case "trackNumber": trackNumber = Integer.parseInt(value.toString());
+                        case "track number": track = Integer.parseInt(value.toString());
                             break;
                     }
                 }
@@ -169,6 +167,7 @@ public class MediaManager {
         MusicRecord musicRecord = new MusicRecord();
         musicRecord.set_album(album);
         musicRecord.set_artist(artist);
+        musicRecord.set_trackNum(track);
         musicRecord.set_filePath(path);
         musicRecord.set_genre(genre);
         musicRecord.set_title(title);
@@ -182,7 +181,7 @@ public class MediaManager {
     public void UpdateLabel()
     {
         songInfo.setText("Title: " + title + "\n" + "Artist: " + artist + "\n" + "Album: " + album + "\n" + "Track#: "
-                + trackNumber + "\n" + "Year: " + year + "\n" + "Genre: " + genre + "\n" + "Lyrics: \n\n" + lyrics);
+                + track + "\n" + "Year: " + year + "\n" + "Genre: " + genre + "\n" + "Lyrics: \n\n" + lyrics);
     }
 
     public void SetTimeStamps()

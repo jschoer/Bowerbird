@@ -14,6 +14,7 @@ public class MusicRecord
     //songdata
     private String _filePath;
     private int _songID;
+    private int _trackNum;
     //endregion PrivateVariables
 
     //region GetSet
@@ -35,9 +36,11 @@ public class MusicRecord
         return _artist;
     }
 
-    public void set_artist(String _artist) {
-        this._artist = _artist;
-    }
+    public void set_trackNum(int _trackNum) { this._trackNum = _trackNum; }
+
+    public int get_trackNum() { return _trackNum; }
+
+    public void set_artist(String _artist) { this._artist = _artist; }
 
     public String get_genre() {
         return _genre;
