@@ -9,6 +9,8 @@ public class BowerbirdDB
     private String dbName = "music.db";
     private String url = "jdbc:sqlite:";
 
+    private enum SearchType { TITLE, ARTIST, ALBUM, FILENAME, LYRICS }
+
     public BowerbirdDB()
     {
         newDB();
@@ -63,8 +65,8 @@ public class BowerbirdDB
                 "Album text," +
                 "TrackNum integer," +
                 "Genre text," +
-                "Year text" +
-                "Lyrics" +
+                "Year text," +
+                "Lyrics text" +
                 ");";
 
         String playlists = "CREATE TABLE IF NOT EXISTS playlists (" +
@@ -259,6 +261,14 @@ public class BowerbirdDB
         }
     }
 
+    public void editSong(int modifiedID)
+    {
+        String sql = "UPDATE music ";
+        String updateClause = "";
+
+
+    }
+
     public void removeSong(int deletedID)
     {
         String sql = "DELETE FROM music WHERE ID = ?";
@@ -295,6 +305,7 @@ public class BowerbirdDB
                 musicRecord.set_genre(rs.getString("Genre"));
                 musicRecord.set_year(rs.getString("Year"));
                 musicRecord.set_songID(rs.getInt("ID"));
+                musicRecord.set_lyrics(rs.getString("Lyrics"));
 
                 if(musicRecord != null)
                 {
@@ -304,10 +315,70 @@ public class BowerbirdDB
         }
         catch (SQLException e)
         {
-            System.out.print(e.getMessage());
+            System.out.print("display all music records error: " + e.getMessage());
         }
 
         return musicRecords;
+    }
+
+    public List<MusicRecord> search(String term, SearchType st)
+    {
+        String sql = "SELECT * FROM music ";
+        String whereClause = "";
+        List<MusicRecord> searchResults = new ArrayList<>();
+
+        switch(st)
+        {
+            case TITLE:
+                whereClause = "WHERE Title LIKE '%?%'";
+                break;
+            case ARTIST:
+                whereClause = "WHERE Artist LIKE '%?%'";
+                break;
+            case ALBUM:
+                whereClause = "WHERE Album LIKE '%?%'";
+                break;
+            case FILENAME:
+                whereClause = "WHERE FilePath LIKE '%?%'";
+                break;
+            case LYRICS:
+                whereClause = "WHERE Lyrics LIKE '%?%'";
+                break;
+            default:
+                System.out.print("Invalid search type");
+                return searchResults;
+        }
+
+        sql += whereClause;
+
+        try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ResultSet rs = ps.executeQuery(sql);
+
+            while(rs.next())
+            {
+                MusicRecord musicRecord = new MusicRecord();
+                musicRecord.set_filePath(rs.getString("FilePath"));
+                musicRecord.set_title(rs.getString("Title"));
+                musicRecord.set_artist(rs.getString("Artist"));
+                musicRecord.set_album(rs.getString("Album"));
+                musicRecord.set_genre(rs.getString("Genre"));
+                musicRecord.set_year(rs.getString("Year"));
+                musicRecord.set_songID(rs.getInt("ID"));
+                musicRecord.set_lyrics(rs.getString("Lyrics"));
+
+                if(musicRecord != null)
+                {
+                    searchResults.add(musicRecord);
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.print("search " + st.toString() + " error: " + e.getMessage());
+        }
+
+        return searchResults;
     }
 
     // endregion

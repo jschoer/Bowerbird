@@ -2,14 +2,11 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -43,8 +40,7 @@
                     <Text text="Volume" />
                     <Slider fx:id="volumeSlider" onScroll="#handleVolumeScrollEvent" />
                 </VBox>
-            <!--<Button fx:id="toVisuals" mnemonicParsing="false" text="Visuals" />-->
-                <Button fx:id="toVisuals" onAction="#handleViewSwitchAction" mnemonicParsing="false" text="Visuals" />
+                <Button fx:id="toLibrary" onAction="#handleViewSwitchAction" mnemonicParsing="false" text="Library" />
             </HBox>
         </VBox>
     </bottom>
@@ -65,46 +61,11 @@
             <Tab text="Playlists">
                 <Text text="A list of play lists go here" />
             </Tab>
-            <Tab text="Sort By">
-                <Text text="A list of sorting options go here" />
-            </Tab>
-            <Tab text="Search">
-                <TextField fx:id="fieldSearch" />
-                <Accordion fx:id="sortOptions" prefHeight="239.0" prefWidth="328.0">
-                    <panes>
-                        <TitledPane text="Title">
-                            <content>
-                                <Text text="123" />
-                            </content>
-                        </TitledPane>
-                        <TitledPane text="Artist">
-                            <content>
-                                <Text text="123" />
-                            </content>
-                        </TitledPane>
-                        <TitledPane text="File Name">
-                            <content>
-                                <Text text="123" />
-                            </content>
-                        </TitledPane>
-                        <TitledPane text="Album">
-                            <content>
-                                <Text text="123" />
-                            </content>
-                        </TitledPane>
-                        <TitledPane text="Lyrics (may take a while)">
-                            <content>
-                                <Text text="123" />
-                            </content>
-                        </TitledPane>
-                    </panes>
-                </Accordion>
-            </Tab>
         </TabPane>
     </right>
 
     <center>
-        <VBox fx:id="songTab" minWidth="300" prefWidth="500" />
+        <Text text="Visualizations window goes here" />
     </center>
 
     <stylesheets>

@@ -26,7 +26,7 @@ public class MediaManager {
     @FXML private Slider timeSlider;
     @FXML private Slider volumeSlider;
     @FXML private Label songInfo, currentTime, totalTime;
-    @FXML private Button playButton, pauseButton, stopButton, addButton;
+    @FXML private Button playButton, pauseButton, stopButton, addButton, toVisuals, toLibrary;
     @FXML private VBox songTab;
 
     private BowerbirdDB bowerbirdDB;
@@ -34,14 +34,15 @@ public class MediaManager {
     private Media media;
     private MediaPlayer mediaPlayer;
 
-    private String artist, title, album, year, genre;
+    private String artist, title, album, year, genre, lyrics;
     private int trackNumber;
 
     public List<MusicRecord> musicRecordList;
 
     public MediaManager(Slider volumeSlider, Slider timeSlider,
                         Label songInfo, Label currentTime, Label totalTime,
-                        Button playButton, Button pauseButton, Button stopButton, Button addButton, VBox songTab)
+                        Button playButton, Button pauseButton, Button stopButton, Button addButton, Button toVisuals,
+                        VBox songTab)
     {
         this.volumeSlider = volumeSlider;
         this.timeSlider = timeSlider;
@@ -53,6 +54,7 @@ public class MediaManager {
         this.stopButton = stopButton;
         this.addButton = addButton;
         this.songTab = songTab;
+        this.toVisuals = toVisuals;
 
         bowerbirdDB = new BowerbirdDB();
 
@@ -100,7 +102,7 @@ public class MediaManager {
 
     public void UpdateMedia(String path, boolean fromList)
     {
-        artist = "unknown"; title = "-"; album = "-"; year = "-"; genre = "N/A";
+        artist = "unknown"; title = "-"; album = "-"; year = "-"; genre = "N/A"; trackNumber = 0; lyrics = "none";
 
         playButton.setDisable(false); pauseButton.setDisable(true); stopButton.setDisable(false);
 
@@ -179,8 +181,8 @@ public class MediaManager {
 
     public void UpdateLabel()
     {
-        songInfo.setText("Title: " + title + "\nArtist: " + artist + "\n" + "Album: " + album + "\n"
-                        + "Year: " + year + "\n" + "Genre: " + genre);
+        songInfo.setText("Title: " + title + "\n" + "Artist: " + artist + "\n" + "Album: " + album + "\n" + "Track#: "
+                + trackNumber + "\n" + "Year: " + year + "\n" + "Genre: " + genre + "\n" + "Lyrics: \n\n" + lyrics);
     }
 
     public void SetTimeStamps()
@@ -214,7 +216,8 @@ public class MediaManager {
 
     public void AddSongsToTab()
     {
-        songTab.getChildren().clear();
+        if(songTab != null)
+            songTab.getChildren().clear();
 
         for (int i = 1; i < musicRecordList.size() + 1; i++)
         {

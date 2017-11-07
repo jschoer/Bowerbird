@@ -8,6 +8,9 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.scene.Parent;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 import java.io.IOException;
 
@@ -18,23 +21,24 @@ public class Controller extends BorderPane{
 
     @FXML private Label songInfo, currentTime, totalTime;
 
-    @FXML
-    private Button playButton, pauseButton, stopButton, addButton;
+    @FXML private Button playButton, pauseButton, stopButton, addButton, toVisuals, toLibrary;
 
     @FXML private TabPane tabPane;
     @FXML private VBox songTab;
 
     private MediaManager mediaManager;
 
-    public  Controller()
+    public Controller()
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Bowerbird.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
-        try{
+        try
+        {
             loader.load();
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             throw new RuntimeException(e);
         }
@@ -42,8 +46,7 @@ public class Controller extends BorderPane{
 
     @FXML public void initialize()
     {
-        mediaManager = new MediaManager(volumeSlider, timeSlider, songInfo, currentTime, totalTime, playButton, pauseButton, stopButton, addButton, songTab);
-
+        mediaManager = new MediaManager(volumeSlider, timeSlider, songInfo, currentTime, totalTime, playButton, pauseButton, stopButton, addButton, toVisuals, songTab);
     }
 
     //region Handlers
@@ -68,12 +71,14 @@ public class Controller extends BorderPane{
         {
             String filePath = f.toURI().toASCIIString();
             System.out.println("Filename: " + filePath);
-            if (mediaManager.getMediaPlayer() != null) {
+
+            if (mediaManager.getMediaPlayer() != null)
+            {
                 mediaManager.Stop();
                 mediaManager.getMediaPlayer().dispose();
             }
-            mediaManager.UpdateMedia(filePath, false);
 
+            mediaManager.UpdateMedia(filePath, false);
         }
         else
             System.out.println("Chosen file is null.");
@@ -89,6 +94,29 @@ public class Controller extends BorderPane{
     {
         double scrollSpeed = event.getDeltaY();
         timeSlider.setValue(timeSlider.getValue() + scrollSpeed / 10);
+    }
+
+    @FXML private void handleViewSwitchAction(ActionEvent event) throws IOException
+    {
+        Stage stage;
+        Parent root;
+
+        if(event.getSource() == toVisuals)
+        {
+            //load up OTHER FXML document
+            root = FXMLLoader.load(getClass().getResource("VisualizationsView.fxml"));
+            //get reference to the button's stage
+            stage = (Stage)toVisuals.getScene().getWindow();
+        }
+        else
+        {
+            root = FXMLLoader.load(getClass().getResource("Bowerbird.fxml"));
+            stage = (Stage)toLibrary.getScene().getWindow();
+        }
+        //create a new scene with root and set the stage
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
     //endregion Handlers

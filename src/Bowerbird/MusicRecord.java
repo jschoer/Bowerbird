@@ -10,15 +10,14 @@ public class MusicRecord
     private String _artist;
     private String _genre;
     private String _year;
+    private String _lyrics;
     //songdata
     private String _filePath;
     private int _songID;
     //endregion PrivateVariables
 
     //region GetSet
-    public String get_title() {
-        return _title;
-    }
+    public String get_title() { return _title; }
 
     public void set_title(String _title) {
         this._title = _title;
@@ -67,6 +66,10 @@ public class MusicRecord
     public int get_songID() { return _songID; }
 
     public void set_songID(int _songID) { this._songID = _songID; }
+
+    public void set_lyrics(String _lyrics) { this._lyrics = _lyrics; }
+
+    public String get_lyrics() { return _lyrics; }
 
     //endregion GetSet
 }

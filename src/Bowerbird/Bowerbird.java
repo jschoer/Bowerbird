@@ -8,7 +8,8 @@ import javafx.stage.Stage;
 public class Bowerbird extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception
+    {
         Controller controller = new Controller();
 
         primaryStage.setTitle("Bowerbird Media Player");
