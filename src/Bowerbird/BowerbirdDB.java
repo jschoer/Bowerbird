@@ -324,32 +324,29 @@ public class BowerbirdDB
     public List<MusicRecord> search(String term, SearchType st)
     {
         String sql = "SELECT * FROM music ";
-        String whereClause = "";
         List<MusicRecord> searchResults = new ArrayList<>();
 
         switch(st)
         {
             case TITLE:
-                whereClause = "WHERE Title LIKE '%?%'";
+                sql += "WHERE Title LIKE '%?%'";
                 break;
             case ARTIST:
-                whereClause = "WHERE Artist LIKE '%?%'";
+                sql += "WHERE Artist LIKE '%?%'";
                 break;
             case ALBUM:
-                whereClause = "WHERE Album LIKE '%?%'";
+                sql += "WHERE Album LIKE '%?%'";
                 break;
             case FILENAME:
-                whereClause = "WHERE FilePath LIKE '%?%'";
+                sql += "WHERE FilePath LIKE '%?%'";
                 break;
             case LYRICS:
-                whereClause = "WHERE Lyrics LIKE '%?%'";
+                sql += "WHERE Lyrics LIKE '%?%'";
                 break;
             default:
                 System.out.print("Invalid search type");
                 return searchResults;
         }
-
-        sql += whereClause;
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
