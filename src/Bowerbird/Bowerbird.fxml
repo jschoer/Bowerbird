@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import java.lang.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
@@ -14,8 +16,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.collections.*?>
 
-<fx:root prefHeight="600" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root prefHeight="600" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
 
     <left>
@@ -44,7 +47,7 @@
                     <Slider fx:id="volumeSlider" onScroll="#handleVolumeScrollEvent" />
                 </VBox>
             <!--<Button fx:id="toVisuals" mnemonicParsing="false" text="Visuals" />-->
-                <Button fx:id="toVisuals" onAction="#handleViewSwitchAction" mnemonicParsing="false" text="Visuals" />
+                <Button fx:id="toVisuals" mnemonicParsing="false" onAction="#handleViewSwitchAction" text="Visuals" />
             </HBox>
         </VBox>
     </bottom>
@@ -64,13 +67,7 @@
             </Tab>
             <Tab text="Playlists">
                 <Text text="A list of play lists go here" />
-            </Tab>
-            <Tab text="Sort By">
-                <Text text="A list of sorting options go here" />
-            </Tab>
-            <Tab text="Search">
-                <TextField fx:id="fieldSearch" />
-                <Accordion fx:id="sortOptions" prefHeight="239.0" prefWidth="328.0">
+                <Accordion fx:id="sortOptions2" prefHeight="239.0" prefWidth="328.0">
                     <panes>
                         <TitledPane text="Title">
                             <content>
@@ -99,6 +96,31 @@
                         </TitledPane>
                     </panes>
                 </Accordion>
+            </Tab>
+            <Tab text="Sort By">
+                <Text text="A list of sorting options go here" />
+            </Tab>
+            <Tab text="Search">
+                <VBox>
+                    <Label layoutX="15.0" layoutY="10.0" styleClass="bold-label" wrapText="true" text="Select one of the following options:" />
+                    <ComboBox prefWidth="350.0" promptText="Select Option" >
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Artist" />
+                                <String fx:value="Title" />
+                                <String fx:value="Album" />
+                                <String fx:value="FilePath" />
+                                <String fx:value="Lyrics" />
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                    <Label layoutX="15.0" layoutY="10.0" styleClass="bold-label"/>
+                    <HBox>
+                        <TextField fx:id="fieldSearch" prefWidth="250.0" />
+                        <Button fx:id="searchButton" text="Search" />
+                    </HBox>
+                </VBox>
+
             </Tab>
         </TabPane>
     </right>
