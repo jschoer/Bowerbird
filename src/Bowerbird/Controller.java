@@ -103,17 +103,15 @@ public class Controller extends BorderPane{
         if(event.getSource() == toVisuals)
         {
             loader = new FXMLLoader(getClass().getResource("VisualizationsView.fxml"));
-            loader.setRoot(this);
-            loader.setController(this);
-            loader.load();
         }
         else
         {
             loader = new FXMLLoader(getClass().getResource("Bowerbird.fxml"));
-            loader.setRoot(this);
-            loader.setController(this);
-            loader.load();
         }
+
+        loader.setRoot(this);
+        loader.setController(this);
+        loader.load();
     }
 
     //endregion Handlers
