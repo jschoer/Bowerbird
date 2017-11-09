@@ -26,6 +26,7 @@ public class MediaManager {
     @FXML private Label songInfo, currentTime, totalTime;
     @FXML private Button playButton, pauseButton, stopButton, addButton, toVisuals, toLibrary;
     @FXML private VBox songTab;
+    @FXML private Accordion playlistTab;
 
     private BowerbirdDB bowerbirdDB;
 
@@ -36,11 +37,12 @@ public class MediaManager {
     private int track;
 
     public List<MusicRecord> musicRecordList;
+    public List<Playlist> playlists;
 
     public MediaManager(Slider volumeSlider, Slider timeSlider,
                         Label songInfo, Label currentTime, Label totalTime,
                         Button playButton, Button pauseButton, Button stopButton, Button addButton, Button toVisuals,
-                        VBox songTab)
+                        VBox songTab, Accordion playlistTab)
     {
         this.volumeSlider = volumeSlider;
         this.timeSlider = timeSlider;
@@ -52,6 +54,7 @@ public class MediaManager {
         this.stopButton = stopButton;
         this.addButton = addButton;
         this.songTab = songTab;
+        this.playlistTab = playlistTab;
         this.toVisuals = toVisuals;
 
         bowerbirdDB = new BowerbirdDB();
@@ -60,6 +63,9 @@ public class MediaManager {
 
         musicRecordList = bowerbirdDB.getAllMusicRecords();
         AddSongsToTab();
+
+        playlists = bowerbirdDB.getAllPlaylists();
+        AddPlaylistsToTab();
     }
 
     public void SetSliders()
@@ -215,8 +221,7 @@ public class MediaManager {
 
     public void AddSongsToTab()
     {
-        if(songTab != null)
-            songTab.getChildren().clear();
+        songTab.getChildren().clear();
 
         for (int i = 1; i < musicRecordList.size() + 1; i++)
         {
@@ -227,9 +232,21 @@ public class MediaManager {
         }
     }
 
+    public void AddPlaylistsToTab()
+    {
+        playlistTab.getPanes().removeAll();
+
+        for (int i = 1; i < playlists.size() + 1; i++)
+        {
+            TitledPane playlist = new TitledPane();
+            playlist.setText(playlists.get(i - 1).get_playlistName());
+            playlistTab.getPanes().add(playlist);
+        }
+    }
+
     public Button songButton(int index, MusicRecord musicRecord)
     {
-        Button newButton = new Button(index + ". " + musicRecord.get_title());
+        Button newButton = new Button(musicRecord.get_title());
         newButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -300,4 +317,15 @@ public class MediaManager {
         this.mediaPlayer = mediaPlayer;
     }
     //endregion GetSet
+
+    public boolean createNewPlaylist(String playlistName)
+    {
+        if(!bowerbirdDB.newPlaylist(playlistName))
+            return false;
+
+        playlists = bowerbirdDB.getAllPlaylists();
+        AddPlaylistsToTab();
+
+        return true;
+    }
 }

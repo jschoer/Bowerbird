@@ -28,9 +28,7 @@ public class MusicRecord
         return _album;
     }
 
-    public void set_album(String _album) {
-        this._album = _album;
-    }
+    public void set_album(String _album) { this._album = _album; }
 
     public String get_artist() {
         return _artist;

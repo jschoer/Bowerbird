@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class Controller extends BorderPane{
 
@@ -25,6 +26,7 @@ public class Controller extends BorderPane{
 
     @FXML private TabPane tabPane;
     @FXML private VBox songTab;
+    @FXML private  Accordion playlistTab;
 
     private MediaManager mediaManager;
 
@@ -46,7 +48,7 @@ public class Controller extends BorderPane{
 
     @FXML public void initialize()
     {
-        mediaManager = new MediaManager(volumeSlider, timeSlider, songInfo, currentTime, totalTime, playButton, pauseButton, stopButton, addButton, toVisuals, songTab);
+        mediaManager = new MediaManager(volumeSlider, timeSlider, songInfo, currentTime, totalTime, playButton, pauseButton, stopButton, addButton, toVisuals, songTab, playlistTab);
     }
 
     //region Handlers
@@ -96,18 +98,29 @@ public class Controller extends BorderPane{
         timeSlider.setValue(timeSlider.getValue() + scrollSpeed / 10);
     }
 
+    @FXML protected void handleNewPlaylistAction(ActionEvent event)
+    {
+        TextInputDialog dialog = new TextInputDialog("newPlaylist");
+        dialog.setTitle("New Playlist");
+        dialog.setHeaderText("Name your new playlist.");
+
+        Optional<String> result = dialog.showAndWait();
+
+        if(result.isPresent())
+        {
+            if(!mediaManager.createNewPlaylist(result.get()))
+                dialog.setContentText("You've already made a playlist called that.");
+        }
+    }
+
     @FXML private void handleViewSwitchAction(ActionEvent event) throws IOException
     {
         FXMLLoader loader;
 
         if(event.getSource() == toVisuals)
-        {
             loader = new FXMLLoader(getClass().getResource("VisualizationsView.fxml"));
-        }
         else
-        {
             loader = new FXMLLoader(getClass().getResource("Bowerbird.fxml"));
-        }
 
         loader.setRoot(this);
         loader.setController(this);

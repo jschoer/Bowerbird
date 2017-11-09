@@ -21,9 +21,6 @@
 <fx:root prefHeight="600" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
 
-    <left>
-    </left>
-
     <bottom>
         <VBox>
             <VBox>
@@ -60,49 +57,26 @@
 
     <right>
         <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
-            <Tab text="Songs">
+            <Tab text="Song">
                 <VBox>
                     <Label fx:id="songInfo" text="Song Information" />
                 </VBox>
             </Tab>
             <Tab text="Playlists">
-                <Text text="A list of play lists go here" />
-                <Accordion fx:id="sortOptions2" prefHeight="239.0" prefWidth="328.0">
-                    <panes>
-                        <TitledPane text="Title">
-                            <content>
-                                <Text text="123" />
-                            </content>
-                        </TitledPane>
-                        <TitledPane text="Artist">
-                            <content>
-                                <Text text="123" />
-                            </content>
-                        </TitledPane>
-                        <TitledPane text="File Name">
-                            <content>
-                                <Text text="123" />
-                            </content>
-                        </TitledPane>
-                        <TitledPane text="Album">
-                            <content>
-                                <Text text="123" />
-                            </content>
-                        </TitledPane>
-                        <TitledPane text="Lyrics (may take a while)">
-                            <content>
-                                <Text text="123" />
-                            </content>
-                        </TitledPane>
-                    </panes>
-                </Accordion>
+                <Text text="A list of playlists go here" />
+                <VBox>
+                    <HBox>
+                        <Button fx:id="addPlaylist" onAction="#handleNewPlaylistAction" text="New" />
+                    </HBox>
+                    <Accordion fx:id="playlistTab" prefHeight="239.0" prefWidth="328.0" />
+                </VBox>
             </Tab>
             <Tab text="Sort By">
                 <Text text="A list of sorting options go here" />
             </Tab>
             <Tab text="Search">
                 <VBox>
-                    <Label layoutX="15.0" layoutY="10.0" styleClass="bold-label" wrapText="true" text="Select one of the following options:" />
+                    <!--<Label layoutX="15.0" layoutY="10.0" styleClass="bold-label" wrapText="true" text="Select one of the following options:" />-->
                     <ComboBox prefWidth="350.0" promptText="Select Option" >
                         <items>
                             <FXCollections fx:factory="observableArrayList">
@@ -117,7 +91,7 @@
                     <Label layoutX="15.0" layoutY="10.0" styleClass="bold-label"/>
                     <HBox>
                         <TextField fx:id="fieldSearch" prefWidth="250.0" />
-                        <Button fx:id="searchButton" text=" Search" />
+                        <Button fx:id="searchButton" text="Search" />
                     </HBox>
                 </VBox>
 

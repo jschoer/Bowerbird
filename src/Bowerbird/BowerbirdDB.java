@@ -70,7 +70,6 @@ public class BowerbirdDB
                 ");";
 
         String playlists = "CREATE TABLE IF NOT EXISTS playlists (" +
-                "PlaylistID integer," +
                 "Name text NOT NULL," +
                 "SongID integer," +
                 "Position integer," +
@@ -98,26 +97,92 @@ public class BowerbirdDB
 
     // region Playlist functions
 
-    public void newPlaylist(String playlistName)
+    public boolean newPlaylist(String playlistName)
     {
-        String sql = "INSERT INTO playlists (PlaylistID, Name, Song, Position)" +
-                "VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO playlists (Name, SongID, Position)" +
+                "VALUES (?, ?, ?)";
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
             ps.setString(1, playlistName);
-            ps.setString(2, null);
+            ps.setInt(2, 0);
             ps.setInt(3, 0);
-            ps.setString(4, playlistName);
 
             ps.executeUpdate();
 
             System.out.println("Playlist " + playlistName + " created.");
+            return true;
         }
         catch(SQLException e)
         {
             System.out.println("new playlist error: " + e.getMessage());
         }
+
+        return false;
+    }
+
+    public List<Playlist> getAllPlaylists()
+    {
+        String sql = "SELECT * FROM playlists WHERE SongID = 0 AND Position = 0";
+        List<Playlist> allPlaylists = new ArrayList<>();
+
+        try(Connection conn = connect(); Statement st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY))
+        {
+            ResultSet rs = st.executeQuery(sql);
+
+            while(rs.next())
+            {
+                Playlist plst = new Playlist();
+
+                plst.set_playlistName(rs.getString("Name"));
+
+                if(plst != null)
+                    allPlaylists.add(plst);
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.print("display all playlists error: " + e.getMessage());
+        }
+
+        return allPlaylists;
+    }
+
+    public Playlist getPlaylistContent(String plstName)
+    {
+        String sql = "SELECT * FROM playlists WHERE Name = ? ORDER BY Position ASC";
+        Playlist plst = new Playlist();
+        List<MusicRecord> content = new ArrayList<>();
+
+        try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
+        {
+            ps.setString(1, plstName);
+            ResultSet rs = ps.executeQuery(sql);
+
+            while(rs.next())
+            {
+                MusicRecord musicRecord = new MusicRecord();
+                musicRecord.set_filePath(rs.getString("FilePath"));
+                musicRecord.set_title(rs.getString("Title"));
+                musicRecord.set_artist(rs.getString("Artist"));
+                musicRecord.set_album(rs.getString("Album"));
+                musicRecord.set_genre(rs.getString("Genre"));
+                musicRecord.set_year(rs.getString("Year"));
+                musicRecord.set_songID(rs.getInt("ID"));
+                musicRecord.set_lyrics(rs.getString("Lyrics"));
+                musicRecord.set_trackNum(rs.getInt("TrackNum"));
+
+                content.add(musicRecord);
+            }
+
+            plst.set_playlistContent(content);
+        }
+        catch(SQLException e)
+        {
+            System.out.println("get playlist " + plstName + " error: " + e.getMessage());
+        }
+
+        return plst;
     }
 
     public void addToPlaylist(int playlistID, int song)
@@ -289,7 +354,7 @@ public class BowerbirdDB
 
     public List<MusicRecord> getAllMusicRecords()
     {
-        String sql = "SELECT * FROM music";
+        String sql = "SELECT * FROM music ORDER BY Title DESC";
         List<MusicRecord> musicRecords = new ArrayList<>();
 
         try(Connection conn = connect(); Statement st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY))

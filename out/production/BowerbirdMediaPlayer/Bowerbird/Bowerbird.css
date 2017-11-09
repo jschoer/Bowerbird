@@ -1,6 +1,6 @@
 .root {
-    -fx-font-size: 12pt;
-    -fx-font-family: "Consolas";
+    -fx-font-size: 11pt;
+    -fx-font-family: "Helvetica";
     -fx-base: rgb(47, 145, 132);
     -fx-background: gray;
     -fx-background-color: #dcdcdc;
