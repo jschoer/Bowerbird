@@ -231,8 +231,8 @@ public class BowerbirdDB
 
     public void importSong(MusicRecord musicRecord)
     {
-        String sql = "INSERT INTO music (FilePath, Title, Artist, Album, Genre, Year) " +
-                "SELECT ?, ?, ?, ?, ?, ? " +
+        String sql = "INSERT INTO music (FilePath, Title, Artist, Album, TrackNum, Genre, Year) " +
+                "SELECT ?, ?, ?, ?, ?, ?, ? " +
                 "WHERE NOT EXISTS" +
                 "(SELECT 1 FROM music WHERE Title = ? AND Artist = ? AND Album = ?)";  //unique to a song so no dupes
 
@@ -243,8 +243,9 @@ public class BowerbirdDB
             ps.setString(2, musicRecord.get_title());
             ps.setString(3, musicRecord.get_artist());
             ps.setString(4, musicRecord.get_album());
-            ps.setString(5, musicRecord.get_genre());
-            ps.setString(6, musicRecord.get_year());
+            ps.setInt(5, musicRecord.get_trackNum());
+            ps.setString(6, musicRecord.get_genre());
+            ps.setString(7, musicRecord.get_year());
 
             //Setting the duplicate values
             ps.setString(7, musicRecord.get_title());
@@ -306,6 +307,7 @@ public class BowerbirdDB
                 musicRecord.set_year(rs.getString("Year"));
                 musicRecord.set_songID(rs.getInt("ID"));
                 musicRecord.set_lyrics(rs.getString("Lyrics"));
+                musicRecord.set_trackNum(rs.getInt("TrackNum"));
 
                 if(musicRecord != null)
                 {
