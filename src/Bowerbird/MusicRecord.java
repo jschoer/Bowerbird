@@ -18,59 +18,59 @@ public class MusicRecord
     //endregion PrivateVariables
 
     //region GetSet
-    public String get_title() { return _title; }
+    public String getTitle() { return _title; }
 
-    public void set_title(String _title) {
+    public void setTitle(String _title) {
         this._title = _title;
     }
 
-    public String get_album() {
+    public String getAlbum() {
         return _album;
     }
 
-    public void set_album(String _album) { this._album = _album; }
+    public void setAlbum(String _album) { this._album = _album; }
 
-    public String get_artist() {
+    public String getArtist() {
         return _artist;
     }
 
-    public void set_trackNum(int _trackNum) { this._trackNum = _trackNum; }
+    public void setTrackNum(int _trackNum) { this._trackNum = _trackNum; }
 
-    public int get_trackNum() { return _trackNum; }
+    public int getTrackNum() { return _trackNum; }
 
-    public void set_artist(String _artist) { this._artist = _artist; }
+    public void setArtist(String _artist) { this._artist = _artist; }
 
-    public String get_genre() {
+    public String getGenre() {
         return _genre;
     }
 
-    public void set_genre(String _genre) {
+    public void setGenre(String _genre) {
         this._genre = _genre;
     }
 
-    public String get_year() {
+    public String getYear() {
         return _year;
     }
 
-    public void set_year(String _year) {
+    public void setYear(String _year) {
         this._year = _year;
     }
 
-    public String get_filePath() {
+    public String getFilePath() {
         return _filePath;
     }
 
-    public void set_filePath(String _filePath) {
+    public void setFilePath(String _filePath) {
         this._filePath = _filePath;
     }
 
-    public int get_songID() { return _songID; }
+    public int getSongID() { return _songID; }
 
-    public void set_songID(int _songID) { this._songID = _songID; }
+    public void setSongID(int _songID) { this._songID = _songID; }
 
-    public void set_lyrics(String _lyrics) { this._lyrics = _lyrics; }
+    public void setLyrics(String _lyrics) { this._lyrics = _lyrics; }
 
-    public String get_lyrics() { return _lyrics; }
+    public String getLyrics() { return _lyrics; }
 
     //endregion GetSet
 }

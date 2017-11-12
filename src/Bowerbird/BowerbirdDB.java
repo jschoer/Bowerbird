@@ -100,13 +100,16 @@ public class BowerbirdDB
     public boolean newPlaylist(String playlistName)
     {
         String sql = "INSERT INTO playlists (Name, SongID, Position)" +
-                "VALUES (?, ?, ?)";
+                "SELECT ?, ?, ? " +
+                "WHERE NOT EXISTS" +
+                "(SELECT 1 FROM playlists WHERE Name = ?)";  //unique to a playlist so no dupes
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
             ps.setString(1, playlistName);
             ps.setInt(2, 0);
             ps.setInt(3, 0);
+            ps.setString(4, playlistName);
 
             ps.executeUpdate();
 
@@ -148,69 +151,67 @@ public class BowerbirdDB
         return allPlaylists;
     }
 
-    public Playlist getPlaylistContent(String plstName)
+    public List<MusicRecord> getPlaylistContent(String plstName)
     {
-        String sql = "SELECT * FROM playlists WHERE Name = ? ORDER BY Position ASC";
-        Playlist plst = new Playlist();
+        String sql = "SELECT * FROM music " +
+                "INNER JOIN playlists on playlists.SongID = music.ID " +
+                "WHERE playlists.Name = ? ORDER BY playlists.Position ASC";
         List<MusicRecord> content = new ArrayList<>();
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
             ps.setString(1, plstName);
-            ResultSet rs = ps.executeQuery(sql);
+            ResultSet rs = ps.executeQuery();
 
             while(rs.next())
             {
                 MusicRecord musicRecord = new MusicRecord();
-                musicRecord.set_filePath(rs.getString("FilePath"));
-                musicRecord.set_title(rs.getString("Title"));
-                musicRecord.set_artist(rs.getString("Artist"));
-                musicRecord.set_album(rs.getString("Album"));
-                musicRecord.set_genre(rs.getString("Genre"));
-                musicRecord.set_year(rs.getString("Year"));
-                musicRecord.set_songID(rs.getInt("ID"));
-                musicRecord.set_lyrics(rs.getString("Lyrics"));
-                musicRecord.set_trackNum(rs.getInt("TrackNum"));
+                musicRecord.setFilePath(rs.getString("FilePath"));
+                musicRecord.setTitle(rs.getString("Title"));
+                musicRecord.setArtist(rs.getString("Artist"));
+                musicRecord.setAlbum(rs.getString("Album"));
+                musicRecord.setGenre(rs.getString("Genre"));
+                musicRecord.setYear(rs.getString("Year"));
+                musicRecord.setSongID(rs.getInt("ID"));
+                musicRecord.setLyrics(rs.getString("Lyrics"));
+                musicRecord.setTrackNum(rs.getInt("TrackNum"));
 
                 content.add(musicRecord);
             }
-
-            plst.set_playlistContent(content);
         }
         catch(SQLException e)
         {
             System.out.println("get playlist " + plstName + " error: " + e.getMessage());
         }
 
-        return plst;
+        return content;
     }
 
-    public void addToPlaylist(int playlistID, int song)
+    public void addToPlaylist(String playlistName, int song)
     {
-        String insert = "INSERT INTO playlists (PlaylistID, Name, Song, Position)" +
-                "VALUES (?, ?, ?, ?)" ;
+        String insert = "INSERT INTO playlists (Name, SongID, Position)" +
+                "VALUES (?, ?, ?)" ;
 
         String getName = "SELECT TOP 1 Name FROM playlists " +
-                "WHERE ID = ? AND Song = null";
+                "WHERE Name = ? AND SongID = 0";
 
         String getLastInPlaylist = "SELECT MAX(Position) FROM playlists " +
-                "WHERE PlaylistID = ?";
+                "WHERE Name = ?";
 
         try(Connection conn = connect())
         {
             PreparedStatement gn = conn.prepareStatement(getName);
-            gn.setInt(1, playlistID);
-            ResultSet rs = gn.executeQuery(getName);
+            gn.setString(1, playlistName);
+            ResultSet rs = gn.executeQuery();
 
             PreparedStatement gl = conn.prepareStatement(getLastInPlaylist);
-            gl.setInt(1, playlistID);
-            ResultSet rs1 = gl.executeQuery(getLastInPlaylist);
+            gl.setString(1, playlistName);
+            ResultSet rs1 = gl.executeQuery();
 
             PreparedStatement in = conn.prepareStatement(insert);
-            in.setInt(1, playlistID);
-            in.setString(2, rs.getString("Name"));
-            in.setInt(3, song);
-            in.setInt(4, rs1.getInt("Position") + 1);
+            in.setString(1, rs.getString("Name"));
+            in.setInt(2, song);
+            in.setInt(3, rs1.getInt("Position") + 1);
         }
         catch(SQLException e)
         {
@@ -218,26 +219,26 @@ public class BowerbirdDB
         }
     }
 
-    public void removeFromPlaylist(int playlistID, int song, int songPos)
+    public void removeFromPlaylist(String playlistName, int song, int songPos)
     {
         String delFromPlaylist = "DELETE FROM playlists " +
-                "WHERE PlaylistID = ? AND Song = ?";
+                "WHERE Name = ? AND Song = ?";
 
         String getLastInPlaylist = "SELECT MAX(Position) FROM playlists " +
-                "WHERE PlaylistID = ?";
+                "WHERE Name = ?";
 
         String updateSuccessors = "UPDATE playlists SET Position = ? " +
-                "WHERE Position = ? AND PlaylistID = ?";
+                "WHERE Position = ? AND Name = ?";
 
         try(Connection conn = connect())
         {
             PreparedStatement dp = conn.prepareStatement(delFromPlaylist);
-            dp.setInt(1, playlistID);
+            dp.setString(1, playlistName);
             dp.setInt(2, song);
             dp.executeUpdate();
 
             PreparedStatement gl = conn.prepareStatement(getLastInPlaylist);
-            gl.setInt(1, playlistID);
+            gl.setString(1, playlistName);
             ResultSet rs = gl.executeQuery(getLastInPlaylist);
 
             for(int i = songPos; i < rs.getInt("Position"); i++)
@@ -245,7 +246,7 @@ public class BowerbirdDB
                 PreparedStatement us = conn.prepareStatement(updateSuccessors);
                 us.setInt(1, i);
                 us.setInt(2, i+1);
-                us.setInt(3, playlistID);
+                us.setString(3, playlistName);
                 us.executeUpdate();
             }
         }
@@ -255,17 +256,17 @@ public class BowerbirdDB
         }
     }
 
-    public void renamePlaylist(int playlistID, String newName)
+    public void renamePlaylist(String oldName, String newName)
     {
         String sql = "UPDATE playlists " +
                 "SET Name = ?" +
-                "WHERE PlaylistID = ?";
+                "WHERE Name = ?";
 
         try(Connection conn = connect())
         {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, newName);
-            ps.setInt(2, playlistID);
+            ps.setString(2, oldName);
             ps.executeUpdate();
         }
         catch(SQLException e)
@@ -274,14 +275,14 @@ public class BowerbirdDB
         }
     }
 
-    public void deletePlaylist(int playlistID)
+    public void deletePlaylist(String playlistName)
     {
-        String sql = "DELETE FROM playlists WHERE PlaylistID = ?";
+        String sql = "DELETE FROM playlists WHERE Name = ?";
 
         try(Connection conn = connect())
         {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, playlistID);
+            ps.setString(1, playlistName);
             ps.executeUpdate();
         }
         catch(SQLException e)
@@ -304,18 +305,18 @@ public class BowerbirdDB
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
             //Setting the values
-            ps.setString(1, musicRecord.get_filePath());
-            ps.setString(2, musicRecord.get_title());
-            ps.setString(3, musicRecord.get_artist());
-            ps.setString(4, musicRecord.get_album());
-            ps.setInt(5, musicRecord.get_trackNum());
-            ps.setString(6, musicRecord.get_genre());
-            ps.setString(7, musicRecord.get_year());
+            ps.setString(1, musicRecord.getFilePath());
+            ps.setString(2, musicRecord.getTitle());
+            ps.setString(3, musicRecord.getArtist());
+            ps.setString(4, musicRecord.getAlbum());
+            ps.setInt(5, musicRecord.getTrackNum());
+            ps.setString(6, musicRecord.getGenre());
+            ps.setString(7, musicRecord.getYear());
 
             //Setting the duplicate values
-            ps.setString(7, musicRecord.get_title());
-            ps.setString(8, musicRecord.get_artist());
-            ps.setString(9, musicRecord.get_album());
+            ps.setString(7, musicRecord.getTitle());
+            ps.setString(8, musicRecord.getArtist());
+            ps.setString(9, musicRecord.getAlbum());
 
             ps.executeUpdate();
 
@@ -364,15 +365,15 @@ public class BowerbirdDB
             while(rs.next())
             {
                 MusicRecord musicRecord = new MusicRecord();
-                musicRecord.set_filePath(rs.getString("FilePath"));
-                musicRecord.set_title(rs.getString("Title"));
-                musicRecord.set_artist(rs.getString("Artist"));
-                musicRecord.set_album(rs.getString("Album"));
-                musicRecord.set_genre(rs.getString("Genre"));
-                musicRecord.set_year(rs.getString("Year"));
-                musicRecord.set_songID(rs.getInt("ID"));
-                musicRecord.set_lyrics(rs.getString("Lyrics"));
-                musicRecord.set_trackNum(rs.getInt("TrackNum"));
+                musicRecord.setFilePath(rs.getString("FilePath"));
+                musicRecord.setTitle(rs.getString("Title"));
+                musicRecord.setArtist(rs.getString("Artist"));
+                musicRecord.setAlbum(rs.getString("Album"));
+                musicRecord.setGenre(rs.getString("Genre"));
+                musicRecord.setYear(rs.getString("Year"));
+                musicRecord.setSongID(rs.getInt("ID"));
+                musicRecord.setLyrics(rs.getString("Lyrics"));
+                musicRecord.setTrackNum(rs.getInt("TrackNum"));
 
                 if(musicRecord != null)
                 {
@@ -422,14 +423,14 @@ public class BowerbirdDB
             while(rs.next())
             {
                 MusicRecord musicRecord = new MusicRecord();
-                musicRecord.set_filePath(rs.getString("FilePath"));
-                musicRecord.set_title(rs.getString("Title"));
-                musicRecord.set_artist(rs.getString("Artist"));
-                musicRecord.set_album(rs.getString("Album"));
-                musicRecord.set_genre(rs.getString("Genre"));
-                musicRecord.set_year(rs.getString("Year"));
-                musicRecord.set_songID(rs.getInt("ID"));
-                musicRecord.set_lyrics(rs.getString("Lyrics"));
+                musicRecord.setFilePath(rs.getString("FilePath"));
+                musicRecord.setTitle(rs.getString("Title"));
+                musicRecord.setArtist(rs.getString("Artist"));
+                musicRecord.setAlbum(rs.getString("Album"));
+                musicRecord.setGenre(rs.getString("Genre"));
+                musicRecord.setYear(rs.getString("Year"));
+                musicRecord.setSongID(rs.getInt("ID"));
+                musicRecord.setLyrics(rs.getString("Lyrics"));
 
                 if(musicRecord != null)
                 {

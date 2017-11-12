@@ -4,18 +4,22 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 import java.util.List;
+import java.util.Optional;
 
 public class MediaManager {
 
@@ -62,7 +66,7 @@ public class MediaManager {
         SetSliders();
 
         musicRecordList = bowerbirdDB.getAllMusicRecords();
-        AddSongsToTab();
+        AddSongsToLibrary();
 
         playlists = bowerbirdDB.getAllPlaylists();
         AddPlaylistsToTab();
@@ -171,22 +175,22 @@ public class MediaManager {
         System.out.println("Attempting database insert.");
 
         MusicRecord musicRecord = new MusicRecord();
-        musicRecord.set_album(album);
-        musicRecord.set_artist(artist);
-        musicRecord.set_trackNum(track);
-        musicRecord.set_filePath(path);
-        musicRecord.set_genre(genre);
-        musicRecord.set_title(title);
-        musicRecord.set_year(year);
+        musicRecord.setAlbum(album);
+        musicRecord.setArtist(artist);
+        musicRecord.setTrackNum(track);
+        musicRecord.setFilePath(path);
+        musicRecord.setGenre(genre);
+        musicRecord.setTitle(title);
+        musicRecord.setYear(year);
 
         bowerbirdDB.importSong(musicRecord);
         musicRecordList = bowerbirdDB.getAllMusicRecords();
-        AddSongsToTab();
+        AddSongsToLibrary();
     }
 
     public void UpdateLabel()
     {
-        songInfo.setText("Title: " + title + "\n" + "Artist: " + artist + "\n" + "Album: " + album + "\n" + "Track#: "
+        songInfo.setText("Name: " + title + "\n" + "Artist: " + artist + "\n" + "Album: " + album + "\n" + "Track#: "
                 + track + "\n" + "Year: " + year + "\n" + "Genre: " + genre + "\n" + "Lyrics: \n\n" + lyrics);
     }
 
@@ -219,34 +223,72 @@ public class MediaManager {
         return new int[] {hour, min, sec};
     }
 
-    public void AddSongsToTab()
+    public void AddSongsToLibrary()
     {
         songTab.getChildren().clear();
 
-        for (int i = 1; i < musicRecordList.size() + 1; i++)
-        {
-            Button newButton = songButton(i, musicRecordList.get(i - 1));
-            newButton.getStyleClass().add("tab-button");
+        TableView library = new TableView();
+        ObservableList<MusicRecord> musicRecsObs = FXCollections.observableArrayList(musicRecordList);
 
-            songTab.getChildren().add(newButton);
-        }
+        TableColumn titleCol = new TableColumn("Name");
+        titleCol.setMinWidth(100);
+        titleCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Title"));
+
+        TableColumn artistCol = new TableColumn("Artist");
+        titleCol.setMinWidth(100);
+        titleCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Artist"));
+
+        TableColumn albumCol = new TableColumn("Album");
+        titleCol.setMinWidth(100);
+        titleCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Album"));
+
+        TableColumn genreCol = new TableColumn("Genre");
+        titleCol.setMinWidth(100);
+        titleCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Genre"));
+
+        TableColumn yearCol = new TableColumn("Year");
+        titleCol.setMinWidth(100);
+        titleCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Year"));
+
+        library.setItems(musicRecsObs);
+        library.getColumns().addAll(titleCol, artistCol, albumCol, genreCol, yearCol);
+
+        library.setRowFactory(tv -> {
+            TableRow<MusicRecord> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if(event.getClickCount() == 2 && !row.isEmpty())
+                {
+                    MusicRecord rowData = row.getItem();
+                    if(mediaPlayer != null)
+                    {
+                        mediaPlayer.stop();
+                        mediaPlayer.dispose();
+
+
+                        row.setStyle("-fx-background-color: yellow");
+                        //newButton.setStyle("-fx-background-color: yellow");
+                    }
+                    UpdateMedia(rowData.getFilePath(), true);
+                    mediaPlayer.play();
+                }
+            });
+            return row;
+        });
+
+        songTab.getChildren().addAll(library);
+
+//        for (int i = 1; i < musicRecordList.size() + 1; i++)
+//        {
+//            Button newButton = songButton(musicRecordList.get(i - 1));
+//            newButton.getStyleClass().add("tab-button");
+//
+//            songTab.getChildren().add(newButton);
+//        }
     }
 
-    public void AddPlaylistsToTab()
+    public Button songButton(MusicRecord musicRecord)
     {
-        playlistTab.getPanes().removeAll();
-
-        for (int i = 1; i < playlists.size() + 1; i++)
-        {
-            TitledPane playlist = new TitledPane();
-            playlist.setText(playlists.get(i - 1).get_playlistName());
-            playlistTab.getPanes().add(playlist);
-        }
-    }
-
-    public Button songButton(int index, MusicRecord musicRecord)
-    {
-        Button newButton = new Button(musicRecord.get_title());
+        Button newButton = new Button(musicRecord.getTitle());
         newButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -257,7 +299,7 @@ public class MediaManager {
 
                     newButton.setStyle("-fx-background-color: yellow");
                 }
-                UpdateMedia(musicRecord.get_filePath(), true);
+                UpdateMedia(musicRecord.getFilePath(), true);
                 mediaPlayer.play();
             }
         });
@@ -318,6 +360,7 @@ public class MediaManager {
     }
     //endregion GetSet
 
+    //region Playlists
     public boolean createNewPlaylist(String playlistName)
     {
         if(!bowerbirdDB.newPlaylist(playlistName))
@@ -328,4 +371,127 @@ public class MediaManager {
 
         return true;
     }
+
+    public void AddPlaylistsToTab()
+    {
+        playlistTab.getPanes().clear();
+
+        for (int i = 1; i < playlists.size() + 1; i++)
+        {
+            TitledPane plstEntry = new TitledPane();
+            VBox playlistContent = new VBox();
+            playlistContent.getChildren().add(GetPlaylistControls(playlists.get(i-1)));
+
+            plstEntry.setText(playlists.get(i-1).get_playlistName());
+            playlists.get(i-1).set_playlistContent(bowerbirdDB.getPlaylistContent(playlists.get(i-1).get_playlistName()));
+            AddSongsToPlaylistTab(plstEntry, playlists.get(i-1), playlistContent);
+
+            plstEntry.setContent(playlistContent);
+            playlistTab.getPanes().add(plstEntry);
+        }
+    }
+
+    public ComboBox<String> GetPlaylistControls(Playlist plst)
+    {
+        ComboBox<String> plstControls = new ComboBox<String>();
+        plstControls.getItems().addAll("Add Songs", "Remove Songs", "Reorder Songs", "Rename Playlist", "Delete Playlist");
+        plstControls.setValue("Playlist options...");
+
+        System.out.println("Playlist option: " + plstControls.getValue());
+
+        plstControls.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                switch(newValue)
+                {
+                    case "Add Songs":
+                        AddSongsToThisPlaylist();
+                        break;
+                    case "Remove Songs":
+                        RemoveSongsFromThisPlaylist();
+                        break;
+                    case "Reorder Songs":
+                        ReorderSongsInThisPlaylist();
+                        break;
+                    case "Rename Playlist":
+                        RenameThisPlaylist(plst);
+                        break;
+                    case "Delete Playlist":
+                        DeleteThisPlaylist(plst);
+                        break;
+                }
+            }
+        });
+
+        return plstControls;
+    }
+
+    public void AddSongsToPlaylistTab(TitledPane plstEntry, Playlist plst, VBox playlistContent)
+    {
+        for (int i = 1; i < plst.get_playlistContent().size() + 1; i++)
+        {
+            Button newButton = songButton(plst.get_playlistContent().get(i - 1));
+            newButton.getStyleClass().add("tab-button");
+
+            playlistContent.getChildren().add(newButton);
+        }
+    }
+
+    public void AddSongsToThisPlaylist()
+    {
+
+    }
+
+    public void RemoveSongsFromThisPlaylist()
+    {
+
+    }
+
+    public void ReorderSongsInThisPlaylist()
+    {
+
+    }
+
+    public void RenameThisPlaylist(Playlist plst)
+    {
+        TextInputDialog dialog = new TextInputDialog("newPlaylist");
+        dialog.setTitle("Rename Playlist");
+        dialog.setHeaderText("Rename the playlist \"" + plst.get_playlistName() + "\" to: ");
+
+        Optional<String> result = dialog.showAndWait();
+
+        if(result.isPresent())
+        {
+            System.out.println("result = " + result.toString());
+            bowerbirdDB.renamePlaylist(plst.get_playlistName(), result.get());
+
+            playlists = bowerbirdDB.getAllPlaylists();
+            AddPlaylistsToTab();
+        }
+    }
+
+    public void DeleteThisPlaylist(Playlist plst)
+    {
+        Alert wannaDelete = new Alert(Alert.AlertType.CONFIRMATION);
+
+        wannaDelete.setTitle("Confirm Playlist Delete");
+        wannaDelete.setContentText("Are you sure you want to delete the playlist \"" + plst.get_playlistName() + "\"?");
+
+        java.util.Optional<ButtonType> result = wannaDelete.showAndWait();
+        System.out.println("button choice: " + result.get().toString());
+
+        if(result.get() == ButtonType.OK)
+        {
+            bowerbirdDB.deletePlaylist(plst.get_playlistName());
+
+            playlists = bowerbirdDB.getAllPlaylists();
+            AddPlaylistsToTab();
+        }
+        else
+        {
+            wannaDelete.showAndWait();
+        }
+    }
+
+    //endregion Playlists
 }

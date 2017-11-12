@@ -37,6 +37,10 @@
     -fx-padding: 0px;
 }
 
+.table-view{
+    -fx-font-size: 10pt;
+}
+
 .button {
     -fx-background-radius: 50%;
 }
