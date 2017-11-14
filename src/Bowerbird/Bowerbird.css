@@ -41,6 +41,70 @@
     -fx-background-radius: 50%;
 }
 
+#playButton {
+    -fx-graphic: url("resources/images/PlayButton.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-radius: 50%;
+}
+
+#playButton:hover {
+    -fx-graphic: url("resources/images/PlayButtonHover.png");
+}
+
+#playButton:pressed {
+    -fx-graphic: url("resources/images/PlayButtonPressed.png");
+}
+
+#pauseButton {
+    -fx-graphic: url("resources/images/PauseButton.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-radius: 50%;
+}
+
+#pauseButton:hover {
+    -fx-graphic: url("resources/images/PauseButtonHover.png");
+}
+
+#pauseButton:pressed {
+    -fx-graphic: url("resources/images/PauseButtonPressed.png");
+}
+
+#stopButton {
+    -fx-graphic: url("resources/images/StopButton.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-radius: 50%;
+}
+
+#stopButton:hover {
+    -fx-graphic: url("resources/images/StopButtonHover.png");
+}
+
+#stopButton:pressed {
+    -fx-graphic: url("resources/images/StopButtonPressed.png");
+}
+
+#addButton {
+    -fx-graphic: url("resources/images/AddSongButton.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-radius: 50%;
+}
+
+#addButton:hover {
+    -fx-graphic: url("resources/images/AddSongButtonHover.png");
+}
+
+#addButton:pressed {
+    -fx-graphic: url("resources/images/AddSongButtonPressed.png");
+}
+
 .tab-button {
     -fx-width: 100%;
     -fx-background-color: #ffffff;

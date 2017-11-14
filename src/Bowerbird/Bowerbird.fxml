@@ -35,9 +35,9 @@
                 <padding>
                     <Insets bottom="10" left="12" right="12" top="15" />
                 </padding>
-                <Button fx:id="playButton" disable="true" onAction="#handlePlayButtonAction" text="Play" />
-                <Button fx:id="pauseButton" disable="true" onAction="#handlePauseButtonAction" text="Pause" />
-                <Button fx:id="stopButton" disable="true" onAction="#handleStopButtonAction" text="Stop" />
+                <Button fx:id="playButton" disable="true" onAction="#handlePlayButtonAction"/>
+                <Button fx:id="pauseButton" disable="true" onAction="#handlePauseButtonAction"/>
+                <Button fx:id="stopButton" disable="true" onAction="#handleStopButtonAction"/>
                 <Button fx:id="addButton" onAction="#handleAddSongButtonAction" text="Add Song" />
                 <VBox alignment="CENTER">
                     <Text text="Volume" />
