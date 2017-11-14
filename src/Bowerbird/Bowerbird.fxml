@@ -15,6 +15,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <fx:root prefHeight="600" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
     <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
 
@@ -35,10 +37,10 @@
                 <padding>
                     <Insets bottom="10" left="12" right="12" top="15" />
                 </padding>
-                <Button fx:id="playButton" disable="true" onAction="#handlePlayButtonAction" text="Play" />
-                <Button fx:id="pauseButton" disable="true" onAction="#handlePauseButtonAction" text="Pause" />
-                <Button fx:id="stopButton" disable="true" onAction="#handleStopButtonAction" text="Stop" />
-                <Button fx:id="addButton" onAction="#handleAddSongButtonAction" text="Add Song" />
+                <Button fx:id="playButton" disable="true" onAction="#handlePlayButtonAction"/>
+                <Button fx:id="pauseButton" disable="true" onAction="#handlePauseButtonAction"/>
+                <Button fx:id="stopButton" disable="true" onAction="#handleStopButtonAction"/>
+                <Button fx:id="addButton" onAction="#handleAddSongButtonAction"/>
                 <VBox alignment="CENTER">
                     <Text text="Volume" />
                     <Slider fx:id="volumeSlider" onScroll="#handleVolumeScrollEvent" />
