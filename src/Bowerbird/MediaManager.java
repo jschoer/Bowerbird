@@ -297,13 +297,8 @@ public class MediaManager {
                     mediaPlayer.stop();
                     mediaPlayer.dispose();
                 }
-<<<<<<< HEAD
                 UpdateMedia(musicRecord.getFilePath(), true);
                 mediaPlayer.play();
-=======
-                UpdateMedia(musicRecord.get_filePath(), true);
-                Play();
->>>>>>> master
             }
         });
 
