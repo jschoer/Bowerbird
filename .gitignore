@@ -25,3 +25,7 @@ hs_err_pid*
 **/.idea/workspace.xml
 **/.idea/tasks.xml
 **/src/Bowerbird/resources/music.db
+# not sure if above worked for music.db
+**/music.db
+# entire output folder
+/out

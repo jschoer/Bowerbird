@@ -296,11 +296,14 @@ public class MediaManager {
                 {
                     mediaPlayer.stop();
                     mediaPlayer.dispose();
-
-                    newButton.setStyle("-fx-background-color: yellow");
                 }
+<<<<<<< HEAD
                 UpdateMedia(musicRecord.getFilePath(), true);
                 mediaPlayer.play();
+=======
+                UpdateMedia(musicRecord.get_filePath(), true);
+                Play();
+>>>>>>> master
             }
         });
 
@@ -313,6 +316,7 @@ public class MediaManager {
         mediaPlayer.play();
         playButton.setDisable(true);
         pauseButton.setDisable(false);
+        stopButton.setDisable(false);
         timeSlider.setDisable(false);
     }
 
@@ -328,17 +332,12 @@ public class MediaManager {
         mediaPlayer.stop();
         playButton.setDisable(false);
         pauseButton.setDisable(true);
+        stopButton.setDisable(true);
         timeSlider.setDisable(true);
 
         currentTime.setText("00.00.00");
         totalTime.setText("00.00.00");
         songInfo.setText("Song Information");
-
-        VBox vbox = songTab;
-        for(Node node : vbox.getChildren())
-        {
-            node.setStyle("-fx-background-color: white");
-        }
     }
     //endregion MediaPlayer
 
