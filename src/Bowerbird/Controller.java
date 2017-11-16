@@ -27,6 +27,7 @@ public class Controller extends BorderPane{
     @FXML private TabPane tabPane;
     @FXML private VBox songTab;
     @FXML private  Accordion playlistTab;
+    @FXML private VBox visuals;
 
     private MediaManager mediaManager;
 
@@ -48,7 +49,7 @@ public class Controller extends BorderPane{
 
     @FXML public void initialize()
     {
-        mediaManager = new MediaManager(volumeSlider, timeSlider, songInfo, currentTime, totalTime, playButton, pauseButton, stopButton, addButton, toVisuals, songTab, playlistTab);
+        mediaManager = new MediaManager(volumeSlider, timeSlider, songInfo, currentTime, totalTime, playButton, pauseButton, stopButton, addButton, toVisuals, songTab, playlistTab, visuals);
     }
 
     //region Handlers

@@ -1,5 +1,6 @@
 package Bowerbird;
 
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
@@ -11,11 +12,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -31,6 +38,7 @@ public class MediaManager {
     @FXML private Button playButton, pauseButton, stopButton, addButton, toVisuals, toLibrary;
     @FXML private VBox songTab;
     @FXML private Accordion playlistTab;
+    @FXML private VBox visuals;
 
     private BowerbirdDB bowerbirdDB;
 
@@ -46,7 +54,7 @@ public class MediaManager {
     public MediaManager(Slider volumeSlider, Slider timeSlider,
                         Label songInfo, Label currentTime, Label totalTime,
                         Button playButton, Button pauseButton, Button stopButton, Button addButton, Button toVisuals,
-                        VBox songTab, Accordion playlistTab)
+                        VBox songTab, Accordion playlistTab, VBox visuals)
     {
         this.volumeSlider = volumeSlider;
         this.timeSlider = timeSlider;
@@ -60,6 +68,7 @@ public class MediaManager {
         this.songTab = songTab;
         this.playlistTab = playlistTab;
         this.toVisuals = toVisuals;
+        this.visuals = visuals;
 
         bowerbirdDB = new BowerbirdDB();
 
@@ -166,6 +175,7 @@ public class MediaManager {
                     databaseInsert(path);
                 UpdateLabel();
                 SetTimeStamps();
+                CreateVisualizations();
             }
         });
     }
@@ -263,7 +273,7 @@ public class MediaManager {
                         //newButton.setStyle("-fx-background-color: yellow");
                     }
                     UpdateMedia(rowData.getFilePath(), true);
-                    mediaPlayer.play();
+                    Play();
                 }
             });
             return row;
@@ -280,6 +290,48 @@ public class MediaManager {
 //        }
     }
 
+    public void CreateVisualizations()
+    {
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis(-50,50,10);
+
+        BarChart<String, Number> visualizerChart = new BarChart<>(xAxis, yAxis);
+        visualizerChart.setLegendVisible(false);
+        visualizerChart.setAnimated(false);
+        visualizerChart.setBarGap(0);
+        visualizerChart.setCategoryGap(0);
+        visualizerChart.setVerticalGridLinesVisible(false);
+        visualizerChart.setVerticalZeroLineVisible(false);
+        visualizerChart.setHorizontalGridLinesVisible(false);
+        visualizerChart.setHorizontalZeroLineVisible(false);
+
+        yAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(yAxis, null, "dB"));
+        yAxis.setTickLabelFill(Color.TRANSPARENT);
+
+        xAxis.setTickLabelFill(Color.TRANSPARENT);
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        for (int i = 0; i < 128; i++)
+        {
+            series.getData().add(new XYChart.Data<>(Integer.toString(i + 1), 50));
+        }
+
+        visualizerChart.getData().add(series);
+        visuals.getChildren().clear();
+        visuals.getChildren().add(visualizerChart);
+
+        mediaPlayer.setAudioSpectrumListener(new AudioSpectrumListener() {
+            @Override
+            public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
+                for(int i = 0; i < magnitudes.length; i++)
+                {
+                    visualizerChart.getData().get(0).getData().get(i).setYValue(magnitudes[i] + 60);
+                }
+            }
+        });
+    }
+
     public Button songButton(MusicRecord musicRecord)
     {
         Button newButton = new Button(musicRecord.getTitle());
@@ -292,7 +344,7 @@ public class MediaManager {
                     mediaPlayer.dispose();
                 }
                 UpdateMedia(musicRecord.getFilePath(), true);
-                mediaPlayer.play();
+                Play();
             }
         });
 
