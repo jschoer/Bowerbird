@@ -19,14 +19,12 @@ public class Controller extends BorderPane{
 
     @FXML private Slider timeSlider;
     @FXML private Slider volumeSlider;
-
     @FXML private Label songInfo, currentTime, totalTime;
-
     @FXML private Button playButton, pauseButton, stopButton, addButton, toVisuals, toLibrary;
-
     @FXML private TabPane tabPane;
     @FXML private VBox songTab;
-    @FXML private  Accordion playlistTab;
+    @FXML private Accordion playlistTab;
+    @FXML private ComboBox<String> searchType;
 
     private MediaManager mediaManager;
 

@@ -12,14 +12,16 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-import java.util.List;
-import java.util.Optional;
+import javax.swing.text.*;
+import java.util.*;
 
 public class MediaManager {
 
@@ -31,6 +33,8 @@ public class MediaManager {
     @FXML private Button playButton, pauseButton, stopButton, addButton, toVisuals, toLibrary;
     @FXML private VBox songTab;
     @FXML private Accordion playlistTab;
+    @FXML private ComboBox<String> searchType;
+    private TableView library;
 
     private BowerbirdDB bowerbirdDB;
 
@@ -227,7 +231,7 @@ public class MediaManager {
     {
         songTab.getChildren().clear();
 
-        TableView library = new TableView();
+        library = new TableView();
         ObservableList<MusicRecord> musicRecsObs = FXCollections.observableArrayList(musicRecordList);
 
         TableColumn titleCol = new TableColumn("Name");
@@ -248,6 +252,32 @@ public class MediaManager {
         library.getColumns().addAll(titleCol, artistCol, albumCol, genreCol, yearCol);
         library.setItems(musicRecsObs);
 
+        SetLibraryForSongPlaying();
+
+        songTab.getChildren().addAll(library);
+    }
+
+    public Button songButton(MusicRecord musicRecord)
+    {
+        Button newButton = new Button(musicRecord.getTitle());
+        newButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(mediaPlayer != null)
+                {
+                    mediaPlayer.stop();
+                    mediaPlayer.dispose();
+                }
+                UpdateMedia(musicRecord.getFilePath(), true);
+                Play();
+            }
+        });
+
+        return newButton;
+    }
+
+    public void SetLibraryForSongPlaying()
+    {
         library.setRowFactory(tv -> {
             TableRow<MusicRecord> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -268,35 +298,6 @@ public class MediaManager {
             });
             return row;
         });
-
-        songTab.getChildren().addAll(library);
-
-//        for (int i = 1; i < musicRecordList.size() + 1; i++)
-//        {
-//            Button newButton = songButton(musicRecordList.get(i - 1));
-//            newButton.getStyleClass().add("tab-button");
-//
-//            songTab.getChildren().add(newButton);
-//        }
-    }
-
-    public Button songButton(MusicRecord musicRecord)
-    {
-        Button newButton = new Button(musicRecord.getTitle());
-        newButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if(mediaPlayer != null)
-                {
-                    mediaPlayer.stop();
-                    mediaPlayer.dispose();
-                }
-                UpdateMedia(musicRecord.getFilePath(), true);
-                mediaPlayer.play();
-            }
-        });
-
-        return newButton;
     }
 
     //region MediaPlayer
@@ -368,18 +369,55 @@ public class MediaManager {
         {
             TitledPane plstEntry = new TitledPane();
             VBox playlistContent = new VBox();
-            playlistContent.getChildren().add(GetPlaylistControls(playlists.get(i-1)));
+            HBox controlRow = new HBox();
+            Button cancel = CancelPlaylistChangesButton();
+            Button done = DoneWithPlaylistChangesButton();
+
+            cancel.setVisible(false);
+            done.setVisible(false);
+
+            controlRow.getChildren().add(GetPlaylistControls(playlists.get(i-1), cancel, done));
+            controlRow.getChildren().add(cancel);
+            controlRow.getChildren().add(done);
 
             plstEntry.setText(playlists.get(i-1).get_playlistName());
             playlists.get(i-1).set_playlistContent(bowerbirdDB.getPlaylistContent(playlists.get(i-1).get_playlistName()));
-            AddSongsToPlaylistTab(plstEntry, playlists.get(i-1), playlistContent);
+            AddPlaylistsToPlaylistTab(plstEntry, playlists.get(i-1), playlistContent);
 
             plstEntry.setContent(playlistContent);
             playlistTab.getPanes().add(plstEntry);
         }
     }
 
-    public ComboBox<String> GetPlaylistControls(Playlist plst)
+    public Button CancelPlaylistChangesButton()
+    {
+        Button newButton = new Button();
+
+        newButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
+        return newButton;
+    }
+
+    public Button DoneWithPlaylistChangesButton()
+    {
+        Button newButton = new Button();
+
+        newButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
+        return newButton;
+    }
+
+    public ComboBox<String> GetPlaylistControls(Playlist plst, Button cancel, Button done)
     {
         ComboBox<String> plstControls = new ComboBox<String>();
         plstControls.getItems().addAll("Add Songs", "Remove Songs", "Reorder Songs", "Rename Playlist", "Delete Playlist");
@@ -393,7 +431,7 @@ public class MediaManager {
                 switch(newValue)
                 {
                     case "Add Songs":
-                        AddSongsToThisPlaylist();
+                        AddSongsToThisPlaylist(cancel, done);
                         break;
                     case "Remove Songs":
                         RemoveSongsFromThisPlaylist();
@@ -414,7 +452,7 @@ public class MediaManager {
         return plstControls;
     }
 
-    public void AddSongsToPlaylistTab(TitledPane plstEntry, Playlist plst, VBox playlistContent)
+    public void AddPlaylistsToPlaylistTab(TitledPane plstEntry, Playlist plst, VBox playlistContent)
     {
         for (int i = 1; i < plst.get_playlistContent().size() + 1; i++)
         {
@@ -425,9 +463,26 @@ public class MediaManager {
         }
     }
 
-    public void AddSongsToThisPlaylist()
+    public void AddSongsToThisPlaylist(Button cancel, Button done)
     {
+        cancel.setVisible(true);
+        done.setVisible(true);
 
+        List<MusicRecord> toBeAddedToPlaylist = new ArrayList<>();
+
+        library.setRowFactory(tv -> {
+            TableRow<MusicRecord> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if(event.getClickCount() == 1 && !row.isEmpty())
+                {
+                    MusicRecord rowData = row.getItem();
+
+                    if(rowData != null)
+                        toBeAddedToPlaylist.add(rowData);
+                }
+            });
+            return row;
+        });
     }
 
     public void RemoveSongsFromThisPlaylist()

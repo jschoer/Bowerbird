@@ -187,10 +187,10 @@ public class BowerbirdDB
         return content;
     }
 
-    public void addToPlaylist(String playlistName, int song)
+    public void addToPlaylist(String playlistName, List<MusicRecord> list)
     {
         String insert = "INSERT INTO playlists (Name, SongID, Position)" +
-                "VALUES (?, ?, ?)" ;
+                "VALUES " ;
 
         String getName = "SELECT TOP 1 Name FROM playlists " +
                 "WHERE Name = ? AND SongID = 0";
@@ -208,10 +208,19 @@ public class BowerbirdDB
             gl.setString(1, playlistName);
             ResultSet rs1 = gl.executeQuery();
 
+            String plstName = rs.getString("Name");
+            int last = rs1.getInt("Position");
+
+            for(int i = 0; i < list.size(); i++)
+            {
+                String newSong = "(" + plstName + ", " + list.get(i) + ", " + last + i + 1 + "), ";
+                insert += newSong;
+            }
+
+            insert = insert.substring(0, insert.length() - 1);
+
             PreparedStatement in = conn.prepareStatement(insert);
-            in.setString(1, rs.getString("Name"));
-            in.setInt(2, song);
-            in.setInt(3, rs1.getInt("Position") + 1);
+            in.executeUpdate();
         }
         catch(SQLException e)
         {
