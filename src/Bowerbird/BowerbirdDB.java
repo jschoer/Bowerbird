@@ -314,9 +314,9 @@ public class BowerbirdDB
             ps.setString(7, musicRecord.getYear());
 
             //Setting the duplicate values
-            ps.setString(7, musicRecord.getTitle());
-            ps.setString(8, musicRecord.getArtist());
-            ps.setString(9, musicRecord.getAlbum());
+            ps.setString(8, musicRecord.getTitle());
+            ps.setString(9, musicRecord.getArtist());
+            ps.setString(10, musicRecord.getAlbum());
 
             ps.executeUpdate();
 

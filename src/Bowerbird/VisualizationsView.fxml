@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Accordion?>
 
 <fx:root prefHeight="600" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
     <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
@@ -56,7 +57,13 @@
                 </VBox>
             </Tab>
             <Tab text="Playlists">
-                <Text text="A list of play lists go here" />
+                <Text text="A list of playlists go here" />
+                <VBox>
+                    <HBox>
+                        <Button fx:id="addPlaylist" onAction="#handleNewPlaylistAction" text="New" />
+                    </HBox>
+                    <Accordion fx:id="playlistTab" prefWidth="328.0" />
+                </VBox>
             </Tab>
         </TabPane>
     </right>

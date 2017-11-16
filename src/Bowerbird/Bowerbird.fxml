@@ -11,7 +11,6 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -43,7 +42,6 @@
                     <Text text="Volume" />
                     <Slider fx:id="volumeSlider" onScroll="#handleVolumeScrollEvent" />
                 </VBox>
-            <!--<Button fx:id="toVisuals" mnemonicParsing="false" text="Visuals" />-->
                 <Button fx:id="toVisuals" mnemonicParsing="false" onAction="#handleViewSwitchAction" text="Visuals" />
             </HBox>
         </VBox>
@@ -76,7 +74,6 @@
             </Tab>
             <Tab text="Search">
                 <VBox>
-                    <!--<Label layoutX="15.0" layoutY="10.0" styleClass="bold-label" wrapText="true" text="Select one of the following options:" />-->
                     <ComboBox prefWidth="350.0" promptText="Select Option" >
                         <items>
                             <FXCollections fx:factory="observableArrayList">

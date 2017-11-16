@@ -231,27 +231,22 @@ public class MediaManager {
         ObservableList<MusicRecord> musicRecsObs = FXCollections.observableArrayList(musicRecordList);
 
         TableColumn titleCol = new TableColumn("Name");
-        titleCol.setMinWidth(100);
         titleCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Title"));
 
         TableColumn artistCol = new TableColumn("Artist");
-        titleCol.setMinWidth(100);
-        titleCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Artist"));
+        artistCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Artist"));
 
         TableColumn albumCol = new TableColumn("Album");
-        titleCol.setMinWidth(100);
-        titleCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Album"));
+        albumCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Album"));
 
         TableColumn genreCol = new TableColumn("Genre");
-        titleCol.setMinWidth(100);
-        titleCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Genre"));
+        genreCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Genre"));
 
         TableColumn yearCol = new TableColumn("Year");
-        titleCol.setMinWidth(100);
-        titleCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Year"));
+        yearCol.setCellValueFactory(new PropertyValueFactory<MusicRecord, String>("Year"));
 
-        library.setItems(musicRecsObs);
         library.getColumns().addAll(titleCol, artistCol, albumCol, genreCol, yearCol);
+        library.setItems(musicRecsObs);
 
         library.setRowFactory(tv -> {
             TableRow<MusicRecord> row = new TableRow<>();
@@ -263,7 +258,6 @@ public class MediaManager {
                     {
                         mediaPlayer.stop();
                         mediaPlayer.dispose();
-
 
                         row.setStyle("-fx-background-color: yellow");
                         //newButton.setStyle("-fx-background-color: yellow");
