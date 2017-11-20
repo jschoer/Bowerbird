@@ -69,15 +69,12 @@
                     <HBox>
                         <Button fx:id="addPlaylist" onAction="#handleNewPlaylistAction" text="New" />
                     </HBox>
-                    <Accordion fx:id="playlistTab" prefHeight="239.0" prefWidth="328.0" />
+                    <Accordion fx:id="playlistTab" prefHeight="239.0" />
                 </VBox>
-            </Tab>
-            <Tab text="Sort By">
-                <Text text="A list of sorting options go here" />
             </Tab>
             <Tab text="Search">
                 <VBox>
-                    <ComboBox prefWidth="350.0" promptText="Select Option" >
+                    <ComboBox fx:id="searchType" prefWidth="350.0" promptText="Select Option" >
                         <items>
                             <FXCollections fx:factory="observableArrayList">
                                 <String fx:value="Artist" />
