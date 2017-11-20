@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -257,19 +258,62 @@ public class MediaManager {
         songTab.getChildren().addAll(library);
     }
 
-    public Button songButton(MusicRecord musicRecord)
+    public Button songButton(int indexOfCurrentSong, Playlist plst, VBox v, TitledPane plstEntry)
     {
-        Button newButton = new Button(musicRecord.getTitle());
-        newButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        Button newButton = new Button(plst.get_playlistContent().get(indexOfCurrentSong-1).getTitle());
+
+        newButton.setOnAction(event ->
+        {
+            for(int i = indexOfCurrentSong-1; i < plst.get_playlistContent().size(); i++)
+            {
                 if(mediaPlayer != null)
                 {
                     mediaPlayer.stop();
                     mediaPlayer.dispose();
                 }
-                UpdateMedia(musicRecord.getFilePath(), true);
+
+                UpdateMedia(plst.get_playlistContent().get(i).getFilePath(), true);
                 Play();
+            }
+        });
+
+        newButton.setOnDragDetected(event ->
+        {
+            if(newButton != null)
+            {
+                Dragboard db = newButton.startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent cc = new ClipboardContent();
+                cc.putString(String.valueOf(indexOfCurrentSong));
+                db.setContent(cc);
+
+                event.consume();
+            }
+        });
+
+        newButton.setOnDragOver(event ->
+        {
+            if(event.getDragboard().hasString())
+            {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+            event.consume();
+        });
+
+        newButton.setOnDragDropped(event ->
+        {
+            Dragboard d = event.getDragboard();
+            if(d.hasString())
+            {
+                int movedSongPos = Integer.parseInt(d.getString());
+                int movedSongID = plst.get_playlistContent().get(movedSongPos-1).getSongID();
+
+                bowerbirdDB.reorderPlaylist(plst.get_playlistName(), movedSongID, movedSongPos, indexOfCurrentSong);
+
+                AddContentToPlaylistTab(plst, v, plstEntry);
+                plstEntry.setContent(v);
+
+                event.setDropCompleted(true);
+                event.consume();
             }
         });
 
@@ -280,6 +324,7 @@ public class MediaManager {
     {
         library.setRowFactory(tv -> {
             TableRow<MusicRecord> row = new TableRow<>();
+
             row.setOnMouseClicked(event -> {
                 if(event.getClickCount() == 2 && !row.isEmpty())
                 {
@@ -290,13 +335,33 @@ public class MediaManager {
                         mediaPlayer.dispose();
 
                         row.setStyle("-fx-background-color: yellow");
-                        //newButton.setStyle("-fx-background-color: yellow");
                     }
                     UpdateMedia(rowData.getFilePath(), true);
                     mediaPlayer.play();
                 }
             });
+
+            row.setOnDragDetected(event -> {
+                if(!row.isEmpty())
+                {
+                    Dragboard db = row.startDragAndDrop(TransferMode.COPY);
+                    ClipboardContent cc = new ClipboardContent();
+                    cc.putString(String.valueOf(row.getItem().getSongID()));
+                    db.setContent(cc);
+
+                    event.consume();
+                }
+            });
+
             return row;
+        });
+
+        library.setOnDragOver(event -> {
+            if(event.getGestureSource() != library && event.getDragboard().hasString())
+            {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
         });
     }
 
@@ -361,179 +426,140 @@ public class MediaManager {
         return true;
     }
 
-    public void AddPlaylistsToTab()
+    private void AddPlaylistsToTab()
     {
         playlistTab.getPanes().clear();
 
-        for (int i = 1; i < playlists.size() + 1; i++)
+        for (int i = 0; i < playlists.size(); i++)
         {
             TitledPane plstEntry = new TitledPane();
-            VBox playlistContent = new VBox();
-            HBox controlRow = new HBox();
-            Button cancel = CancelPlaylistChangesButton();
-            Button done = DoneWithPlaylistChangesButton();
+            VBox v = PlaylistAccordionVBox(playlists.get(i), plstEntry);
 
-            cancel.setVisible(false);
-            done.setVisible(false);
+            plstEntry.setText(playlists.get(i).get_playlistName());
 
-            controlRow.getChildren().add(GetPlaylistControls(playlists.get(i-1), cancel, done));
-            controlRow.getChildren().add(cancel);
-            controlRow.getChildren().add(done);
-
-            plstEntry.setText(playlists.get(i-1).get_playlistName());
-            playlists.get(i-1).set_playlistContent(bowerbirdDB.getPlaylistContent(playlists.get(i-1).get_playlistName()));
-            AddPlaylistsToPlaylistTab(plstEntry, playlists.get(i-1), playlistContent);
-
-            plstEntry.setContent(playlistContent);
+            AddContentToPlaylistTab(playlists.get(i), v, plstEntry);
+            plstEntry.setContent(v);
             playlistTab.getPanes().add(plstEntry);
         }
     }
 
-    public Button CancelPlaylistChangesButton()
+    private VBox PlaylistAccordionVBox(Playlist plst, TitledPane plstEntry)
     {
-        Button newButton = new Button();
+        VBox v = new VBox();
 
-        newButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        v.setOnDragOver(event -> {
+            if(event.getGestureSource() != v && event.getDragboard().hasString())
+            {
+                event.acceptTransferModes(TransferMode.COPY);
+            }
+            event.consume();
+        });
 
+        v.setOnDragDropped(event -> {
+            Dragboard d = event.getDragboard();
+            if(d.hasString() && event.getGestureSource() != v)
+            {
+                int songID = Integer.parseInt(d.getString());
+                bowerbirdDB.addToPlaylist(plst.get_playlistName(), songID);
+
+                AddContentToPlaylistTab(plst, v, plstEntry);
+                plstEntry.setContent(v);
             }
         });
 
-        return newButton;
+        return v;
     }
 
-    public Button DoneWithPlaylistChangesButton()
+    private void AddContentToPlaylistTab(Playlist plst, VBox playlistContent, TitledPane plstEntry)
     {
-        Button newButton = new Button();
+        playlistContent.getChildren().clear();
+        plst.set_playlistContent(bowerbirdDB.getPlaylistContent(plst.get_playlistName()));
 
-        newButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        HBox controlRow = new HBox();
+        Button rename = RenameThisPlaylistButton(plst);
+        Button delete = DeleteThisPlaylistButton(plst, playlistContent, plstEntry);
+        controlRow.getChildren().addAll(rename, delete);
+        playlistContent.getChildren().add(controlRow);
+        rename.setVisible(true);
+        delete.setVisible(true);
 
-            }
-        });
-
-        return newButton;
-    }
-
-    public ComboBox<String> GetPlaylistControls(Playlist plst, Button cancel, Button done)
-    {
-        ComboBox<String> plstControls = new ComboBox<String>();
-        plstControls.getItems().addAll("Add Songs", "Remove Songs", "Reorder Songs", "Rename Playlist", "Delete Playlist");
-        plstControls.setValue("Playlist options...");
-
-        System.out.println("Playlist option: " + plstControls.getValue());
-
-        plstControls.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                switch(newValue)
-                {
-                    case "Add Songs":
-                        AddSongsToThisPlaylist(cancel, done);
-                        break;
-                    case "Remove Songs":
-                        RemoveSongsFromThisPlaylist();
-                        break;
-                    case "Reorder Songs":
-                        ReorderSongsInThisPlaylist();
-                        break;
-                    case "Rename Playlist":
-                        RenameThisPlaylist(plst);
-                        break;
-                    case "Delete Playlist":
-                        DeleteThisPlaylist(plst);
-                        break;
-                }
-            }
-        });
-
-        return plstControls;
-    }
-
-    public void AddPlaylistsToPlaylistTab(TitledPane plstEntry, Playlist plst, VBox playlistContent)
-    {
         for (int i = 1; i < plst.get_playlistContent().size() + 1; i++)
         {
-            Button newButton = songButton(plst.get_playlistContent().get(i - 1));
+            Button newButton = songButton(i, plst, playlistContent, plstEntry);
             newButton.getStyleClass().add("tab-button");
 
             playlistContent.getChildren().add(newButton);
         }
     }
 
-    public void AddSongsToThisPlaylist(Button cancel, Button done)
+    private Button RenameThisPlaylistButton(Playlist plst)
     {
-        cancel.setVisible(true);
-        done.setVisible(true);
+        Button r = new Button("Rename");
 
-        List<MusicRecord> toBeAddedToPlaylist = new ArrayList<>();
+        r.setOnAction(event -> {
+            TextInputDialog dialog = new TextInputDialog("newPlaylist");
+            dialog.setTitle("Rename Playlist");
+            dialog.setHeaderText("Rename the playlist \"" + plst.get_playlistName() + "\" to: ");
 
-        library.setRowFactory(tv -> {
-            TableRow<MusicRecord> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if(event.getClickCount() == 1 && !row.isEmpty())
-                {
-                    MusicRecord rowData = row.getItem();
+            Optional<String> result = dialog.showAndWait();
 
-                    if(rowData != null)
-                        toBeAddedToPlaylist.add(rowData);
-                }
-            });
-            return row;
+            if(result.isPresent())
+            {
+                bowerbirdDB.renamePlaylist(plst.get_playlistName(), result.get());
+                playlists = bowerbirdDB.getAllPlaylists();
+                AddPlaylistsToTab();
+            }
         });
+
+        return r;
     }
 
-    public void RemoveSongsFromThisPlaylist()
+    private Button DeleteThisPlaylistButton(Playlist plst, VBox v, TitledPane plstEntry)
     {
+        Button d = new Button("Delete");
 
-    }
+        d.setOnAction(event -> {
+            Alert wannaDelete = new Alert(Alert.AlertType.CONFIRMATION);
+            wannaDelete.setTitle("Confirm Playlist Delete");
+            wannaDelete.setContentText("Are you sure you want to delete the playlist \"" + plst.get_playlistName() + "\"?");
 
-    public void ReorderSongsInThisPlaylist()
-    {
+            java.util.Optional<ButtonType> result = wannaDelete.showAndWait();
 
-    }
+            if(result.get() == ButtonType.OK)
+            {
+                bowerbirdDB.deletePlaylist(plst.get_playlistName());
+                playlists = bowerbirdDB.getAllPlaylists();
+                AddPlaylistsToTab();
+            }
+            else
+            {
+                wannaDelete.showAndWait();
+            }
+        });
 
-    public void RenameThisPlaylist(Playlist plst)
-    {
-        TextInputDialog dialog = new TextInputDialog("newPlaylist");
-        dialog.setTitle("Rename Playlist");
-        dialog.setHeaderText("Rename the playlist \"" + plst.get_playlistName() + "\" to: ");
+        d.setOnDragOver(event -> {
+            if(event.getGestureSource() != d && event.getDragboard().hasString())
+            {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
 
-        Optional<String> result = dialog.showAndWait();
+        d.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            if(db.hasString())
+            {
+                int movedSongPos = Integer.parseInt(db.getString());
+                int movedSongID = plst.get_playlistContent().get(movedSongPos-1).getSongID();
+                System.out.println("Song " + plst.get_playlistContent().get(movedSongPos-1).getTitle() + " (" + movedSongID + ") in pos " + movedSongPos + " to be deleted");
+                bowerbirdDB.removeFromPlaylist(plst.get_playlistName(), movedSongID, movedSongPos-1);
 
-        if(result.isPresent())
-        {
-            System.out.println("result = " + result.toString());
-            bowerbirdDB.renamePlaylist(plst.get_playlistName(), result.get());
+                AddContentToPlaylistTab(plst, v, plstEntry);
+                plstEntry.setContent(v);
+            }
+        });
 
-            playlists = bowerbirdDB.getAllPlaylists();
-            AddPlaylistsToTab();
-        }
-    }
-
-    public void DeleteThisPlaylist(Playlist plst)
-    {
-        Alert wannaDelete = new Alert(Alert.AlertType.CONFIRMATION);
-
-        wannaDelete.setTitle("Confirm Playlist Delete");
-        wannaDelete.setContentText("Are you sure you want to delete the playlist \"" + plst.get_playlistName() + "\"?");
-
-        java.util.Optional<ButtonType> result = wannaDelete.showAndWait();
-        System.out.println("button choice: " + result.get().toString());
-
-        if(result.get() == ButtonType.OK)
-        {
-            bowerbirdDB.deletePlaylist(plst.get_playlistName());
-
-            playlists = bowerbirdDB.getAllPlaylists();
-            AddPlaylistsToTab();
-        }
-        else
-        {
-            wannaDelete.showAndWait();
-        }
+        return d;
     }
 
     //endregion Playlists

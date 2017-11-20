@@ -72,8 +72,7 @@ public class BowerbirdDB
         String playlists = "CREATE TABLE IF NOT EXISTS playlists (" +
                 "Name text NOT NULL," +
                 "SongID integer," +
-                "Position integer," +
-                "UNIQUE(Name)" +
+                "Position integer" +
                 ");";
 
         try
@@ -145,7 +144,7 @@ public class BowerbirdDB
         }
         catch (SQLException e)
         {
-            System.out.print("display all playlists error: " + e.getMessage());
+            System.out.print("Display all playlists error: " + e.getMessage());
         }
 
         return allPlaylists;
@@ -156,6 +155,7 @@ public class BowerbirdDB
         String sql = "SELECT * FROM music " +
                 "INNER JOIN playlists on playlists.SongID = music.ID " +
                 "WHERE playlists.Name = ? ORDER BY playlists.Position ASC";
+
         List<MusicRecord> content = new ArrayList<>();
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
@@ -187,39 +187,26 @@ public class BowerbirdDB
         return content;
     }
 
-    public void addToPlaylist(String playlistName, List<MusicRecord> list)
+    public void addToPlaylist(String playlistName, int songID)
     {
         String insert = "INSERT INTO playlists (Name, SongID, Position)" +
-                "VALUES " ;
+                "VALUES (?, ?, ?)" ;
 
-        String getName = "SELECT TOP 1 Name FROM playlists " +
-                "WHERE Name = ? AND SongID = 0";
-
-        String getLastInPlaylist = "SELECT MAX(Position) FROM playlists " +
+        String getLastInPlaylist = "SELECT MAX(Position) as maxPos FROM playlists " +
                 "WHERE Name = ?";
 
         try(Connection conn = connect())
         {
-            PreparedStatement gn = conn.prepareStatement(getName);
-            gn.setString(1, playlistName);
-            ResultSet rs = gn.executeQuery();
-
             PreparedStatement gl = conn.prepareStatement(getLastInPlaylist);
             gl.setString(1, playlistName);
             ResultSet rs1 = gl.executeQuery();
-
-            String plstName = rs.getString("Name");
-            int last = rs1.getInt("Position");
-
-            for(int i = 0; i < list.size(); i++)
-            {
-                String newSong = "(" + plstName + ", " + list.get(i) + ", " + last + i + 1 + "), ";
-                insert += newSong;
-            }
-
-            insert = insert.substring(0, insert.length() - 1);
+            int last = rs1.getInt("maxPos");
 
             PreparedStatement in = conn.prepareStatement(insert);
+            in.setString(1, playlistName);
+            in.setInt(2, songID);
+            in.setInt(3, last+1);
+
             in.executeUpdate();
         }
         catch(SQLException e)
@@ -231,9 +218,9 @@ public class BowerbirdDB
     public void removeFromPlaylist(String playlistName, int song, int songPos)
     {
         String delFromPlaylist = "DELETE FROM playlists " +
-                "WHERE Name = ? AND Song = ?";
+                "WHERE Name = ? AND SongID = ?";
 
-        String getLastInPlaylist = "SELECT MAX(Position) FROM playlists " +
+        String getLastInPlaylist = "SELECT MAX(Position) as maxPos FROM playlists " +
                 "WHERE Name = ?";
 
         String updateSuccessors = "UPDATE playlists SET Position = ? " +
@@ -248,9 +235,10 @@ public class BowerbirdDB
 
             PreparedStatement gl = conn.prepareStatement(getLastInPlaylist);
             gl.setString(1, playlistName);
-            ResultSet rs = gl.executeQuery(getLastInPlaylist);
+            ResultSet rs = gl.executeQuery();
+            int last = rs.getInt("maxPos");
 
-            for(int i = songPos; i < rs.getInt("Position"); i++)
+            for(int i = songPos; i <= last; i++)
             {
                 PreparedStatement us = conn.prepareStatement(updateSuccessors);
                 us.setInt(1, i);
@@ -262,6 +250,37 @@ public class BowerbirdDB
         catch(SQLException e)
         {
             System.out.println("remove from playlist error: " + e.getMessage());
+        }
+    }
+
+    public void reorderPlaylist(String plstName, int movedSongID, int movedSongPos, int oldSongPos)
+    {
+        String moveOldSongsDown = "UPDATE playlists SET Position = ? " +
+                "WHERE Name = ? AND Position = ?";
+
+        String moveNewSong = "UPDATE playlists SET Position = ? " +
+                "WHERE Name = ? AND SongID = ?";
+
+        try(Connection conn = connect())
+        {
+            for(int i = oldSongPos; i <= movedSongPos; i++)
+            {
+                PreparedStatement mosd = conn.prepareStatement(moveOldSongsDown);
+                mosd.setInt(1, oldSongPos+1);
+                mosd.setString(2, plstName);
+                mosd.setInt(3, oldSongPos);
+                mosd.executeUpdate();
+            }
+
+            PreparedStatement mns = conn.prepareStatement(moveNewSong);
+            mns.setInt(1, oldSongPos);
+            mns.setString(2, plstName);
+            mns.setInt(3, movedSongID);
+            mns.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("reorder playlist error: " + e.getMessage());
         }
     }
 
@@ -328,8 +347,6 @@ public class BowerbirdDB
             ps.setString(10, musicRecord.getAlbum());
 
             ps.executeUpdate();
-
-            System.out.println("Successful song insert!");
         }
         catch(SQLException e)
         {
