@@ -9,7 +9,7 @@ public class BowerbirdDB
     private String dbName = "music.db";
     private String url = "jdbc:sqlite:";
 
-    private enum SearchType { TITLE, ARTIST, ALBUM, FILENAME, LYRICS }
+    public enum SearchType {TITLE, ARTIST, ALBUM, FILEPATH, LYRICS}
 
     public BowerbirdDB()
     {
@@ -433,7 +433,7 @@ public class BowerbirdDB
             case ALBUM:
                 sql += "WHERE Album LIKE '%?%'";
                 break;
-            case FILENAME:
+            case FILEPATH:
                 sql += "WHERE FilePath LIKE '%?%'";
                 break;
             case LYRICS:

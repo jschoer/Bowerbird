@@ -45,7 +45,7 @@ public class MediaManager {
     @FXML private ComboBox<String> searchType;
     private TableView library;
 
-    private BowerbirdDB bowerbirdDB;
+    public BowerbirdDB bowerbirdDB;
 
     private Media media;
     private MediaPlayer mediaPlayer;

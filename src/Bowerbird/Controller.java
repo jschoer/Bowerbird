@@ -8,9 +8,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.scene.Parent;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -26,6 +23,8 @@ public class Controller extends BorderPane{
     @FXML private Accordion playlistTab;
     @FXML private VBox visuals;
     @FXML private ComboBox<String> searchType;
+    @FXML private Button searchButton;
+    @FXML private TextField fieldSearch;
 
     private MediaManager mediaManager;
 
@@ -124,6 +123,13 @@ public class Controller extends BorderPane{
         loader.setRoot(this);
         loader.setController(this);
         loader.load();
+    }
+
+    @FXML protected void handleSearchAction(ActionEvent event) {
+        System.out.println("test");
+        BowerbirdDB.SearchType st = BowerbirdDB.SearchType.valueOf(searchType.getSelectionModel().getSelectedItem());
+        mediaManager.bowerbirdDB.search(fieldSearch.getText(), st);
+
     }
 
     //endregion Handlers

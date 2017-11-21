@@ -77,18 +77,18 @@
                     <ComboBox fx:id="searchType" prefWidth="350.0" promptText="Select Option" >
                         <items>
                             <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Artist" />
-                                <String fx:value="Title" />
-                                <String fx:value="Album" />
-                                <String fx:value="FilePath" />
-                                <String fx:value="Lyrics" />
+                                <String fx:value="ARTIST" />
+                                <String fx:value="TITLE" />
+                                <String fx:value="ALBUM" />
+                                <String fx:value="FILEPATH" />
+                                <String fx:value="LYRICS" />
                             </FXCollections>
                         </items>
                     </ComboBox>
                     <Label layoutX="15.0" layoutY="10.0" styleClass="bold-label"/>
-                    <HBox>
+                    <HBox spacing="10">
                         <TextField fx:id="fieldSearch" prefWidth="250.0" />
-                        <Button fx:id="searchButton" text="Search" />
+                        <Button fx:id="searchButton" onAction="#handleSearchAction" text="Search" />
                     </HBox>
                 </VBox>
 
