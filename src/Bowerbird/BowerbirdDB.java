@@ -364,13 +364,19 @@ public class BowerbirdDB
 
     }
 
-    public void removeSong(int deletedID)
+    public void removeSong(String songTitle)
     {
-        String sql = "DELETE FROM music WHERE ID = ?";
+        String delete = "DELETE FROM music WHERE ID = ?";
+        String getID = "SELECT ID FROM music WHERE Title = ?";
 
-        try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
+        try(Connection conn = connect())
         {
-            ps.setInt(1, deletedID);
+            PreparedStatement gi = conn.prepareStatement(getID);
+            gi.setString(1, songTitle);
+            ResultSet rs = gi.executeQuery();
+
+            PreparedStatement ps = conn.prepareStatement(delete);
+            ps.setInt(1, rs.getInt("ID"));
             ps.executeUpdate();
 
             System.out.println("Successful song delete!");
@@ -446,6 +452,7 @@ public class BowerbirdDB
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
+            ps.setString(1, term);
             ResultSet rs = ps.executeQuery(sql);
 
             while(rs.next())

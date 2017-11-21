@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -20,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioSpectrumListener;
@@ -336,6 +338,13 @@ public class MediaManager {
             TableRow<MusicRecord> row = new TableRow<>();
 
             row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 1 && !row.isEmpty()) {
+                    MusicRecord rowData = row.getItem();
+                    UpdateMedia(rowData.getFilePath(), true);
+                }
+            });
+
+            row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     MusicRecord rowData = row.getItem();
                     if (mediaPlayer != null) {
@@ -440,10 +449,71 @@ public class MediaManager {
         pauseButton.setDisable(true);
         stopButton.setDisable(true);
         timeSlider.setDisable(true);
+        visuals.getChildren().clear();
 
         currentTime.setText("00.00.00");
         totalTime.setText("00.00.00");
         songInfo.setText("Song Information");
+    }
+
+    public void RemoveSongFromLibrary()
+    {
+        if(mediaPlayer != null)
+        {
+            Alert removeSongFromLibrary = new Alert(Alert.AlertType.CONFIRMATION);
+            removeSongFromLibrary.setTitle("Confirm Removal of Song From Library");
+            removeSongFromLibrary.setContentText("Are you sure you want to remove \"" + title + "\" from your library?");
+
+            java.util.Optional<ButtonType> result = removeSongFromLibrary.showAndWait();
+
+            if(result.get() == ButtonType.OK)
+            {
+                mediaPlayer.stop();
+                mediaPlayer.dispose();
+
+                bowerbirdDB.removeSong(title);
+                musicRecordList = bowerbirdDB.getAllMusicRecords();
+                AddSongsToLibrary();
+            }
+            else
+            {
+                removeSongFromLibrary.showAndWait();
+            }
+        }
+    }
+
+    public void EditSongInfo()
+    {
+        if(mediaPlayer != null)
+        {
+            Dialog editSong = new Dialog();
+            ButtonType saveChanges = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+            editSong.getDialogPane().getButtonTypes().addAll(saveChanges, ButtonType.CANCEL);
+
+            TabPane songInfoContent = new TabPane();
+            Tab songData = new Tab("Song Data");
+            Tab lyricTab = new Tab("Lyrics");
+
+            VBox songDataVBox = new VBox();
+            HBox songTitleRow = new HBox();
+            HBox songArtistRow = new HBox();
+            HBox songAlbumRow = new HBox();
+            HBox songTrackRow = new HBox();
+            HBox songYearRow = new HBox();
+            HBox songGenreRow = new HBox();
+            VBox lyricsVBox = new VBox();
+
+            TextField songTitleField = new TextField(title);
+            TextField songArtistField = new TextField(artist);
+            TextField songAlbumField = new TextField(album);
+            TextField songTrackField = new TextField(String.valueOf(track));
+            TextField songYearField = new TextField(year);
+            TextField songGenreField = new TextField(genre);
+            TextArea songLyricsArea = new TextArea(lyrics);
+
+            songTitleRow.getChildren().addAll(new Label("Title: "), songTitleField);
+            songArtistRow.getChildren().addAll(new Label("Artist: "), songArtistField);
+        }
     }
     //endregion MediaPlayer
 
