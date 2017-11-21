@@ -506,9 +506,17 @@ public class MediaManager {
             event.consume();
         });
 
+        v.setOnDragEntered(event ->
+        {
+            if(event.getTransferMode() == TransferMode.COPY)
+            {
+
+            }
+        });
+
         v.setOnDragDropped(event -> {
             Dragboard d = event.getDragboard();
-            if(d.hasString() && event.getGestureSource() != v )
+            if(d.hasString() && event.getTransferMode() == TransferMode.COPY)
             {
                 int songID = Integer.parseInt(d.getString());
                 bowerbirdDB.addToPlaylist(plst.get_playlistName(), songID);
@@ -596,14 +604,19 @@ public class MediaManager {
             event.consume();
         });
 
+        d.setOnDragEntered(event -> {
+            if(event.getTransferMode() == TransferMode.MOVE)
+            {
+
+            }
+        });
+
         d.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
-            if(db.hasString())
+            if(db.hasString() && event.getTransferMode() == TransferMode.MOVE)
             {
                 int movedSongPos = Integer.parseInt(db.getString());
-                int movedSongID = plst.get_playlistContent().get(movedSongPos-1).getSongID();
-                System.out.println("Song " + plst.get_playlistContent().get(movedSongPos-1).getTitle() + " (" + movedSongID + ") in pos " + movedSongPos + " to be deleted");
-                bowerbirdDB.removeFromPlaylist(plst.get_playlistName(), movedSongID, movedSongPos-1);
+                bowerbirdDB.removeFromPlaylist(plst.get_playlistName(), movedSongPos);
 
                 AddContentToPlaylistTab(plst, v, plstEntry);
                 plstEntry.setContent(v);

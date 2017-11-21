@@ -217,10 +217,10 @@ public class BowerbirdDB
         }
     }
 
-    public void removeFromPlaylist(String playlistName, int song, int songPos)
+    public void removeFromPlaylist(String playlistName, int songPos)
     {
         String delFromPlaylist = "DELETE FROM playlists " +
-                "WHERE Name = ? AND SongID = ?";
+                "WHERE Name = ? AND Position = ?";
 
         String getLastInPlaylist = "SELECT MAX(Position) as maxPos FROM playlists " +
                 "WHERE Name = ?";
@@ -232,7 +232,7 @@ public class BowerbirdDB
         {
             PreparedStatement dp = conn.prepareStatement(delFromPlaylist);
             dp.setString(1, playlistName);
-            dp.setInt(2, song);
+            dp.setInt(2, songPos);
             dp.executeUpdate();
 
             PreparedStatement gl = conn.prepareStatement(getLastInPlaylist);
