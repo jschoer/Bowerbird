@@ -87,7 +87,7 @@ public class Controller extends BorderPane{
                 mediaManager.getMediaPlayer().dispose();
             }
 
-            mediaManager.UpdateMedia(filePath, false);
+            mediaManager.ImportNewMedia(filePath);
         }
         else
             System.out.println("Chosen file is null.");
