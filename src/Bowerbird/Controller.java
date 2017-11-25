@@ -17,7 +17,7 @@ public class Controller extends BorderPane{
     @FXML private Slider timeSlider;
     @FXML private Slider volumeSlider;
     @FXML private Label songInfo, currentTime, totalTime;
-    @FXML private Button playButton, pauseButton, stopButton, addButton, toVisuals, toLibrary;
+    @FXML private Button playButton, pauseButton, stopButton, addButton, toVisuals, toLibrary, editSongButton, removeFromLibraryButton;
     @FXML private TabPane tabPane;
     @FXML private VBox songTab;
     @FXML private Accordion playlistTab;
@@ -62,6 +62,14 @@ public class Controller extends BorderPane{
         mediaManager.Stop();
     }
 
+    @FXML private void handleEditSongAction(ActionEvent event) {
+        mediaManager.EditSongInfo();
+    }
+
+    @FXML private void handleRemoveSongAction(ActionEvent event) {
+        mediaManager.RemoveSongFromLibrary();
+    }
+
     @FXML protected void handleAddSongButtonAction(ActionEvent event) {
 
         final FileChooser fc = new FileChooser();
@@ -78,7 +86,7 @@ public class Controller extends BorderPane{
                 mediaManager.getMediaPlayer().dispose();
             }
 
-            mediaManager.UpdateMedia(filePath, false);
+            mediaManager.ImportNewMedia(filePath);
         }
         else
             System.out.println("Chosen file is null.");

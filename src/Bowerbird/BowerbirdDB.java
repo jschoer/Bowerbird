@@ -111,8 +111,6 @@ public class BowerbirdDB
             ps.setString(4, playlistName);
 
             ps.executeUpdate();
-
-            System.out.println("Playlist " + playlistName + " created.");
             return true;
         }
         catch(SQLException e)
@@ -206,8 +204,6 @@ public class BowerbirdDB
             in.setString(1, playlistName);
             in.setInt(2, songID);
             in.setInt(3, last+1);
-
-            System.out.println("Added " + songID + " to " + playlistName);
 
             in.executeUpdate();
         }
@@ -356,24 +352,72 @@ public class BowerbirdDB
         }
     }
 
-    public void editSong(int modifiedID)
+    public String getLyrics(String filepath)
     {
-        String sql = "UPDATE music ";
-        String updateClause = "";
-
-
-    }
-
-    public void removeSong(int deletedID)
-    {
-        String sql = "DELETE FROM music WHERE ID = ?";
+        String sql = "SELECT Lyrics FROM music WHERE FilePath = ?";
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
-            ps.setInt(1, deletedID);
-            ps.executeUpdate();
+            ps.setString(1, filepath);
+            ResultSet rs = ps.executeQuery();
 
-            System.out.println("Successful song delete!");
+            return rs.getString("Lyrics");
+        }
+        catch(SQLException e)
+        {
+            System.out.println("get lyrics error: " + e.getMessage());
+        }
+
+        return "";
+    }
+
+    public void editSong(String oldtitle, String oldalbum, String oldartist,
+                         String newtitle, String newalbum, String newartist, int newtrack, String newyear, String newgenre, String newlyrics)
+    {
+        String getID = "SELECT * FROM music WHERE Title = ? AND Album = ? AND Artist = ?";
+        String edit = "UPDATE music SET Title = ?, Album = ?, Artist = ?, TrackNum = ?, Year = ?, Genre = ?, Lyrics = ? WHERE ID = ?";
+
+        try(Connection conn = connect())
+        {
+            PreparedStatement gi = conn.prepareStatement(getID);
+            gi.setString(1, oldtitle);
+            gi.setString(2, oldalbum);
+            gi.setString(3, oldartist);
+            ResultSet rs = gi.executeQuery();
+
+            PreparedStatement ps = conn.prepareStatement(edit);
+            ps.setString(1, newtitle);
+            ps.setString(2, newalbum);
+            ps.setString(3, newartist);
+            ps.setInt(4,    newtrack);
+            ps.setString(5, newyear);
+            ps.setString(6, newgenre);
+            ps.setString(7, newlyrics);
+            ps.setInt(8, rs.getInt("ID"));
+            ps.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("edit song error: " + e.getMessage());
+        }
+    }
+
+    public void removeSong(String songTitle, String songAlbum, String songArtist)
+    {
+        String delete = "DELETE FROM music WHERE ID = ?";
+        String getID = "SELECT ID FROM music WHERE Title = ? AND Album = ? AND Artist = ?";
+
+        try(Connection conn = connect())
+        {
+            PreparedStatement gi = conn.prepareStatement(getID);
+            gi.setString(1, songTitle);
+            gi.setString(2, songAlbum);
+            gi.setString(3, songArtist);
+            ResultSet rs = gi.executeQuery();
+
+            PreparedStatement ps = conn.prepareStatement(delete);
+            ps.setInt(1, rs.getInt("ID"));
+            ps.executeUpdate();
         }
         catch(SQLException e)
         {
@@ -383,7 +427,7 @@ public class BowerbirdDB
 
     public List<MusicRecord> getAllMusicRecords()
     {
-        String sql = "SELECT * FROM music ORDER BY Title DESC";
+        String sql = "SELECT * FROM music ORDER BY ID ASC";
         List<MusicRecord> musicRecords = new ArrayList<>();
 
         try(Connection conn = connect(); Statement st = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY))
@@ -446,6 +490,7 @@ public class BowerbirdDB
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
+            ps.setString(1, term);
             ResultSet rs = ps.executeQuery(sql);
 
             while(rs.next())

@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -20,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioSpectrumListener;
@@ -122,36 +124,39 @@ public class MediaManager {
         });
     }
 
-    public void UpdateMedia(String path, boolean fromList)
+    public void ImportNewMedia(String path)
     {
         artist = "unknown"; title = "-"; album = "-"; year = "-"; genre = "N/A"; track = 0; lyrics = "none";
 
         playButton.setDisable(false); pauseButton.setDisable(true); stopButton.setDisable(false);
 
         media = new Media(path);
+
         media.getMetadata().addListener(new MapChangeListener<String, Object>() {
             @Override
             public void onChanged(MapChangeListener.Change<? extends String, ? extends Object> change) {
                 if(change.wasAdded())
                 {
-                    String key = change.getKey();
-                    Object value = change.getValueAdded();
+                        String key = change.getKey();
+                        Object value = change.getValueAdded();
 
-                    switch(key)
-                    {
-                        case "title": title = value.toString();
-                            break;
-                        case "artist": artist = value.toString();
-                            break;
-                        case "album": album = value.toString();
-                            break;
-                        case "year": year = value.toString();
-                            break;
-                        case "genre": genre = value.toString();
-                            break;
-                        case "track number": track = Integer.parseInt(value.toString());
-                            break;
-                    }
+                        switch(key)
+                        {
+                            case "title": title = value.toString();
+                                break;
+                            case "artist": artist = value.toString();
+                                break;
+                            case "album": album = value.toString();
+                                break;
+                            case "year": year = value.toString();
+                                break;
+                            case "genre": genre = value.toString();
+                                break;
+                            case "track number": track = Integer.parseInt(value.toString());
+                                break;
+                        }
+
+                        lyrics = bowerbirdDB.getLyrics(path);
                 }
             }
         });
@@ -176,8 +181,58 @@ public class MediaManager {
         mediaPlayer.setOnReady(new Runnable() {
             @Override
             public void run() {
-                if(!fromList)
-                    databaseInsert(path);
+                databaseInsert(path);
+                UpdateLabel();
+                SetTimeStamps();
+                CreateVisualizations();
+            }
+        });
+    }
+
+    public void UpdateMedia(MusicRecord m)
+    {
+        artist = "unknown"; title = "-"; album = "-"; year = "-"; genre = "N/A"; track = 0; lyrics = "none";
+
+        playButton.setDisable(false); pauseButton.setDisable(true); stopButton.setDisable(false);
+
+        media = new Media(m.getFilePath());
+
+        media.getMetadata().addListener(new MapChangeListener<String, Object>() {
+            @Override
+            public void onChanged(MapChangeListener.Change<? extends String, ? extends Object> change) {
+                if(change.wasAdded())
+                {
+                    title = m.getTitle();
+                    artist = m.getArtist();
+                    album = m.getAlbum();
+                    year = m.getYear();
+                    genre = m.getGenre();
+                    track = m.getTrackNum();
+                    lyrics = m.getLyrics();
+                }
+            }
+        });
+
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.currentTimeProperty().addListener(new ChangeListener<Duration>() {
+            @Override
+            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                if(!timeSlider.isValueChanging()) {
+                    timeSlider.setValue(newValue.toSeconds());
+                }
+            }
+        });
+
+        mediaPlayer.totalDurationProperty().addListener(new ChangeListener<Duration>() {
+            @Override
+            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                timeSlider.setMax(newValue.toSeconds());
+            }
+        });
+
+        mediaPlayer.setOnReady(new Runnable() {
+            @Override
+            public void run() {
                 UpdateLabel();
                 SetTimeStamps();
                 CreateVisualizations();
@@ -274,17 +329,21 @@ public class MediaManager {
 
         newButton.setOnAction(event ->
         {
-            for(int i = indexOfCurrentSong-1; i < plst.get_playlistContent().size(); i++)
-            {
-                if(mediaPlayer != null)
-                {
-                    mediaPlayer.stop();
-                    mediaPlayer.dispose();
-                }
+            UpdateMedia(plst.get_playlistContent().get(indexOfCurrentSong-1));
+            Play();
 
-                UpdateMedia(plst.get_playlistContent().get(i).getFilePath(), true);
-                Play();
-            }
+            mediaPlayer.setOnEndOfMedia(new Runnable() {
+                @Override
+                public void run() {
+                    mediaPlayer.stop();
+
+                    for(int i = indexOfCurrentSong; i < plst.get_playlistContent().size(); i++)
+                    {
+                        UpdateMedia(plst.get_playlistContent().get(i));
+                        Play();
+                    }
+                }
+            });
         });
 
         newButton.setOnDragDetected(event ->
@@ -336,15 +395,24 @@ public class MediaManager {
             TableRow<MusicRecord> row = new TableRow<>();
 
             row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 1 && !row.isEmpty()) {
+                    MusicRecord rowData = row.getItem();
+                    UpdateMedia(rowData);
+                }
+            });
+
+            row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     MusicRecord rowData = row.getItem();
                     if (mediaPlayer != null) {
                         mediaPlayer.stop();
                         mediaPlayer.dispose();
-
-                        row.setStyle("-fx-background-color: yellow");
                     }
-                    UpdateMedia(rowData.getFilePath(), true);
+
+                    library.setStyle("-fx-background-color: rgb(47, 145, 132)");
+                    row.setStyle("-fx-background-color: gray");
+
+                    UpdateMedia(rowData);
                     Play();
                 }
             });
@@ -440,10 +508,110 @@ public class MediaManager {
         pauseButton.setDisable(true);
         stopButton.setDisable(true);
         timeSlider.setDisable(true);
+        visuals.getChildren().clear();
 
         currentTime.setText("00.00.00");
         totalTime.setText("00.00.00");
         songInfo.setText("Song Information");
+    }
+
+    public void RemoveSongFromLibrary()
+    {
+        if(mediaPlayer != null)
+        {
+            Alert removeSongFromLibrary = new Alert(Alert.AlertType.CONFIRMATION);
+            removeSongFromLibrary.setTitle("Confirm Removal of Song From Library");
+            removeSongFromLibrary.setContentText("Are you sure you want to remove \"" + title + "\" from your library?");
+
+            java.util.Optional<ButtonType> result = removeSongFromLibrary.showAndWait();
+
+            if(result.get() == ButtonType.OK)
+            {
+                Stop();
+                bowerbirdDB.removeSong(title, album, artist);
+                musicRecordList = bowerbirdDB.getAllMusicRecords();
+                AddSongsToLibrary();
+            }
+            else
+            {
+                removeSongFromLibrary.showAndWait();
+            }
+        }
+    }
+
+    public void EditSongInfo()
+    {
+        if(mediaPlayer != null)
+        {
+            Dialog editSong = new Dialog();
+            ButtonType saveChanges = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+            editSong.getDialogPane().getButtonTypes().addAll(saveChanges, ButtonType.CANCEL);
+
+            TabPane songInfoContent = new TabPane();
+            Tab songData = new Tab("Song Data");
+            Tab lyricTab = new Tab("Lyrics");
+
+            VBox songDataVBox = new VBox();
+            HBox songTitleRow = new HBox();
+            HBox songArtistRow = new HBox();
+            HBox songAlbumRow = new HBox();
+            HBox songTrackRow = new HBox();
+            HBox songYearRow = new HBox();
+            HBox songGenreRow = new HBox();
+            VBox songLyricsVBox = new VBox();
+
+            TextField songTitleField = new TextField(title);
+            TextField songArtistField = new TextField(artist);
+            TextField songAlbumField = new TextField(album);
+            TextField songTrackField = new TextField(String.valueOf(track));
+            TextField songYearField = new TextField(year);
+            TextField songGenreField = new TextField(genre);
+            TextArea songLyricsArea = new TextArea(lyrics);
+
+            songTitleRow.getChildren().addAll(new Label("Title: "), songTitleField);
+            songArtistRow.getChildren().addAll(new Label("Artist: "), songArtistField);
+            songAlbumRow.getChildren().addAll(new Label("Album: "), songAlbumField);
+            songTrackRow.getChildren().addAll(new Label("Track#: "), songTrackField);
+            songYearRow.getChildren().addAll(new Label("Year: "), songYearField);
+            songGenreRow.getChildren().addAll(new Label("Genre: "), songGenreField);
+
+            songDataVBox.getChildren().addAll(songTitleRow, songArtistRow, songAlbumRow, songTrackRow, songYearRow, songGenreRow);
+            songLyricsVBox.getChildren().addAll(songLyricsArea);
+            songData.setContent(songDataVBox);
+            lyricTab.setContent(songLyricsVBox);
+            songInfoContent.getTabs().addAll(songData, lyricTab);
+
+            editSong.getDialogPane().setContent(songInfoContent);
+
+            java.util.Optional<ButtonType> result = editSong.showAndWait();
+
+            try
+            {
+                if(result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE)
+                {
+                    int trk = Integer.parseInt(songTrackField.getText());
+
+                    bowerbirdDB.editSong(title, album, artist, songTitleField.getText(), songAlbumField.getText(), songArtistField.getText(),
+                            trk, songYearField.getText(), songGenreField.getText(), songLyricsArea.getText());
+
+                    UpdateLabel();
+                    musicRecordList = bowerbirdDB.getAllMusicRecords();
+                    AddSongsToLibrary();
+                }
+                else
+                {
+                    editSong.close();
+                }
+            }
+            catch(NumberFormatException e)
+            {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setContentText("Please enter an integer value for the track number.");
+
+                alert.showAndWait();
+            }
+        }
     }
     //endregion MediaPlayer
 
@@ -592,7 +760,7 @@ public class MediaManager {
             }
             else
             {
-                wannaDelete.showAndWait();
+                wannaDelete.close();
             }
         });
 
