@@ -121,3 +121,6 @@
 .tab-button:click {
     -fx-background-color: gray;
 }
+.default-color0.chart-bar {
+  -fx-background-color:linear-gradient(to bottom,aqua,#2F9184);
+}

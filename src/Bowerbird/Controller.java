@@ -134,7 +134,6 @@ public class Controller extends BorderPane{
     }
 
     @FXML protected void handleSearchAction(ActionEvent event) {
-        System.out.println("test");
         BowerbirdDB.SearchType st = BowerbirdDB.SearchType.valueOf(searchType.getSelectionModel().getSelectedItem());
         mediaManager.bowerbirdDB.search(fieldSearch.getText(), st);
 

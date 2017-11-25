@@ -444,7 +444,7 @@ public class MediaManager {
     public void CreateVisualizations()
     {
         CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis(-50,50,10);
+        NumberAxis yAxis = new NumberAxis(0,50,10);
 
         BarChart<String, Number> visualizerChart = new BarChart<>(xAxis, yAxis);
         visualizerChart.setLegendVisible(false);
