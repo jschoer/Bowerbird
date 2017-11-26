@@ -16,7 +16,7 @@ public class Controller extends BorderPane{
 
     @FXML private Slider timeSlider;
     @FXML private Slider volumeSlider;
-    @FXML private Label songInfo, currentTime, totalTime;
+    @FXML private Label songInfo, currentTime, totalTime, instructions, lyricsLabel;
     @FXML private Button playButton, pauseButton, stopButton, addButton, toVisuals, toLibrary, editSongButton, removeFromLibraryButton;
     @FXML private TabPane tabPane;
     @FXML private VBox songTab;
@@ -25,6 +25,7 @@ public class Controller extends BorderPane{
     @FXML private ComboBox<String> searchType;
     @FXML private Button searchButton;
     @FXML private TextField fieldSearch;
+    @FXML private ScrollPane lyricsPane;
 
     private MediaManager mediaManager;
 
@@ -46,7 +47,10 @@ public class Controller extends BorderPane{
 
     @FXML public void initialize()
     {
-        mediaManager = new MediaManager(volumeSlider, timeSlider, songInfo, currentTime, totalTime, playButton, pauseButton, stopButton, addButton, toVisuals, songTab, playlistTab, visuals);
+        mediaManager = new MediaManager(volumeSlider, timeSlider,
+                songInfo, currentTime, totalTime, instructions, lyricsLabel,
+                playButton, pauseButton, stopButton, addButton, toVisuals,
+                songTab, playlistTab, visuals);
     }
 
     //region Handlers
@@ -64,6 +68,7 @@ public class Controller extends BorderPane{
 
     @FXML private void handleEditSongAction(ActionEvent event) {
         mediaManager.EditSongInfo();
+        mediaManager.UpdateLabel();
     }
 
     @FXML private void handleRemoveSongAction(ActionEvent event) {

@@ -39,7 +39,7 @@ public class MediaManager {
 
     @FXML private Slider timeSlider;
     @FXML private Slider volumeSlider;
-    @FXML private Label songInfo, currentTime, totalTime;
+    @FXML private Label songInfo, currentTime, totalTime, instructions, lyricsLabel;
     @FXML private Button playButton, pauseButton, stopButton, addButton, toVisuals, toLibrary;
     @FXML private VBox songTab;
     @FXML private Accordion playlistTab;
@@ -59,7 +59,7 @@ public class MediaManager {
     public List<Playlist> playlists;
 
     public MediaManager(Slider volumeSlider, Slider timeSlider,
-                        Label songInfo, Label currentTime, Label totalTime,
+                        Label songInfo, Label currentTime, Label totalTime, Label instructions, Label lyricsLabel,
                         Button playButton, Button pauseButton, Button stopButton, Button addButton, Button toVisuals,
                         VBox songTab, Accordion playlistTab, VBox visuals)
     {
@@ -68,6 +68,8 @@ public class MediaManager {
         this.songInfo = songInfo;
         this.currentTime = currentTime;
         this.totalTime = totalTime;
+        this.instructions = instructions;
+        this.lyricsLabel = lyricsLabel;
         this.playButton = playButton;
         this.pauseButton = pauseButton;
         this.stopButton = stopButton;
@@ -137,26 +139,26 @@ public class MediaManager {
             public void onChanged(MapChangeListener.Change<? extends String, ? extends Object> change) {
                 if(change.wasAdded())
                 {
-                        String key = change.getKey();
-                        Object value = change.getValueAdded();
+                    String key = change.getKey();
+                    Object value = change.getValueAdded();
 
-                        switch(key)
-                        {
-                            case "title": title = value.toString();
-                                break;
-                            case "artist": artist = value.toString();
-                                break;
-                            case "album": album = value.toString();
-                                break;
-                            case "year": year = value.toString();
-                                break;
-                            case "genre": genre = value.toString();
-                                break;
-                            case "track number": track = Integer.parseInt(value.toString());
-                                break;
-                        }
+                    switch(key)
+                    {
+                        case "title": title = value.toString();
+                            break;
+                        case "artist": artist = value.toString();
+                            break;
+                        case "album": album = value.toString();
+                            break;
+                        case "year": year = value.toString();
+                            break;
+                        case "genre": genre = value.toString();
+                            break;
+                        case "track number": track = Integer.parseInt(value.toString());
+                            break;
+                    }
 
-                        lyrics = bowerbirdDB.getLyrics(path);
+                    lyrics = bowerbirdDB.getLyrics(path);
                 }
             }
         });
@@ -261,7 +263,9 @@ public class MediaManager {
     public void UpdateLabel()
     {
         songInfo.setText("Name: " + title + "\n" + "Artist: " + artist + "\n" + "Album: " + album + "\n" + "Track#: "
-                + track + "\n" + "Year: " + year + "\n" + "Genre: " + genre + "\n" + "Lyrics: \n\n" + lyrics);
+                + track + "\n" + "Year: " + year + "\n" + "Genre: " + genre + "\n" + "Lyrics: \n");
+        lyricsLabel.setText(lyrics);
+
     }
 
     public void SetTimeStamps()
@@ -329,21 +333,7 @@ public class MediaManager {
 
         newButton.setOnAction(event ->
         {
-            UpdateMedia(plst.get_playlistContent().get(indexOfCurrentSong-1));
-            Play();
-
-            mediaPlayer.setOnEndOfMedia(new Runnable() {
-                @Override
-                public void run() {
-                    mediaPlayer.stop();
-
-                    for(int i = indexOfCurrentSong; i < plst.get_playlistContent().size(); i++)
-                    {
-                        UpdateMedia(plst.get_playlistContent().get(i));
-                        Play();
-                    }
-                }
-            });
+            PlayPlaylist(indexOfCurrentSong-1, plst);
         });
 
         newButton.setOnDragDetected(event ->
@@ -387,6 +377,26 @@ public class MediaManager {
         });
 
         return newButton;
+    }
+
+    public void PlayPlaylist(int index, Playlist plst)
+    {
+        UpdateMedia(plst.get_playlistContent().get(index));
+        Play();
+        int i = index + 1;
+
+        mediaPlayer.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                mediaPlayer.stop();
+
+                if(i < plst.get_playlistContent().size())
+                {
+                    PlayPlaylist(i, plst);
+                }
+                return;
+            }
+        });
     }
 
     public void SetLibraryForSongPlaying()
@@ -483,7 +493,6 @@ public class MediaManager {
         });
     }
 
-
     //region MediaPlayer
     public void Play()
     {
@@ -513,6 +522,7 @@ public class MediaManager {
         currentTime.setText("00.00.00");
         totalTime.setText("00.00.00");
         songInfo.setText("Song Information");
+        lyricsLabel.setText("");
     }
 
     public void RemoveSongFromLibrary()
@@ -544,6 +554,7 @@ public class MediaManager {
         if(mediaPlayer != null)
         {
             Dialog editSong = new Dialog();
+            editSong.setTitle("Edit Song");
             ButtonType saveChanges = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
             editSong.getDialogPane().getButtonTypes().addAll(saveChanges, ButtonType.CANCEL);
 
@@ -582,7 +593,6 @@ public class MediaManager {
             songInfoContent.getTabs().addAll(songData, lyricTab);
 
             editSong.getDialogPane().setContent(songInfoContent);
-
             java.util.Optional<ButtonType> result = editSong.showAndWait();
 
             try
@@ -594,7 +604,6 @@ public class MediaManager {
                     bowerbirdDB.editSong(title, album, artist, songTitleField.getText(), songAlbumField.getText(), songArtistField.getText(),
                             trk, songYearField.getText(), songGenreField.getText(), songLyricsArea.getText());
 
-                    UpdateLabel();
                     musicRecordList = bowerbirdDB.getAllMusicRecords();
                     AddSongsToLibrary();
                 }
@@ -666,7 +675,8 @@ public class MediaManager {
     {
         VBox v = new VBox();
 
-        v.setOnDragOver(event -> {
+        v.setOnDragOver(event ->
+        {
             if(event.getGestureSource() != v && event.getDragboard().hasString())
             {
                 event.acceptTransferModes(TransferMode.COPY);
@@ -676,10 +686,18 @@ public class MediaManager {
 
         v.setOnDragEntered(event ->
         {
-            if(event.getTransferMode() == TransferMode.COPY)
+            if(!playlists.isEmpty() && event.getTransferMode() == TransferMode.COPY)
             {
-
+                playlistTab.setStyle("-fx-border-color: orange; -fx-border-width: 4;");
+                instructions.setText("Drag and drop to add songs to open playlist");
+                instructions.setVisible(true);
             }
+        });
+
+        v.setOnDragExited(event ->
+        {
+            playlistTab.setStyle("");
+            instructions.setVisible(false);
         });
 
         v.setOnDragDropped(event -> {
@@ -688,6 +706,8 @@ public class MediaManager {
             {
                 int songID = Integer.parseInt(d.getString());
                 bowerbirdDB.addToPlaylist(plst.get_playlistName(), songID);
+                playlistTab.setStyle("");
+                instructions.setVisible(false);
 
                 AddContentToPlaylistTab(plst, v, plstEntry);
                 plstEntry.setContent(v);

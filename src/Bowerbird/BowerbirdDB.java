@@ -356,12 +356,20 @@ public class BowerbirdDB
     {
         String sql = "SELECT Lyrics FROM music WHERE FilePath = ?";
 
-        try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
+        try(Connection conn = connect())
         {
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, filepath);
             ResultSet rs = ps.executeQuery();
 
-            return rs.getString("Lyrics");
+            if(rs.next())
+            {
+                return rs.getString("Lyrics");
+            }
+            else
+            {
+                return "";
+            }
         }
         catch(SQLException e)
         {
