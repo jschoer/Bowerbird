@@ -601,6 +601,15 @@ public class MediaManager {
                     bowerbirdDB.editSong(title, album, artist, songTitleField.getText(), songAlbumField.getText(), songArtistField.getText(),
                             trk, songYearField.getText(), songGenreField.getText(), songLyricsArea.getText());
 
+                    title = songTitleField.getText();
+                    album = songAlbumField.getText();
+                    artist = songArtistField.getText();
+                    track = trk;
+                    year = songYearField.getText();
+                    genre = songGenreField.getText();
+                    lyrics = songLyricsArea.getText();
+
+                    UpdateLabel();
                     musicRecordList = bowerbirdDB.getAllMusicRecords();
                     AddSongsToLibrary();
                 }

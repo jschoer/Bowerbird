@@ -68,7 +68,6 @@ public class Controller extends BorderPane{
 
     @FXML private void handleEditSongAction(ActionEvent event) {
         mediaManager.EditSongInfo();
-        mediaManager.UpdateLabel();
     }
 
     @FXML private void handleRemoveSongAction(ActionEvent event) {
