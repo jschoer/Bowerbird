@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import java.lang.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.Accordion?>
+<?import javafx.collections.*?>
 
 <fx:root prefHeight="600" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
     <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
@@ -50,10 +54,14 @@
     </top>
 
     <right>
-        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
+        <TabPane fx:id="tabPane" prefWidth="400" tabClosingPolicy="UNAVAILABLE">
             <Tab text="Song">
                 <VBox>
-                    <Label fx:id="songInfo" text="Song Information" />
+                    <HBox alignment="CENTER_RIGHT" spacing="10">
+                        <Button fx:id="editSongButton" text="Edit..." onAction="#handleEditSongAction" />
+                        <Button fx:id="removeFromLibraryButton" text="Remove" onAction="#handleRemoveSongAction" />
+                    </HBox>
+                    <Label fx:id="songInfo" text="Song Information"/>
                 </VBox>
             </Tab>
             <Tab text="Playlists">
@@ -62,8 +70,29 @@
                     <HBox>
                         <Button fx:id="addPlaylist" onAction="#handleNewPlaylistAction" text="New" />
                     </HBox>
-                    <Accordion fx:id="playlistTab" prefWidth="328.0" />
+                    <Accordion fx:id="playlistTab" prefHeight="239.0" />
                 </VBox>
+            </Tab>
+            <Tab text="Search">
+                <VBox>
+                    <ComboBox fx:id="searchType" prefWidth="350.0" promptText="Select Option" >
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="ARTIST" />
+                                <String fx:value="TITLE" />
+                                <String fx:value="ALBUM" />
+                                <String fx:value="FILEPATH" />
+                                <String fx:value="LYRICS" />
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                    <Label layoutX="15.0" layoutY="10.0" styleClass="bold-label"/>
+                    <HBox spacing="10">
+                        <TextField fx:id="fieldSearch" prefWidth="250.0" />
+                        <Button fx:id="searchButton" onAction="#handleSearchAction" text="Search" />
+                    </HBox>
+                </VBox>
+
             </Tab>
         </TabPane>
     </right>

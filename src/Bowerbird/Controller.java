@@ -135,8 +135,12 @@ public class Controller extends BorderPane{
 
     @FXML protected void handleSearchAction(ActionEvent event) {
         BowerbirdDB.SearchType st = BowerbirdDB.SearchType.valueOf(searchType.getSelectionModel().getSelectedItem());
-        mediaManager.bowerbirdDB.search(fieldSearch.getText(), st);
 
+        if (mediaManager.bowerbirdDB.search(fieldSearch.getText().toLowerCase(), st) == null) {
+            System.out.println("Not Found");
+        }
+        else
+            mediaManager.bowerbirdDB.search(fieldSearch.getText().toLowerCase(), st);
     }
 
     //endregion Handlers

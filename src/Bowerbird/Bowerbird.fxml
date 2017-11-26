@@ -20,7 +20,6 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 
-<?import javafx.scene.control.TextArea?>
 <fx:root prefHeight="800" prefWidth="1400" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
 
