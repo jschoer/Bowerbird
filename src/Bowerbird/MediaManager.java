@@ -419,9 +419,6 @@ public class MediaManager {
                         mediaPlayer.dispose();
                     }
 
-                    library.setStyle("-fx-background-color: rgb(47, 145, 132)");
-                    row.setStyle("-fx-background-color: gray");
-
                     UpdateMedia(rowData);
                     Play();
                 }
