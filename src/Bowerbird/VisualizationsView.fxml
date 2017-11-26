@@ -69,7 +69,7 @@
     </right>
 
     <center>
-        <Text text="Visualizations window goes here" />
+        <VBox fx:id="visuals" />
     </center>
 
     <stylesheets>
