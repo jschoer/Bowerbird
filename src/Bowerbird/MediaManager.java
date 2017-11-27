@@ -180,13 +180,13 @@ public class MediaManager {
             }
         });
 
+        CreateVisualizations();
         mediaPlayer.setOnReady(new Runnable() {
             @Override
             public void run() {
                 databaseInsert(path);
                 UpdateLabel();
                 SetTimeStamps();
-                CreateVisualizations();
             }
         });
     }

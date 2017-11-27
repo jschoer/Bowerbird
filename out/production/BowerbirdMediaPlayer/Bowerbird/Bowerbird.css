@@ -29,6 +29,7 @@
     -fx-border-color: gray;
 }
 
+
 .tab:selected {
     -fx-background-color: gray;
 }
@@ -39,6 +40,13 @@
 
 .table-view{
     -fx-font-size: 10pt;
+}
+
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-control-inner-background: transparent;
+    -fx-border-color: transparent;
 }
 
 .button {

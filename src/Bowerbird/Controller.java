@@ -28,6 +28,7 @@ public class Controller extends BorderPane{
     @FXML private ScrollPane lyricsPane;
 
     private MediaManager mediaManager;
+    private boolean isVisuals = false;
 
     public Controller()
     {
@@ -51,6 +52,9 @@ public class Controller extends BorderPane{
                 songInfo, currentTime, totalTime, instructions, lyricsLabel,
                 playButton, pauseButton, stopButton, addButton, toVisuals,
                 songTab, playlistTab, visuals);
+
+        visuals.setVisible(false);
+        visuals.managedProperty().bind(visuals.visibleProperty());
     }
 
     //region Handlers
@@ -123,18 +127,23 @@ public class Controller extends BorderPane{
         }
     }
 
-    @FXML private void handleViewSwitchAction(ActionEvent event) throws IOException
+    @FXML private void handleViewSwitchAction(ActionEvent event)
     {
-        FXMLLoader loader;
+        songTab.managedProperty().bind(songTab.visibleProperty());
+        visuals.managedProperty().bind(visuals.visibleProperty());
 
-        if(event.getSource() == toVisuals)
-            loader = new FXMLLoader(getClass().getResource("VisualizationsView.fxml"));
+        if(!isVisuals)
+        {
+            songTab.setVisible(false);
+            visuals.setVisible(true);
+            isVisuals = true;
+        }
         else
-            loader = new FXMLLoader(getClass().getResource("Bowerbird.fxml"));
-
-        loader.setRoot(this);
-        loader.setController(this);
-        loader.load();
+        {
+            songTab.setVisible(true);
+            visuals.setVisible(false);
+            isVisuals = false;
+        }
     }
 
     @FXML protected void handleSearchAction(ActionEvent event) {
