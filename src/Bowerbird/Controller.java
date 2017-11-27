@@ -136,12 +136,14 @@ public class Controller extends BorderPane{
         {
             songTab.setVisible(false);
             visuals.setVisible(true);
+            toVisuals.setText("Library");
             isVisuals = true;
         }
         else
         {
             songTab.setVisible(true);
             visuals.setVisible(false);
+            toVisuals.setText("Visuals");
             isVisuals = false;
         }
     }
