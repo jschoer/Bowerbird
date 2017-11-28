@@ -97,6 +97,10 @@
                         <TextField fx:id="fieldSearch" prefWidth="250.0" />
                         <Button fx:id="searchButton" onAction="#handleSearchAction" text="Search" />
                     </HBox>
+
+                    <ScrollPane prefViewportHeight="400">
+                        <VBox fx:id="searchOutput"/>
+                    </ScrollPane>
                 </VBox>
 
             </Tab>

@@ -1,5 +1,6 @@
 package Bowerbird;
 
+import javax.naming.directory.SearchResult;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -477,19 +478,19 @@ public class BowerbirdDB
         switch(st)
         {
             case TITLE:
-                sql += "WHERE Title LIKE '%?%'";
+                sql += "WHERE Title LIKE ?";
                 break;
             case ARTIST:
-                sql += "WHERE Artist LIKE '%?%'";
+                sql += "WHERE Artist LIKE ?";
                 break;
             case ALBUM:
-                sql += "WHERE Album LIKE '%?%'";
+                sql += "WHERE Album LIKE ?";
                 break;
             case FILEPATH:
-                sql += "WHERE FilePath LIKE '%?%'";
+                sql += "WHERE FilePath LIKE ?";
                 break;
             case LYRICS:
-                sql += "WHERE Lyrics LIKE '%?%'";
+                sql += "WHERE Lyrics LIKE ?";
                 break;
             default:
                 System.out.print("Invalid search type");
@@ -498,8 +499,8 @@ public class BowerbirdDB
 
         try(Connection conn = connect(); PreparedStatement ps = conn.prepareStatement(sql))
         {
-            ps.setString(1, term);
-            ResultSet rs = ps.executeQuery(sql);
+            ps.setString(1, "%" + term + "%");
+            ResultSet rs = ps.executeQuery();
 
             while(rs.next())
             {
@@ -523,7 +524,7 @@ public class BowerbirdDB
         {
             System.out.print("search " + st.toString() + " error: " + e.getMessage());
         }
-
+System.out.println(searchResults.size());
         return searchResults;
     }
 

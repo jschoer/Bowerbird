@@ -1,5 +1,6 @@
 package Bowerbird;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 public class Controller extends BorderPane{
@@ -26,6 +28,7 @@ public class Controller extends BorderPane{
     @FXML private Button searchButton;
     @FXML private TextField fieldSearch;
     @FXML private ScrollPane lyricsPane;
+    @FXML private VBox searchOutput;
 
     private MediaManager mediaManager;
     private boolean isVisuals = false;
@@ -150,13 +153,39 @@ public class Controller extends BorderPane{
 
     @FXML protected void handleSearchAction(ActionEvent event) {
         BowerbirdDB.SearchType st = BowerbirdDB.SearchType.valueOf(searchType.getSelectionModel().getSelectedItem());
-
-        if (mediaManager.bowerbirdDB.search(fieldSearch.getText().toLowerCase(), st) == null) {
+        List<MusicRecord> results = mediaManager.bowerbirdDB.search(fieldSearch.getText().toLowerCase(), st);
+        if (results == null) {
             System.out.println("Not Found");
         }
-        else
-            mediaManager.bowerbirdDB.search(fieldSearch.getText().toLowerCase(), st);
-    }
 
+        searchOutput.getChildren().clear();
+
+        for (int i = 1; i < results.size() + 1; i++)
+        {
+            Button newButton = getSearchResults(results.get(i - 1));
+            newButton.getStyleClass().add("tab-button");
+
+            searchOutput.getChildren().add(newButton);
+        }
+    }
+    
+    public Button getSearchResults(MusicRecord musicRecord)
+    {
+        Button newButton = new Button(musicRecord.getTitle());
+        newButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(mediaManager.getMediaPlayer() != null)
+                {
+                    mediaManager.Stop();
+                    mediaManager.getMediaPlayer().dispose();
+                }
+                mediaManager.ImportNewMedia(musicRecord.getFilePath());
+                mediaManager.Play();
+            }
+        });
+
+        return newButton;
+    }
     //endregion Handlers
 }
