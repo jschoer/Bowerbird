@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.collections.*?>
 
-<fx:root prefHeight="600" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root prefHeight="800" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
     <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
 
     <bottom>
