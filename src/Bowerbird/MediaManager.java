@@ -265,7 +265,6 @@ public class MediaManager {
         songInfo.setText("Name: " + title + "\n" + "Artist: " + artist + "\n" + "Album: " + album + "\n" + "Track#: "
                 + track + "\n" + "Year: " + year + "\n" + "Genre: " + genre + "\n" + "Lyrics: \n");
         lyricsLabel.setText(lyrics);
-
     }
 
     public void SetTimeStamps()
