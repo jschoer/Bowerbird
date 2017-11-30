@@ -10,7 +10,7 @@ public class BowerbirdDB
     private String dbName = "music.db";
     private String url = "jdbc:sqlite:";
 
-    public enum SearchType {TITLE, ARTIST, ALBUM, FILEPATH, LYRICS}
+    public enum SearchType {TITLE, ARTIST, ALBUM, GENRE, LYRICS}
 
     public BowerbirdDB()
     {
@@ -414,6 +414,7 @@ public class BowerbirdDB
     public void removeSong(String songTitle, String songAlbum, String songArtist)
     {
         String delete = "DELETE FROM music WHERE ID = ?";
+        String deletePlaylist = "DELETE FROM playlists WHERE SongID = ?";
         String getID = "SELECT ID FROM music WHERE Title = ? AND Album = ? AND Artist = ?";
 
         try(Connection conn = connect())
@@ -424,9 +425,15 @@ public class BowerbirdDB
             gi.setString(3, songArtist);
             ResultSet rs = gi.executeQuery();
 
+            int id = rs.getInt("ID");
+
             PreparedStatement ps = conn.prepareStatement(delete);
-            ps.setInt(1, rs.getInt("ID"));
+            ps.setInt(1, id);
             ps.executeUpdate();
+
+            PreparedStatement statement = conn.prepareStatement(deletePlaylist);
+            statement.setInt(1, id);
+            statement.executeUpdate();
         }
         catch(SQLException e)
         {
@@ -486,8 +493,8 @@ public class BowerbirdDB
             case ALBUM:
                 sql += "WHERE Album LIKE ?";
                 break;
-            case FILEPATH:
-                sql += "WHERE FilePath LIKE ?";
+            case GENRE:
+                sql += "WHERE Genre LIKE ?";
                 break;
             case LYRICS:
                 sql += "WHERE Lyrics LIKE ?";
@@ -524,7 +531,7 @@ public class BowerbirdDB
         {
             System.out.print("search " + st.toString() + " error: " + e.getMessage());
         }
-System.out.println(searchResults.size());
+
         return searchResults;
     }
 

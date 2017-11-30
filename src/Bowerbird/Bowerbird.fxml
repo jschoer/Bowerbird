@@ -87,7 +87,7 @@
                                 <String fx:value="ARTIST" />
                                 <String fx:value="TITLE" />
                                 <String fx:value="ALBUM" />
-                                <String fx:value="FILEPATH" />
+                                <String fx:value="GENRE" />
                                 <String fx:value="LYRICS" />
                             </FXCollections>
                         </items>

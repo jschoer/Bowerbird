@@ -321,6 +321,7 @@ public class MediaManager {
 
         library.getColumns().addAll(titleCol, artistCol, albumCol, genreCol, yearCol);
         library.setItems(musicRecsObs);
+        library.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         SetLibraryForSongPlaying();
 
@@ -381,6 +382,7 @@ public class MediaManager {
 
     public void PlayPlaylist(int index, Playlist plst)
     {
+        Stop();
         UpdateMedia(plst.get_playlistContent().get(index));
         Play();
         int i = index + 1;
@@ -388,7 +390,7 @@ public class MediaManager {
         mediaPlayer.setOnEndOfMedia(new Runnable() {
             @Override
             public void run() {
-                mediaPlayer.stop();
+                Stop();
 
                 if(i < plst.get_playlistContent().size())
                 {
@@ -465,8 +467,10 @@ public class MediaManager {
 
         yAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(yAxis, null, "dB"));
         yAxis.setTickLabelFill(Color.TRANSPARENT);
+        yAxis.setTickMarkVisible(false);
 
         xAxis.setTickLabelFill(Color.TRANSPARENT);
+        xAxis.setTickMarkVisible(false);
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
 
@@ -484,7 +488,7 @@ public class MediaManager {
             public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
                 for(int i = 0; i < magnitudes.length; i++)
                 {
-                    visualizerChart.getData().get(0).getData().get(i).setYValue(magnitudes[i] + 60);
+                    visualizerChart.getData().get(0).getData().get(i).setYValue(magnitudes[i] + 61);
                 }
             }
         });
@@ -538,10 +542,9 @@ public class MediaManager {
                 bowerbirdDB.removeSong(title, album, artist);
                 musicRecordList = bowerbirdDB.getAllMusicRecords();
                 AddSongsToLibrary();
-            }
-            else
-            {
-                removeSongFromLibrary.showAndWait();
+
+                playlists = bowerbirdDB.getAllPlaylists();
+                AddPlaylistsToTab();
             }
         }
     }
@@ -663,6 +666,7 @@ public class MediaManager {
     private void AddPlaylistsToTab()
     {
         playlistTab.getPanes().clear();
+        playlistTab.getPanes().removeAll();
 
         for (int i = 0; i < playlists.size(); i++)
         {

@@ -152,24 +152,26 @@ public class Controller extends BorderPane{
     }
 
     @FXML protected void handleSearchAction(ActionEvent event) {
-        BowerbirdDB.SearchType st = BowerbirdDB.SearchType.valueOf(searchType.getSelectionModel().getSelectedItem());
-        List<MusicRecord> results = mediaManager.bowerbirdDB.search(fieldSearch.getText().toLowerCase(), st);
-        if (results == null) {
-            System.out.println("Not Found");
-        }
+        String item = searchType.getSelectionModel().getSelectedItem();
+        if(item != null && !item.isEmpty()) {
+            BowerbirdDB.SearchType st = BowerbirdDB.SearchType.valueOf(item);
+            List<MusicRecord> results = mediaManager.bowerbirdDB.search(fieldSearch.getText().toLowerCase(), st);
+            if (results == null) {
+                System.out.println("Not Found");
+            }
 
-        searchOutput.getChildren().clear();
+            searchOutput.getChildren().clear();
 
-        for (int i = 1; i < results.size() + 1; i++)
-        {
-            Button newButton = getSearchResults(results.get(i - 1));
-            newButton.getStyleClass().add("tab-button");
+            for (int i = 1; i < results.size() + 1; i++) {
+                Button newButton = getSearchResultsButton(results.get(i - 1));
+                newButton.getStyleClass().add("tab-button");
 
-            searchOutput.getChildren().add(newButton);
+                searchOutput.getChildren().add(newButton);
+            }
         }
     }
     
-    public Button getSearchResults(MusicRecord musicRecord)
+    public Button getSearchResultsButton(MusicRecord musicRecord)
     {
         Button newButton = new Button(musicRecord.getTitle());
         newButton.setOnAction(new EventHandler<ActionEvent>() {
