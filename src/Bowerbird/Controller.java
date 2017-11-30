@@ -151,24 +151,32 @@ public class Controller extends BorderPane{
         }
     }
 
+    private void errorMessageHandling(String message) {
+        searchOutput.getChildren().clear();
+        searchOutput.getChildren().add(new Label((message)));
+    }
+
     @FXML protected void handleSearchAction(ActionEvent event) {
         String item = searchType.getSelectionModel().getSelectedItem();
         if(item != null && !item.isEmpty()) {
             BowerbirdDB.SearchType st = BowerbirdDB.SearchType.valueOf(item);
             List<MusicRecord> results = mediaManager.bowerbirdDB.search(fieldSearch.getText().toLowerCase(), st);
-            if (results == null) {
-                System.out.println("Not Found");
+            if (results == null || results.size() == 0) {
+                errorMessageHandling("There are no results found.");
             }
+            else {
+                searchOutput.getChildren().clear();
 
-            searchOutput.getChildren().clear();
+                for (int i = 1; i < results.size() + 1; i++) {
+                    Button newButton = getSearchResultsButton(results.get(i - 1));
+                    newButton.getStyleClass().add("tab-button");
 
-            for (int i = 1; i < results.size() + 1; i++) {
-                Button newButton = getSearchResultsButton(results.get(i - 1));
-                newButton.getStyleClass().add("tab-button");
-
-                searchOutput.getChildren().add(newButton);
+                    searchOutput.getChildren().add(newButton);
+                }
             }
         }
+        else
+            errorMessageHandling("Please select an option from the drop down menu.");
     }
     
     public Button getSearchResultsButton(MusicRecord musicRecord)
